@@ -12,28 +12,73 @@ function updater() {
   }, (1000 / updaterate));
 }
 function updatesetting(id) {
-  
+  if (id == "shortendisplay") {
+    if (user.active[id]) {
+      d(id).style.backgroundColor = "rgb(50, 50, 50)";
+      for (let i = 0; i < currencyids.length; i++) {
+        d(currencyids[i] + "text").textContent = " " + currencyids[i].toUpperCase();
+        d(currencyids[i] + "sectext").textContent = "";
+        d("pb" + currencyids[i] + "c").style.width = "150px";
+      }
+    }
+    else {
+      d(id).style.backgroundColor = "rgb(25, 25, 25)";
+      for (let i = 0; i < currencyids.length; i++) {
+        d(currencyids[i] + "text").textContent = " " + currencynames[i] + " Points";
+        d(currencyids[i] + "sectext").textContent = "You are gaining ";
+        d("pb" + currencyids[i] + "c").style.width = "240px";
+      }
+    }
+    return;
+  }
+  if (id == "creset") {
+    if (user.confirm[id]) {d(id).style.backgroundColor = "rgb(50, 50, 50)"}
+    else {d(id).style.backgroundColor = "rgb(25, 25, 25)"}
+  }
+  if (id == "csacrifice") {
+    if (user.confirm[id]) {d(id).style.backgroundColor = "rgb(50, 50, 50)"}
+    else {d(id).style.backgroundColor = "rgb(25, 25, 25)"}
+  }
+  if (id == "displaypause") {
+    if (user.active[id]) {d(id).style.backgroundColor = "rgb(50, 50, 50)"}
+    else {d(id).style.backgroundColor = "rgb(25, 25, 25)"}
+    return;
+  }
 }
 function updateip() {
   d("ipx").textContent = e(user.ip.x, 2);
-  if (user.automate.inc.x) {d("ipsecx").textContent = e(getincxx())}
+  if (user.automate.inc.x) {d("ipsecx").textContent = e(getincxx().times(getautomateincxrate()))}
   else {d("ipsecx").textContent = 0}
   updatepbip();
 }
 function updatepbip() {
-  for (let i = (goals.ip.length - 1); i >= 0; i--) {
-    if (user.ip.sac.lt(goals.ip[i])) {
-      d("pbip").style.width = nd(100).times(user.ip.sac).divide(goals.ip[i]).toFixed(2) + "%";
-      d("pbipx").innerHTML = e(nd(100).times(user.ip.sac).divide(goals.ip[i]), 2, 2) + "%&rArr;" + unlocknames.ip[i];
-      if (user.automate.inc.x) {d("pbiptime").textContent = time(nd(goals.ip[i]).minus(user.ip.sac).divide(getincxx()).times(1000))}
-      else {d("pbiptime").textContent = "Infinite Time"; d("pbiptime").textContent = "-"}
-      if (d("pbiptime").textContent == "0.000 Seconds") {d("pbiptime").textContent = "Infinite Time"}
-    }
+  let j = 0;
+  for (let i = 0; i < goals.ip.length; i++) {if (user.ip.sac.gte(goals.ip[i]) && user.sacrifice.ip.x.gte(goals.ipsac[i])) {j = i + 1}}
+  d("pbip").style.width = nd(100).times(user.ip.sac).divide(goals.ip[j]).toFixed(2) + "%";
+  d("pbipx").innerHTML = e(user.ip.sac) + "IP/" + e(nd(goals.ip[j])) + "IP";
+  if (user.automate.inc.x) {d("pbiptime").innerHTML = unlocknames.ip[j] + "<br>" + time(nd(goals.ip[j]).minus(user.ip.sac).divide(getincxx()).times(1000))}
+  else {d("pbiptime").innerHTML = unlocknames.ip[j] + "<br>-"}
+  if (user.ip.sac.gte(goals.ip[j])) {
+    d("pbip").style.width = "100%";
+    d("pbipx").innerHTML = e(nd(goals.ip[j])) + "IP/" + e(nd(goals.ip[j])) + "IP";
+    d("pbiptime").innerHTML = unlocknames.ip[j] + "<br>-";
   }
   if (user.ip.sac.gte(goals.ip[goals.ip.length - 1])) {
     d("pbip").style.width = "100%";
-    d("pbipx").textContent = "100%";
-    d("pbiptime").textContent = "-";
+    d("pbipx").textContent = e(nd(goals.ip[goals.ip.length - 1])) + "IP/" + e(nd(goals.ip[goals.ip.length - 1])) + "IP";
+    d("pbiptime").innerHTML = "-<br>-";
+  }
+  let k = 0;
+  for (let i = 0; i < goals.ipsac.length; i++) {if (user.sacrifice.ip.x.gte(goals.ipsac[i])) {k = i + 1}}
+  d("pbipsac").style.width = nd(100).times(user.sacrifice.ip.x).divide(goals.ipsac[k]).toFixed(2) + "%";
+  d("pbipsacx").innerHTML = e(user.sacrifice.ip.x) + "x/" + e(nd(goals.ipsac[k])) + "x";
+  if (user.sacrifice.ip.x.gte(goals.ipsac[j])) {
+    d("pbipsac").style.width = "100%";
+    d("pbipsacx").textContent = e(nd(goals.ipsac[j])) + "x/" + e(nd(goals.ipsac[j])) + "x";
+  }
+  if (user.sacrifice.ip.x.gte(goals.ipsac[goals.ipsac.length - 1])) {
+    d("pbipsac").style.width = "100%";
+    d("pbipsacx").textContent = e(nd(goals.ipsac[goals.ipsac.length - 1])) + "x/" + e(nd(goals.ipsac[goals.ipsac.length - 1])) + "x";
   }
 }
 function updateautomation() {
@@ -97,9 +142,9 @@ function updateautomation() {
 }
 function updateautomaterate() {
   let pmc = ["p", "m", "e"];
-  for (let i = 0; i < 3; i++) {d("automatescaleinc" + pmc[i] + "rate").textContent = e(getautomaterate()) + "/s";}
+  for (let i = 0; i < 3; i++) {d("automatescaleinc" + pmc[i] + "rate").textContent = e(getautomaterate("rate").times(getautomaterate("bulk"))) + "/s"}
   d("automateincxrate").textContent = e(getautomateincxrate()) + "/s";
-  for (let i = 1; i <= 5; i++) {for (let j = 0; j < 3; j++) {d("automateinc" + pmc[j] + i + "rate").textContent = e(getautomaterate()) + "/s"}}
+  for (let i = 1; i <= 5; i++) {for (let j = 0; j < 3; j++) {d("automateinc" + pmc[j] + i + "rate").textContent = e(getautomaterate("rate").times(getautomaterate("bulk"))) + "/s"}}
 }
 function updateincx() {
   d("incxx").textContent = "+" + e(getincxx());
@@ -167,6 +212,15 @@ function updatescaleinc() {
     }
   }
   d("scaleincmcost").textContent = e(getscaleincmcost());
+  if (user.ip.sac.gte(goals.ip[unlocks.ip.indexOf("ince1")])) {
+    d("scaleincex").innerHTML = "1/" + e(getscaleince(1), 2, 2);
+    for (let i = 2; i <= 5; i++) {
+      if (user.ip.sac.gte(goals.ip[unlocks.ip.indexOf("incm" + i)])) {
+        d("scaleincex").innerHTML += "<br>1/" + e(getscaleince(i), 2, 2);
+      }
+    }
+  }
+  d("scaleincecost").textContent = e(getscaleincecost());
 }
 function updatesac() {
   updatesacip();
