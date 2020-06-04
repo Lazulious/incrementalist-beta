@@ -181,7 +181,6 @@ function scale(layer, type) {
     if (type == 'e' && user.ip.x.gte(getscaleincecost())) {
       user.ip.x = user.ip.x.minus(getscaleincecost());
       user.scale.inc.e++;
-      console.log(user.scale.inc.e);
       updateip();
       updateince();
       updatescaleinc();
