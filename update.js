@@ -1,6 +1,25 @@
 function updater() {
   setInterval(() => {
     if (focused) {
+      if (user.tab == "scale") {
+        if (user.automate.inc.x || user.automate.scale.inc.p || user.automate.scale.inc.m || user.automate.scale.inc.e) {updatescaleinc()}
+      }
+      if (user.tab == "sac") {
+        if (user.automate.inc.x) {updatesacip()}
+      }
+      if (user.tab == "ip") {
+        if (user.automate.scale.inc.p || user.automate.inc.p[1] || user.automate.inc.p[2] || user.automate.inc.p[3] || user.automate.inc.p[4] || user.automate.inc.p[5]) {updateincp()}
+        if (user.automate.scale.inc.m || user.automate.inc.m[1] || user.automate.inc.m[2] || user.automate.inc.m[3] || user.automate.inc.m[4] || user.automate.inc.m[5]) {updateincm()}
+        if (user.automate.scale.inc.e || user.automate.inc.e[1] || user.automate.inc.e[2] || user.automate.inc.e[3] || user.automate.inc.e[4] || user.automate.inc.e[5]) {updateince()}
+        let isTrue = false;
+        for (let i = 1; i <= 5; i++) {if (user.automate.inc.p[i] || user.automate.inc.m[i] || user.automate.inc.e[i]) {isTrue = true}}
+        if (isTrue) {updateincx()}
+      }
+      let isTrue = false;
+      for (let i = 1; i <= 5; i++) {if (user.automate.inc.p[i] || user.automate.inc.m[i] || user.automate.inc.e[i]) {isTrue = true}}
+      if (user.automate.inc.x || isTrue) {updateip()}
+      if (user.automate.inc.x) {unlockip()}
+      /*
       if (user.automate.inc.x || user.automate.inc.p[1] || user.automate.inc.p[2] || user.automate.inc.p[3] || user.automate.inc.p[4] || user.automate.inc.p[5] || user.automate.inc.m[1] || user.automate.inc.m[2] || user.automate.inc.m[3] || user.automate.inc.m[4] || user.automate.inc.m[5] || user.automate.inc.e[1] || user.automate.inc.e[2] || user.automate.inc.e[3] || user.automate.inc.e[4] || user.automate.inc.e[5] || user.automate.scale.inc.p || user.automate.scale.inc.m || user.automate.scale.inc.e) {updateip()}
       if (user.automate.inc.x) {updatesacip(); unlockip()}
       if (user.automate.inc.p[1] || user.automate.inc.p[2] || user.automate.inc.p[3] || user.automate.inc.p[4] || user.automate.inc.p[5] || user.automate.inc.m[1] || user.automate.inc.m[2] || user.automate.inc.m[3] || user.automate.inc.m[4] || user.automate.inc.m[5] || user.automate.inc.e[1] || user.automate.inc.e[2] || user.automate.inc.e[3] || user.automate.inc.e[4] || user.automate.inc.e[5]) {updateincx()}
@@ -8,6 +27,7 @@ function updater() {
       if (user.automate.scale.inc.m || user.automate.inc.m[1] || user.automate.inc.m[2] || user.automate.inc.m[3] || user.automate.inc.m[4] || user.automate.inc.m[5]) {updateincm()}
       if (user.automate.scale.inc.e || user.automate.inc.e[1] || user.automate.inc.e[2] || user.automate.inc.e[3] || user.automate.inc.e[4] || user.automate.inc.e[5]) {updateince()}
       if (user.automate.inc.x || user.automate.scale.inc.p || user.automate.scale.inc.m || user.automate.scale.inc.e) {updatescaleinc()}
+      */
     }
   }, (1000 / updaterate));
 }
