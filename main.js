@@ -244,13 +244,13 @@ function confirmation(name) {
 }
 
 function progress() {
-  let x = nd(10).pow(400);
+  /*let x = nd(10).pow(400);
   user.ip.x = user.ip.x.plus(x);
   user.ip.sac = user.ip.sac.plus(x);
   user.ip.pp = user.ip.pp.plus(x);
   user.ip.total = user.ip.total.plus(x);
   updates();
-  unlocking();
+  unlocking();*/
 }
 
 //event listeners
