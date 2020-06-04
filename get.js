@@ -1,4 +1,4 @@
-function getautomateincxrate() {return nd(1).times(gamespeed)}
+function getautomateincxrate() {return nd(gamespeed)}
 function getautomaterate(type) {
   if (typeof type == "undefined") {type = "rate"}
   let rate = nd(100).times(gamespeed);
@@ -35,8 +35,16 @@ function getince(num, type) {
 function getscaleincp(num) {return nd(1).divide(nd(1).minus(nd(0.1).times(nd(0.5).pow(num - 1))).pow(user.scale.inc.p))}
 function getscaleincm(num) {return nd(1).divide(nd(1).minus(nd(0.1).times(nd(0.5).pow(num - 1))).pow(nd(user.scale.inc.m).divide(2)))}
 function getscaleince(num) {return nd(1).divide(nd(1).minus(nd(0.0141).times(nd(0.5).pow(num - 1))).pow(nd(user.scale.inc.e).divide(4)))}
-function getscaleincpcost() {return nd(1.6).pow(user.scale.inc.p).floor()}
-function getscaleincmcost() {return nd(2.1).pow(user.scale.inc.m).floor()}
+function getscaleincpcost() {
+  let cost = nd(1.6).pow(user.scale.inc.p).floor();
+  if (cost.gte(1.79e308)) {return nd(1.6).pow(nd(user.scale.inc.p).times(nd(nd(user.scale.inc.p).log10()))).floor()}
+  else {return cost}
+}
+function getscaleincmcost() {
+  let cost = nd(2.1).pow(user.scale.inc.m).floor();
+  if (cost.gte(1.79e308)) {return nd(2.1).pow(nd(user.scale.inc.m).times(nd(nd(user.scale.inc.p).log10()))).floor()}
+  else {return cost}
+}
 function getscaleincecost() {return nd(2).pow(nd(user.scale.inc.e).minus(25).divide(50).floor().plus(3)).divide(10).plus(1).pow(user.scale.inc.e).floor()}
 function getsacipxnext() {
   if (user.ip.x.gte(1.79e308)) {return user.sacrifice.ip.x.plus(nd(nd(user.ip.sac.log10()).sqrt()).pow(nd(user.ip.sac.log10()).divide(1.5).sqrt()).times(user.sacrifice.ip.x.plus(1).sqrt()))}
