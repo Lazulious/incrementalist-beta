@@ -41,27 +41,33 @@ const autoInterval = {
     inc: {
       p: () => {
         setTimeout(() => {
-          if (user.automate.scale.inc.p && focused && user.ip.x.gte(getscaleincpcost())) {
-            user.ip.x = user.ip.x.minus(getscaleincpcost());
-            user.scale.inc.p++;
+          for (let i = 0; i < gamespeed; i++) {
+            if (user.automate.scale.inc.p && focused && user.ip.x.gte(getscaleincpcost())) {
+              user.ip.x = user.ip.x.minus(getscaleincpcost());
+              user.scale.inc.p++;
+            }
           }
           if (user.automate.scale.inc.p) {autoInterval.scale.inc.p()}
         }, (1000 / getautomaterate()));
       },
       m: () => {
         setTimeout(() => {
-          if (user.automate.scale.inc.m && focused && user.ip.x.gte(getscaleincmcost())) {
-            user.ip.x = user.ip.x.minus(getscaleincmcost());
-            user.scale.inc.m++;
+          for (let i = 0; i < gamespeed; i++) {
+            if (user.automate.scale.inc.m && focused && user.ip.x.gte(getscaleincmcost())) {
+              user.ip.x = user.ip.x.minus(getscaleincmcost());
+              user.scale.inc.m++;
+            }
           }
           if (user.automate.scale.inc.m) {autoInterval.scale.inc.m()}
         }, (1000 / getautomaterate()));
       },
       e: () => {
         setTimeout(() => {
-          if (user.automate.scale.inc.e && focused && user.ip.x.gte(getscaleincecost())) {
-            user.ip.x = user.ip.x.minus(getscaleincecost());
-            user.scale.inc.e++;
+          for (let i = 0; i < gamespeed; i++) {
+            if (user.automate.scale.inc.e && focused && user.ip.x.gte(getscaleincecost())) {
+              user.ip.x = user.ip.x.minus(getscaleincecost());
+              user.scale.inc.e++;
+            }
           }
           if (user.automate.scale.inc.e) {autoInterval.scale.inc.e()}
         }, (1000 / getautomaterate()));
