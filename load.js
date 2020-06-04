@@ -27,7 +27,6 @@ function loadData(data) {
     console.log("Loaded version " + user.version);
   }
   ndify(user);
-  user.time = Date.now();
   tab(user.tab);
   loadOffline();
   loadAutomate();
