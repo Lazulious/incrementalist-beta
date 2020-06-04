@@ -32,7 +32,7 @@ const currencyids = ["ip", "pp", "ap", "tp", "dp", "gp"];
 const currencynames = ["Increment", "Prestige", "Ascension", "Transcension", "Divinity", "WIP"];
 const tabs = ["auto", "scale", "sac", "ach", "ip", "pp", "ap", "tp", "dp", "gp"];
 const goals = {
-  ip: [100, 2000, 2000, 2000, 10000, 25000, 100000, 100000, 500000, 2e6, 1e7, 1e8, 1e9, 2e10, 1e12, 1e13, 1e15, 1e19, 1e23, 1e27, 1e30, 1e37, 2.5e47, 1e68, 5e84, 1e190, 1e208, ndn(1, 465)],
+  ip: [100, 2000, 2000, 2000, 10000, 25000, 100000, 100000, 500000, 2e6, 1e7, 1e8, 1e9, 2e10, 1e12, 1e13, 1e15, 1e19, 1e23, 1e27, 1e30, 1e37, 2.5e47, 1e68, 5e84, 1e190, 1e208, ndn(1, 454)],
   ipsac: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10000, 33333, 100000, 250000, 1e6, 1e13, 2.5e14, 1e42],
 }
 const unlocks = {
@@ -244,7 +244,7 @@ function confirmation(name) {
 }
 
 function progress() {
-  /*let x = nd(10).pow(400);
+  /*let x = nd(10).pow(460);
   user.ip.x = user.ip.x.plus(x);
   user.ip.sac = user.ip.sac.plus(x);
   user.ip.pp = user.ip.pp.plus(x);
