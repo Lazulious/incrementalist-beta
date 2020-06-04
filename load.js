@@ -4,34 +4,27 @@ function save() {localStorage.setItem("user", JSON.stringify(user)); brokenUser 
 function load() {
   let data = JSON.parse(localStorage.getItem("user"));
   brokenUser = data;
-  if (data != null) {loadData(data)}
+  if (data != null && data.version != null) {loadData(data)}
+  else {updates(); unlocking()}
 }
 function ndify(obj) {
-  for (key in obj.ip) {user.ip[key] = nd(obj.ip[key])}
-  for (key in obj.pp) {user.pp[key] = nd(obj.pp[key])}
-  for (key in obj.ap) {user.ap[key] = nd(obj.ap[key])}
-  for (key in obj.tp) {user.tp[key] = nd(obj.tp[key])}
-  for (key in obj.dp) {user.dp[key] = nd(obj.dp[key])}
-  for (key in obj.gp) {user.gp[key] = nd(obj.gp[key])}
+  user.ip.x = nd(user.ip.x);
+  user.ip.sac = nd(user.ip.sac);
+  user.ip.pp = nd(user.ip.pp);
+  user.ip.total = nd(user.ip.total);
   user.sacrifice.ip.x = nd(user.sacrifice.ip.x);
-  user.sacrifice.pp.x = nd(user.sacrifice.pp.x);
-  user.sacrifice.ap.x = nd(user.sacrifice.ap.x);
-  user.sacrifice.tp.x = nd(user.sacrifice.tp.x);
-  user.sacrifice.dp.x = nd(user.sacrifice.dp.x);
-  user.sacrifice.gp.x = nd(user.sacrifice.gp.x);
 }
 function loadsame(obj1, obj2, array) {for (let i = 0; i < array.length; i++) {obj1[array[i]] = obj2[array[i]]}}
-function loadData(d) {
-  let data = d;
+function loadData(data) {
   user = data;
   if (user.version == "0.0.0") {
     console.log("Loaded version " + user.version);
+    user.active.displaypause = false;
     user.confirm = {}
     user.version = "0.1.0";
   }
   if (user.version == "0.1.0") {
     console.log("Loaded version " + user.version);
-    user.confirm = data.confirm;
   }
   ndify(user);
   user.time = Date.now();
@@ -39,13 +32,15 @@ function loadData(d) {
   loadOffline();
   loadAutomate();
 }
-function loadOffline() {
-  let timeOffline = Math.abs(user.time - Date.now());
+function loadOffline(ms) {
+  let timeOffline = 0;
+  if (typeof ms == "undefined") {timeOffline = Math.abs(user.time - Date.now())}
+  else {timeOffline = ms}
   if (user.automate.inc.x) {
-    user.ip.x = user.ip.x.plus(timeOffline / 1000 * getincxx());
-    user.ip.sac = user.ip.sac.plus(timeOffline / 1000 * getincxx());
-    user.ip.pp = user.ip.pp.plus(timeOffline / 1000 * getincxx());
-    user.ip.total = user.ip.total.plus(timeOffline / 1000 * getincxx());
+    user.ip.x = user.ip.x.plus(nd(timeOffline).divide(1000).times(getincxx()));
+    user.ip.sac = user.ip.sac.plus(nd(timeOffline).divide(1000).times(getincxx()));
+    user.ip.pp = user.ip.pp.plus(nd(timeOffline).divide(1000).times(getincxx()));
+    user.ip.total = user.ip.total.plus(nd(timeOffline).divide(1000).times(getincxx()));
   }
   updates();
   unlocking();
@@ -73,5 +68,5 @@ function updates() {
   updatesac();
   updateversion();
 }
-const tempHide = ["pp", "space1", "ap", "space2", "tp", "space3", "dp", "space4", "gp", "ince5", "btabpp", "btabap", "btabtp", "btabdp", "btabgp", "automationince", "btabach"];
+const tempHide = ["pp", "space1", "ap", "space2", "tp", "space3", "dp", "space4", "gp", "btabpp", "btabap", "btabtp", "btabdp", "btabgp", "automationince", "btabach"];
 for (let i = 0; i < tempHide.length; i++) {h(tempHide[i])}
