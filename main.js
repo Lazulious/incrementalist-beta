@@ -273,5 +273,3 @@ h("settings");
 d("loading").style.opacity = 0;
 d("game").style.opacity = 1;
 setTimeout(() => {h("loading")}, 750);
-
-user.sacrifice.ip.x = nd(1e42);
