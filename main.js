@@ -32,15 +32,15 @@ const currencyids = ["ip", "pp", "ap", "tp", "dp", "gp"];
 const currencynames = ["Increment", "Prestige", "Ascension", "Transcension", "Divinity", "WIP"];
 const tabs = ["auto", "scale", "sac", "ach", "ip", "pp", "ap", "tp", "dp", "gp"];
 const goals = {
-  ip: [100, 2000, 2000, 2000, 10000, 25000, 100000, 100000, 500000, 2e6, 1e7, 1e8, 1e9, 2e10, 1e12, 1e13, 1e15, 1e19, 1e23, 1e27, 1e30, 1e37, 2.5e47, 1e68, 5e84, 1e190],
-  ipsac: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10000, 33333, 100000, 250000, 1e6, 1e13],
+  ip: [100, 2000, 2000, 2000, 10000, 25000, 100000, 100000, 500000, 2e6, 1e7, 1e8, 1e9, 2e10, 1e12, 1e13, 1e15, 1e19, 1e23, 1e27, 1e30, 1e37, 2.5e47, 1e68, 5e84, 1e190, 1e208, ndn(1, 465)],
+  ipsac: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10000, 33333, 100000, 250000, 1e6, 1e13, 2.5e14, 1e42],
 }
 const unlocks = {
-  /*: [100    , 2000      , 2000            , 2000   , 10000  , 25000           , 100000     , 100000,    , 500000 , 2e6    , 1e7    , 1e8    , 1e9                  , 2e10   , 1e12            , 1e13       , 1e15   , 1e19   , 1e23     , 1e27                 , 1e30   , 1e37   , 2.5e47   , 1e68     , 5e84*/
-  ip: ["incp2", "btabauto", "automationincx", "ipsec", "incp3", "automationincp", "btabscale", "scaleincp", "incp4", "incp5", "incm1", "incm2", "automationscaleincp", "incm3", "automationincm", "scaleincm", "incm4", "incm5", "btabsac", "automationscaleincm", "ince1", "ince2", "ince3", "scaleince", "ince4", "automationscaleince"],
+  /*: [100    , 2000      , 2000            , 2000   , 10000  , 25000           , 100000     , 100000,    , 500000 , 2e6    , 1e7    , 1e8    , 1e9                  , 2e10   , 1e12            , 1e13       , 1e15   , 1e19   , 1e23     , 1e27                 , 1e30   , 1e37   , 2.5e47   , 1e68     , 5e84   , 1e190                , 1e208*/
+  ip: ["incp2", "btabauto", "automationincx", "ipsec", "incp3", "automationincp", "btabscale", "scaleincp", "incp4", "incp5", "incm1", "incm2", "automationscaleincp", "incm3", "automationincm", "scaleincm", "incm4", "incm5", "btabsac", "automationscaleincm", "ince1", "ince2", "ince3", "scaleince", "ince4", "automationscaleince", "ince5"],
 }
 const unlocknames = {
-  ip: ["Increment", "Automation", "Automation", "Automation", "Increment", "Automation", "Scaling", "Scaling", "Increment", "Increment", "Increment", "Increment", "Automation", "Increment", "Automation", "Scaling", "Increment", "Increment", "Sacrifice", "Automation", "Increment", "Increment", "Increment", "Scaling", "Increment", "Automation", "SoftLimit"],
+  ip: ["Increment", "Automation", "Automation", "Automation", "Increment", "Automation", "Scaling", "Scaling", "Increment", "Increment", "Increment", "Increment", "Automation", "Increment", "Automation", "Scaling", "Increment", "Increment", "Sacrifice", "Automation", "Increment", "Increment", "Increment", "Scaling", "Increment", "Automation", "Increment", "SoftLimit"],
 }
 
 //do not change
@@ -49,6 +49,7 @@ var updaterate = 24; //Display updates per second
 const tickrate = 24; //Calculated ticks per second
 if (updaterate > tickrate) {updaterate = tickrate}
 var gamespeed = 1; //Testing
+function skip(ms) {loadOffline(ms)}
 
 //global functions
 function automation(tab, con, type) {
@@ -151,6 +152,7 @@ function unlockip() {
   if (sac.gte(1e68) && sacx.gte(250000)) {s("scaleince")} else {h("scaleince")}
   if (sac.gte(5e84) && sacx.gte(1e6)) {s("ince4")} else {h("ince4")}
   if (sac.gte(1e190) && sacx.gte(1e13)) {s("automationscaleince")} else {h("automationscaleince")}
+  if (sac.gte(1e208) && sacx.gte(2.5e14)) {s("ince5")} else {h("ince5")}
   unlockautomate("ip");
 }
 function unlockautomate(layer) {
@@ -204,9 +206,9 @@ function confirmReset() {
 }
 function reset() {
   console.log("Game reset");
-  localStorage.clear();
   user = setUser();
   brokenUser = setUser();
+  localStorage.removeItem("user");
   user.time = Date.now();
   tab("ip");
   updates();
@@ -242,13 +244,13 @@ function confirmation(name) {
 }
 
 function progress() {
-  /*let x = 1e180;
+  let x = nd(10).pow(400);
   user.ip.x = user.ip.x.plus(x);
   user.ip.sac = user.ip.sac.plus(x);
   user.ip.pp = user.ip.pp.plus(x);
   user.ip.total = user.ip.total.plus(x);
   updates();
-  unlocking();*/
+  unlocking();
 }
 
 //event listeners
@@ -266,8 +268,10 @@ brokenCheck();
 load();
 saving();
 updater();
-tab("ip");
+if (user.tab == "ip") {tab("ip")}
 h("settings");
 d("loading").style.opacity = 0;
 d("game").style.opacity = 1;
 setTimeout(() => {h("loading")}, 750);
+
+user.sacrifice.ip.x = nd(1e42);
