@@ -37,17 +37,14 @@ function getscaleincm(num) {return nd(1).divide(nd(1).minus(nd(0.1).times(nd(0.5
 function getscaleince(num) {return nd(1).divide(nd(1).minus(nd(0.0141).times(nd(0.5).pow(num - 1))).pow(nd(user.scale.inc.e).divide(4)))}
 function getscaleincpcost() {return nd(1.6).pow(user.scale.inc.p).floor()}
 function getscaleincmcost() {return nd(2.1).pow(user.scale.inc.m).floor()}
-function getscaleincecost() {
-  if (user.scale.inc.e >= 225) {return nd(13.8).pow(user.scale.inc.e).floor()}
-  else if (user.scale.inc.e >= 175) {return nd(7.4).pow(user.scale.inc.e).floor()}
-  else if (user.scale.inc.e >= 125) {return nd(4.2).pow(user.scale.inc.e).floor()}
-  else {return nd(2.6).pow(user.scale.inc.e).floor()}
-}
+function getscaleincecost() {return nd(2).pow(nd(user.scale.inc.e).minus(25).divide(50).floor().plus(3)).divide(10).plus(1).pow(user.scale.inc.e).floor()}
 function getsacipxnext() {
-  if (user.sacrifice.ip.x.gte(2.5e6)) {return user.sacrifice.ip.x.plus(nd(nd(user.ip.sac.log10()).times(10).log10()).pow(nd(user.ip.sac.log10()).divide(1.5).sqrt()).times(user.sacrifice.ip.x.sqrt()))}
+  if (user.ip.x.gte(1.79e308)) {return user.sacrifice.ip.x.plus(nd(nd(user.ip.sac.log10()).sqrt()).pow(nd(user.ip.sac.log10()).divide(1.5).sqrt()).times(user.sacrifice.ip.x.plus(1).sqrt()))}
+  else if (user.sacrifice.ip.x.gte(2.5e6)) {return user.sacrifice.ip.x.plus(nd(nd(user.ip.sac.log10()).times(10).log10()).pow(nd(user.ip.sac.log10()).divide(1.5).sqrt()).times(user.sacrifice.ip.x.sqrt()))}
   else {return user.sacrifice.ip.x.plus(nd(nd(user.ip.sac.log10()).plus(10).log10()).pow(nd(user.ip.sac.log10()).divide(1.5).sqrt()).times(user.sacrifice.ip.x.sqrt()))}
 }
 function getsacipcost() {
-  if (user.sacrifice.ip.count >= 75) {return nd(1e46).times(nd(2).pow(user.sacrifice.ip.count))}
+  if (user.sacrifice.ip.count >= 100) {return nd(1e92).times(nd(2).pow(user.sacrifice.ip.count))}
+  else if (user.sacrifice.ip.count >= 75) {return nd(1e46).times(nd(2).pow(user.sacrifice.ip.count))}
   else {return nd(1e23).times(nd(2).pow(user.sacrifice.ip.count))}
 }
