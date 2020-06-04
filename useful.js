@@ -22,10 +22,10 @@ function e(obj, exp, dec) {
   if (typeof exp == "undefined") {exp = 2}
   if (typeof dec == "undefined") {dec = 0}
   if (dec > 10) {dec = 10}
-  if (obj.e >= 1e6) {
-    return obj.m.toFixed(exp) + "e" + obj.e.toExponential(exp)/*.replace("1e+", "e")*/.replace("e+", "e");
-  }
-  else if (obj.e >= 6) {
+  /*if (obj.e >= 1e6) {
+    return obj.m.toFixed(exp) + "e" + obj.e.toExponential(exp).replace("e+", "e");
+  }*/
+  if (obj.e >= 6) {
     if (obj.m.toFixed(exp) >= 10) {obj.m /= 10; obj.e++}
     return obj.m.toFixed(exp) + "e" + obj.e.toLocaleString();
   }
@@ -128,6 +128,7 @@ function cb2(el) {
   else {el.select()}
   document.execCommand("copy");
 }
+function ndn(m, e) {return nd(m).times(nd(10).pow(e))}
 
 //other
 function tab(t) {
