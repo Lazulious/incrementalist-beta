@@ -15,7 +15,7 @@ function setUser() {
     confirm: {creset: true, csacrifice: true},
     tab: "ip",
     time: 0,
-    version: "0.2.0",
+    version: "0.1.2",
   }
 }
 
