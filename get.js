@@ -1,7 +1,7 @@
-function getautomateincxrate() {return nd(gamespeed)}
+function getautomateincxrate() {return nd(1)}
 function getautomaterate(type) {
   if (typeof type == "undefined") {type = "rate"}
-  let rate = nd(100).times(gamespeed);
+  let rate = nd(100);
   if (type == "rate") {
     if (rate.gt(100)) {return nd(100)}
     else {return rate}
@@ -12,41 +12,6 @@ function getautomaterate(type) {
   }
 }
 function getautomationincp(num, type) {if (type == "rate") {return nd(1)}}
-function getincxx() {
-  let x = nd();
-  for (let i = 1; i <= 5; i++) {x = x.plus(getincp(i, "x"))}
-  for (let i = 1; i <= 5; i++) {x = x.times(getincm(i, "x"))}
-  for (let i = 1; i <= 5; i++) {x = x.pow(getince(i, "x"))}
-  x = x.times(user.sacrifice.ip);
-  return x;
-}
-function getincp(num, type) {
-  if (type == "x") {return nd(num).pow(num - 1).times(user.inc.p[num])}
-  if (type == "cost") {
-    let cost = nd(10).times(nd(2).pow((nd(user.inc.p[num]).times(nd(user.inc.p[num]).plus(1).log10()).times(nd(1).divide(getscaleincp(num))).divide(6 - num)))).floor();
-    return cost;
-    if (cost.gte(infinity)) {return "Infinity"}
-    return cost;
-  }
-}
-function getincm(num, type) {
-  if (type == "x") {return nd(3).pow(num - 1).times(user.inc.m[num]).plus(1)}
-  if (type == "cost") {
-    let cost = nd(1e6).times(nd(3).pow((nd(user.inc.m[num]).times(nd(user.inc.m[num]).plus(1).log10()).times(nd(1).divide(getscaleincm(num))).divide(6 - num)))).floor();
-    return cost;
-    if (cost.gte(infinity)) {return "Infinity"}
-    return cost;
-  }
-}
-function getince(num, type) {
-  if (type == "x") {return nd(nd(user.inc.e[num]).times(nd(num + 9).log10()).divide(nd(2).sqrt()).plus(1).log10()).plus(1)}
-  if (type == "cost") {
-    let cost = nd(1e29).pow(nd(num + 1).pow(nd(user.inc.e[num]).times(nd(1).divide(getscaleince(num)))));
-    return cost;
-    if (cost.gte(infinity)) {return "Infinity"}
-    return cost;
-  }
-}
 function getscaleincp(num) {
   let x = nd(1).divide(nd(1).minus(nd(0.1).times(nd(0.5).pow(num - 1))).pow(user.scale.inc.p));
   let y = nd(x.log10()).divide(3).floor();
@@ -92,3 +57,47 @@ function getsacipcost() {
   if (cost.gte(infinity)) {return "Infinity"}
   else {return cost}
 }
+function getincxx() {
+  let x = nd();
+  for (let i = 1; i <= 5; i++) {x = x.plus(getincp(i, "x"))}
+  for (let i = 1; i <= 5; i++) {x = x.times(getincm(i, "x"))}
+  for (let i = 1; i <= 5; i++) {x = x.pow(getince(i, "x"))}
+  x = x.times(user.sacrifice.ip);
+  return x;
+}
+function getincp(num, type, count, fixed) {
+  if (type == "x") {return nd(num).pow(num - 1).times(user.inc.p[num])}
+  if (type == "cost") {
+    let n = 0;
+    if (typeof count == "undefined") {count = 0}
+    if (typeof fixed == "undefined") {n = user.inc.p[num]} else {n = 0}
+    let cost = nd(10).times(nd(2).pow((nd(n).plus(count).times(nd(n).plus(count).plus(1).log10()).times(nd(1).divide(getscaleincp(num))).divide(6 - num)))).floor();
+    return cost;
+  }
+}
+function getincm(num, type, count, fixed) {
+  if (type == "x") {return nd(3).pow(num - 1).times(user.inc.m[num]).plus(1)}
+  if (type == "cost") {
+    let n = 0;
+    if (typeof count == "undefined") {count = 0}
+    if (typeof fixed == "undefined") {n = user.inc.m[num]} else {n = 0}
+    let cost = nd(1e6).times(nd(3).pow((nd(n).plus(count).times(nd(n).plus(count).plus(1).log10()).times(nd(1).divide(getscaleincm(num))).divide(6 - num)))).floor();
+    return cost;
+  }
+}
+function getince(num, type, count, fixed) {
+  if (type == "x") {return nd(nd(user.inc.e[num]).times(nd(num + 9).log10()).divide(nd(2).sqrt()).plus(1).log10()).plus(1)}
+  if (type == "cost") {
+    let n = 0;
+    if (typeof count == "undefined") {count = 0}
+    if (typeof fixed == "undefined") {n = user.inc.e[num]}
+    let cost = nd(1e29).pow(nd(num + 1).pow(nd(n).plus(count).times(nd(1).divide(getscaleince(num)))));
+    return cost;
+  }
+}
+function getppnext() {
+  let next = ppreq.times(nd(10).pow(user.pp.extra));
+  if (user.ip.pp.gte(next)) {user.pp.extra++; next = ppreq.times(nd(10).pow(user.pp.extra))}
+  return next;
+}
+function getppgain() {return nd(user.pp.extra)}
