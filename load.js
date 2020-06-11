@@ -45,9 +45,9 @@ function loadData(data) {
   if (user.version == "0.1.1") {
     console.log("Loaded version " + user.version);
     user.pp.extra = 0;
-    user.version = "0.2.0";
+    user.version = "0.1.2";
   }
-  if (user.version == "0.2.0") {
+  if (user.version == "0.1.2") {
     console.log("Loaded version " + user.version);
   }
   ndify(user);
