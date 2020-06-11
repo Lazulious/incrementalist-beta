@@ -1,20 +1,4 @@
 //main
-/*function e(num, exp, dec) {
-  let x = "";
-  if (typeof num == "undefined") {x = "Error 1"}
-  else if (typeof num == "string") {x = num}
-  else if (num >= 1e6) {x = num.toExponential(exp)}
-  else {
-    let a = Math.floor(num / 1000);
-    let b = (num % 1000).toFixed(dec);
-    if (b == 1000) {a++; b = 0}
-    if (a == 0) {x = b}
-    else if (b < 10) {x = a + ",00" + b}
-    else if (b < 100) {x = a + ",0" + b}
-    else {x = a + "," + b}
-  }
-  return x.replace("+", "");
-}*/
 function e(obj, exp, dec) {
   if (typeof obj == "undefined") {return "Error=e1"}
   if (typeof obj == "number") {return "Error=e2"}
@@ -47,33 +31,9 @@ function h(x) {document.getElementById(x).style.display = "none"}
 function s(x) {document.getElementById(x).style.display = "inline"}
 function sb(x) {document.getElementById(x).style.display = ""}
 function sf(x) {document.getElementById(x).style.display = "flex"}
-/*function show(id) {
-  if (user.show.ip <= unlocks.ip.indexOf(id)) {user.show.ip++}
-  s(id);
-}*/
 function del(a, b) {document.addEventListener(a, b)}
 function wel(a, b) {window.addEventListener(a, b)}
-/*function time(time) {
-  let x = time / 1000;
-  if (x == Infinity || time == null) {return "Infinite Time"}
-  let y = e(Math.floor(x / 31536000), 2);
-  let yy = (y == 1) ? " Year " : " Years ";
-  let d = Math.floor((x % 31536000) / 86400);
-  let dd = (d == 1) ? " Day " : " Days ";
-  let h = Math.floor((x % 86400) / 3600);
-  let hh = (h == 1) ? " Hour " : " Hours ";
-  let m = Math.floor((x % 3600) / 60);
-  let mm = (m == 1) ? " Minute " : " Minutes ";
-  let s = Math.floor(x % 60);
-  let ss = (s == 1) ? " Second" : " Seconds";
-  if (y == 0) {y = ""; yy = ""}
-  if (d == 0) {d = ""; dd = ""}
-  if (h == 0 || y > 0) {h = ""; hh = ""}
-  if (m == 0 || d > 0 || y > 0) {m = ""; mm = ""}
-  if (s == 0 || h > 0 || d > 0 || y > 0) {s = ""; ss = ""}
-  return y + yy + d + dd + h + hh + m + mm + s + ss;
-}*/
-function time(obj) {
+function time(obj, full) {
   let x = obj.divide(1000);
   if (x == "Infinity" || typeof x == "null" || typeof obj == "undefined") {return "Infinite Time"}
   let y = e(x.divide(31536000).floor());
@@ -88,12 +48,20 @@ function time(obj) {
   let ss = (s == 1) ? " Second " : " Seconds ";
   /*let ms = x.minus(x.floor()).times(1000).floor();
   let msms = (ms == 1) ? " Millisecond" : " Milliseconds";*/
-  if (y == 0) {y = ""; yy = ""}
-  if (d == 0 || Number(y) > 1000) {d = ""; dd = ""}
-  if (h == 0 || Number(y.replace(",", "")) > 0) {h = ""; hh = ""}
-  if (m == 0 || d > 0 || Number(y.replace(",", "")) > 0) {m = ""; mm = ""}
-  if (h > 0 || d > 0 || Number(y.replace(",", "")) > 0) {s = ""; ss = ""}
-  /*if (m > 0 || h > 0 || d > 0 || y > 0) {ms = ""; msms = ""}*/
+  if (!full) {
+    if (y == 0) {y = ""; yy = ""}
+    if (d == 0 || Number(y) > 1000) {d = ""; dd = ""}
+    if (h == 0 || Number(y.replace(",", "")) > 0) {h = ""; hh = ""}
+    if (m == 0 || d > 0 || Number(y.replace(",", "") > 0)) {m = ""; mm = ""}
+    if (h > 0 || d > 0 || Number(y.replace(",", "") > 0)) {s = ""; ss = ""}
+    /*if (m > 0 || h > 0 || d > 0 || y > 0) {ms = ""; msms = ""}*/
+  }
+  else {
+    if (y == 0) {y = ""; yy = ""}
+    if (d == 0) {d = ""; dd = ""}
+    if (h == 0) {h = ""; hh = ""}
+    if (m == 0) {m = ""; mm = ""}
+  }
   return y + yy + d + dd + h + hh + m + mm + s + ss/* + ms + msms*/;
 }
 function cb(str) {
@@ -129,8 +97,20 @@ function cb2(el) {
   document.execCommand("copy");
 }
 function ndn(m, e) {return nd(m).times(nd(10).pow(e))}
+function gainip(ms) {
+  if (typeof ms == "undefined") {ms = 0}
+  user.ip.x = user.ip.x.plus(getincxx().times(nd(ms).divide(1000)));
+  user.ip.sac = user.ip.sac.plus(getincxx().times(nd(ms).divide(1000)));
+  user.ip.pp = user.ip.pp.plus(getincxx().times(nd(ms).divide(1000)));
+  user.ip.total = user.ip.total.plus(getincxx().times(nd(ms).divide(1000)));
+}
 
 //other
+function reveal() {
+  d("loading").style.opacity = 0;
+  d("game").style.opacity = 1;
+  setTimeout(() => {h("loading")}, 750);
+}
 function tab(t) {
   for (let i = 0; i < tabs.length; i++) {h("tab" + tabs[i])}
   s("tab" + t);
