@@ -30,20 +30,23 @@ function getscaleince(num) {
   for (let i = 1; i <= y; i++) {if (x.gte(nd(10).pow(i))) {x = nd(10).pow(i).divide(nd(1).minus(nd(0.0141).times(nd(0.5).pow(num - 1))).pow(nd(user.scale.inc.e).divide(nd(50).pow(i))))}}
   return x;
 }
-function getscaleincpcost() {
-  let cost = nd(1.6).pow(user.scale.inc.p).floor();
+function getscaleincpcost(count) {
+  if (typeof count == "undefined") {count = 0}
+  let cost = nd(1.6).pow(nd(user.scale.inc.p).plus(count)).floor();
   return cost;
   if (cost.gte(infinity)) {return "Infinity"; nd(1.6).pow(nd(user.scale.inc.p).times(nd(user.scale.inc.p).log10())).floor()}
   else {return cost}
 }
-function getscaleincmcost() {
-  let cost = nd(2.1).pow(user.scale.inc.m).floor();
+function getscaleincmcost(count) {
+  if (typeof count == "undefined") {count = 0}
+  let cost = nd(2.1).pow(nd(user.scale.inc.m).plus(count)).floor();
   return cost;
   if (cost.gte(infinity)) {return "Infinity"; nd(2.1).pow(nd(user.scale.inc.m).times(nd(user.scale.inc.m).log10())).floor()}
   else {return cost}
 }
-function getscaleincecost() {
-  let cost = nd(2).pow(nd(user.scale.inc.e).plus(/*18*/25).divide(50).floor().plus(2)).divide(10).plus(1).pow(user.scale.inc.e).floor();
+function getscaleincecost(count) {
+  if (typeof count == "undefined") {count = 0}
+  let cost = nd(2).pow(nd(user.scale.inc.e).plus(count).plus(25).divide(50).floor().plus(2)).divide(10).plus(1).pow(user.scale.inc.e).floor();
   return cost;
   if (cost.gte(infinity)) {return "Infinity"; nd(2).pow(nd(user.scale.inc.e).minus(25).divide(50).floor().plus(3)).divide(10).plus(1).pow(nd(user.scale.inc.e).times(nd(user.scale.inc.e).log10())).floor()}
   else {return cost}
@@ -90,7 +93,7 @@ function getince(num, type, count, fixed) {
   if (type == "cost") {
     let n = 0;
     if (typeof count == "undefined") {count = 0}
-    if (typeof fixed == "undefined") {n = user.inc.e[num]}
+    if (typeof fixed == "undefined") {n = user.inc.e[num]} else {n = 0}
     let cost = nd(1e29).pow(nd(num + 1).pow(nd(n).plus(count).times(nd(1).divide(getscaleince(num)))));
     return cost;
   }

@@ -26,6 +26,7 @@ var brokenUser = setUser();
 var setting = false;
 var confirmations = false;
 var focused = false;
+var revealed = false;
 var clickrate = 0;
 var ppreq = ndn(1, 383);
 
@@ -233,10 +234,7 @@ function settings() {
   if (setting) {h("screen"); s("settings"); d("bsettings").textContent = "X"}
   else {s("screen"); h("settings"); d("bsettings").innerHTML = "&#9881"}
 }
-function exporty() {
-  if (brokenCheck()) {cb(btoa(JSON.stringify(brokenUser)))}
-  else {cb(btoa(JSON.stringify(user)))}
-}
+function exporty() {cb(btoa(JSON.stringify(brokenUser)))}
 function importy() {let data = JSON.parse(atob(prompt("Paste your save code here"))); if (data != null) {loadData(data)}}
 function confirmReset() {
   if (user.confirm.creset) {
@@ -286,7 +284,7 @@ function confirmation(name) {
 }
 
 function progress() {
-  /*let a = ndn(1, 383);
+  let a = ndn(1, 383);
   user.ip.x = user.ip.x.plus(a);
   user.ip.sac = user.ip.sac.plus(a);
   user.ip.pp = user.ip.pp.plus(a);
@@ -294,7 +292,7 @@ function progress() {
   let aa = nd(1e19);
   user.sacrifice.ip = user.sacrifice.ip.plus(aa);
   updates();
-  unlocking();*/
+  unlocking();
 }
 
 //event listeners
@@ -308,7 +306,9 @@ wel("focus", () => {if (!user.active.displaypause) {focused = true; h("display")
 
 //run on page load
 focused = true;
+var setBrokenUser = true;
 load();
+setBrokenUser = true;
 saving();
 updater();
 if (user.tab == "ip") {tab("ip")}
