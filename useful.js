@@ -132,15 +132,15 @@ function reveal() {
   d("loading").style.opacity = 0;
   d("game").style.opacity = 1;
   setTimeout(() => {h("loading")}, 750);
-  console.log(revealed);
   revealed = true;
+  console.log(revealed);
 }
 function unreveal() {
   d("loading").style.opacity = 1;
   d("game").style.opacity = 0;
   s("loading");
-  console.log(revealed);
   revealed = false;
+  console.log(revealed);
 }
 function tab(t) {
   for (let i = 0; i < tabs.length; i++) {h("tab" + tabs[i])}
