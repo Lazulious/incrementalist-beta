@@ -11,10 +11,11 @@ function setUser() {
     scale: {inc: {p: 0, m: 0, e: 0}},
     sacrifice: {ip: nd(1), pp: nd(1), ap: nd(1), tp: nd(1), dp: nd(1), gp: nd(1)},
     inc: {x: 0, p: ["null", 0, 0, 0, 0, 0], m: ["null", 0, 0, 0, 0, 0], e: ["null", 0, 0, 0, 0, 0]},
-    active: {shortendisplay: false, progressbar: false, displaypause: false},
+    active: {shortendisplay: false, progressbar: false, displaypause: false, aeAutomates: true},
     confirm: {creset: true, csacrifice: true},
     tab: "ip",
     time: 0,
+    offline: 0,
     version: "0.1.2",
   }
 }
@@ -32,7 +33,7 @@ var ppreq = ndn(1, 383);
 
 //consts
 const infinity = ndn(3.83, 383);
-const settingids = ["shortendisplay", "creset", "csacrifice", "displaypause"];
+const settingids = ["shortendisplay", "creset", "csacrifice", "displaypause", "aeAutomates"];
 const currencyids = ["ip", "pp", "ap", "tp", "dp", "gp"];
 const currencynames = ["Increment", "Prestige", "Ascension", "Transcension", "Divinity", "WIP"];
 const tabs = ["auto", "scale", "sac", "ach", "ip", "pp", "ap", "tp", "dp", "gp"];
@@ -74,7 +75,6 @@ function automation(tab, con, type) {
       updateip();
       updateautomation();
       unlockautomate("ip");
-      automate('incx');
       return;
     }
     if (type == 'p' && user.ip.x.gte(25000) && !user.automation.inc.p) {
@@ -198,18 +198,18 @@ function unlockautomate(layer) {
     else {h("automateincx")}
     if (user.automation.inc.p) {
       s("automateincp1");
-      if (sac.gte(100)) {s("automateincp2")} else {h("automateincp2")}
-      if (sac.gte(10000)) {s("automateincp3")} else {h("automateincp3")}
-      if (sac.gte(500000)) {s("automateincp4")} else {h("automateincp4")}
-      if (sac.gte(2e6)) {s("automateincp5")} else {h("automateincp5")}
+      if (sac.gte(100)) {s("automateincp2"); if (user.active.aeAutomates && !user.automate.inc.p[2]) {automate("incp", 2)}} else {h("automateincp2"); if (user.automate.inc.p[2]) {automate("incp", 2)}}
+      if (sac.gte(10000)) {s("automateincp3"); if (user.active.aeAutomates && !user.automate.inc.p[3]) {automate("incp", 3)}} else {h("automateincp3"); if (user.automate.inc.p[3]) {automate("incp", 3)}}
+      if (sac.gte(500000)) {s("automateincp4"); if (user.active.aeAutomates && !user.automate.inc.p[4]) {automate("incp", 4)}} else {h("automateincp4"); if (user.automate.inc.p[4]) {automate("incp", 4)}}
+      if (sac.gte(2e6)) {s("automateincp5"); if (user.active.aeAutomates && !user.automate.inc.p[5]) {automate("incp", 5)}} else {h("automateincp5"); if (user.automate.inc.p[5]) {automate("incp", 5)}}
     }
     else {for (let i = 1; i <= 5; i++) {h("automateincp" + i)}}
     if (user.automation.inc.m) {
-      if (sac.gte(1e7)) {s("automateincm1")} else {h("automateincm1")}
-      if (sac.gte(1e8)) {s("automateincm2")} else {h("automateincm2")}
-      if (sac.gte(2e10)) {s("automateincm3")} else {h("automateincm3")}
-      if (sac.gte(1e15)) {s("automateincm4")} else {h("automateincm4")}
-      if (sac.gte(1e19)) {s("automateincm5")} else {h("automateincm5")}
+      if (sac.gte(1e7)) {s("automateincm1"); if (user.active.aeAutomates && !user.automate.inc.m[1]) {automate("incm", 1)}} else {h("automateincm1"); if (user.automate.inc.m[1]) {automate("incm", 1)}}
+      if (sac.gte(1e8)) {s("automateincm2"); if (user.active.aeAutomates && !user.automate.inc.m[2]) {automate("incm", 2)}} else {h("automateincm2"); if (user.automate.inc.m[2]) {automate("incm", 2)}}
+      if (sac.gte(2e10)) {s("automateincm3"); if (user.active.aeAutomates && !user.automate.inc.m[3]) {automate("incm", 3)}} else {h("automateincm3"); if (user.automate.inc.m[3]) {automate("incm", 3)}}
+      if (sac.gte(1e15)) {s("automateincm4"); if (user.active.aeAutomates && !user.automate.inc.m[4]) {automate("incm", 4)}} else {h("automateincm4"); if (user.automate.inc.m[4]) {automate("incm", 4)}}
+      if (sac.gte(1e19)) {s("automateincm5"); if (user.active.aeAutomates && !user.automate.inc.m[5]) {automate("incm", 5)}} else {h("automateincm5"); if (user.automate.inc.m[5]) {automate("incm", 5)}}
     }
     else {for (let i = 1; i <= 5; i++) {h("automateincm" + i)}} 
     if (user.automation.inc.e) {
@@ -275,6 +275,11 @@ function qol(name) {
   if (name == 'displaypause') {
     user.active.displaypause = !user.active.displaypause;
     updatesetting("displaypause");
+    return;
+  }
+  if (name == 'aeAutomates') {
+    user.active.aeAutomates = !user.active.aeAutomates;
+    updatesetting("aeAutomates");
     return;
   }
 }
