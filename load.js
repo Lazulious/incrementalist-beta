@@ -76,6 +76,8 @@ function loadOffline(ms) {
     var skipping = false;
     let runTick = () => {
       setTimeout (() => {
+        /*if (revealed) {unreveal()}
+        s("offline");*/
         if (skipped && !skipping) {skipping = true; checkTicks = Math.floor((ticks - ticksRan) / 100)/*ticksRan = ticks - checkTicks*/}
         ticksRan += checkTicks;
         if (user.automate.inc.x) {gainip(tickSpeed * checkTicks)}
@@ -97,7 +99,7 @@ function loadOffline(ms) {
       }, 10);
     }
     if (ticks >= checkTicks) {runTick()}
-    else {reveal()}
+    else if (ticksRan >= ticks) {reveal()}
   }
   updates();
   unlocking();
