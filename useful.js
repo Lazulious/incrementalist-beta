@@ -137,7 +137,7 @@ function reveal() {
 function unreveal() {
   d("loading").style.opacity = 1;
   d("game").style.opacity = 0;
-  setTimeout(() => {s("loading")}, 375);
+  s("loading");
   revealed = false;
 }
 function tab(t) {
