@@ -39,6 +39,7 @@ function updatesetting(id) {
         d(currencyids[i] + "sectext").textContent = "";
         d("pb" + currencyids[i] + "c").style.width = "150px";
       }
+      d("pbipsacc").style.width = "150px";
     }
     else {
       d(id).style.backgroundColor = "rgb(25, 25, 25)";
@@ -47,18 +48,26 @@ function updatesetting(id) {
         d(currencyids[i] + "sectext").textContent = "You are gaining ";
         d("pb" + currencyids[i] + "c").style.width = "240px";
       }
+      d("pbipsacc").style.width = "240px";
     }
     return;
   }
   if (id == "creset") {
     if (user.confirm[id]) {d(id).style.backgroundColor = "rgb(50, 50, 50)"}
     else {d(id).style.backgroundColor = "rgb(25, 25, 25)"}
+    return;
   }
   if (id == "csacrifice") {
     if (user.confirm[id]) {d(id).style.backgroundColor = "rgb(50, 50, 50)"}
     else {d(id).style.backgroundColor = "rgb(25, 25, 25)"}
+    return;
   }
   if (id == "displaypause") {
+    if (user.active[id]) {d(id).style.backgroundColor = "rgb(50, 50, 50)"}
+    else {d(id).style.backgroundColor = "rgb(25, 25, 25)"}
+    return;
+  }
+  if (id == "aeAutomates") {
     if (user.active[id]) {d(id).style.backgroundColor = "rgb(50, 50, 50)"}
     else {d(id).style.backgroundColor = "rgb(25, 25, 25)"}
     return;
@@ -78,7 +87,8 @@ function updatepbip() {
   if (g == undefined) {g = goals.ip[j - 1]}
   if (u == undefined) {u = "-"}
   d("pbip").style.width = nd(100).times(user.ip.sac).divide(g).toFixed(2) + "%";
-  d("pbipx").textContent = e(user.ip.sac) + "IP/" + e(nd(g)) + "IP";
+  if (!user.active.shortendisplay) {d("pbipx").textContent = e(user.ip.sac) + "IP/" + e(nd(g)) + "IP"}
+  else {d("pbipx").textContent = e(user.ip.sac) + "/" + e(nd(g))}
   if (user.automate.inc.x) {d("pbiptime").innerHTML = u + "<br>" + time(nd(g).minus(user.ip.sac).divide(getincxx()).times(1000))}
   else {d("pbiptime").innerHTML = u + "<br>-"}
   if (user.ip.sac.gte(g)) {
