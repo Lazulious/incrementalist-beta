@@ -56,7 +56,6 @@ function loadData(data) {
   loadOffline();
   loadAutomate();
 }
-/*let offlining = false;*/
 let skipped = false;
 function loadOffline(ms) {
   s("offline");
@@ -77,9 +76,6 @@ function loadOffline(ms) {
     var skipping = false;
     let runTick = () => {
       setTimeout (() => {
-        /*offlining = true;*/
-        if (revealed) {unreveal()}
-        s("offline");
         if (skipped && !skipping) {skipping = true; checkTicks = Math.floor((ticks - ticksRan) / 100)/*ticksRan = ticks - checkTicks*/}
         ticksRan += checkTicks;
         if (user.automate.inc.x) {gainip(tickSpeed * checkTicks)}
@@ -96,14 +92,12 @@ function loadOffline(ms) {
         else {
           d("pboffline").style.width = "100%";
           d("ticksOffline").innerHTML = e(nd(ticks)) + "/" + e(nd(ticks)) + "<br>" + time(nd(0), false, true);
-          /*offlining = false;
-          if (!offlining) {reveal()}*/
           reveal();
         }
       }, 10);
     }
     if (ticks >= checkTicks) {runTick()}
-    else {reveal()} //setTimeout
+    else {reveal()}
   }
   updates();
   unlocking();
