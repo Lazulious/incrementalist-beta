@@ -99,7 +99,7 @@ function loadOffline(ms) {
         }
       }, 10);
     }
-    if (ticks >= checkTicks && !resetting) {runTick()}
+    if (ticks >= checkTicks && !resetting && timeOffline >= 1000) {runTick()}
     else {reveal()}
   }
   updates();
