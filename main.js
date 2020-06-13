@@ -15,7 +15,6 @@ function setUser() {
     confirm: {creset: true, csacrifice: true},
     tab: "ip",
     time: 0,
-    offline: 0,
     version: "0.1.2",
   }
 }
@@ -63,44 +62,16 @@ if (updaterate > tickrate) {updaterate = tickrate}
 function automation(tab, con, type) {
   if (tab == 'scale') {
     if (con == 'inc') {
-      if (type == 'p' && user.ip.x.gte(1e9) && !user.automation.scale.inc.p) {user.ip.x = user.ip.x.minus(1e9); user.automation.scale.inc.p = true; updateip(); updateautomation(); unlockautomate("ip"); return}
-      if (type == 'm' && user.ip.x.gte(1e27) && !user.automation.scale.inc.m) {user.ip.x = user.ip.x.minus(1e27); user.automation.scale.inc.m = true; updateip(); updateautomation(); unlockautomate("ip"); return}
-      if (type == 'e' && user.ip.x.gte(1e190) && !user.automation.scale.inc.e) {user.ip.x = user.ip.x.minus(1e190); user.automation.scale.inc.e = true; updateip(); updateautomation(); unlockautomate("ip"); return}
+      if (type == 'p' && user.ip.x.gte(1e9) && !user.automation.scale.inc.p) {user.ip.x = user.ip.x.minus(1e9); user.automation.scale.inc.p = true; automate("scaleincp"); updateip(); updateautomation(); unlockautomate("ip"); return}
+      if (type == 'm' && user.ip.x.gte(1e27) && !user.automation.scale.inc.m) {user.ip.x = user.ip.x.minus(1e27); user.automation.scale.inc.m = true; automate("scaleincm"); updateip(); updateautomation(); unlockautomate("ip"); return}
+      if (type == 'e' && user.ip.x.gte(1e190) && !user.automation.scale.inc.e) {user.ip.x = user.ip.x.minus(1e190); user.automation.scale.inc.e = true; automate("scaleince"); updateip(); updateautomation(); unlockautomate("ip"); return}
     }
   }
   if (tab == 'inc') {
-    if (type == 'x' && user.ip.x.gte(2000) && !user.automation.inc.x) {
-      user.ip.x = user.ip.x.minus(2000);
-      user.automation.inc.x = true;
-      updateip();
-      updateautomation();
-      unlockautomate("ip");
-      return;
-    }
-    if (type == 'p' && user.ip.x.gte(25000) && !user.automation.inc.p) {
-      user.ip.x = user.ip.x.minus(25000);
-      user.automation.inc.p = true;
-      updateip();
-      updateautomation();
-      unlockautomate("ip");
-      return;
-    }
-    if (type == 'm' && user.ip.x.gte(1e12) && !user.automation.inc.m) {
-      user.ip.x = user.ip.x.minus(1e12);
-      user.automation.inc.m = true;
-      updateip();
-      updateautomation();
-      unlockautomate("ip");
-      return;
-    }
-    if (type == 'e' && user.ip.x.gte(1e185) && !user.automation.inc.e) {
-      user.ip.x = user.ip.x.minus(1e185);
-      user.automation.inc.e = true;
-      updateip();
-      updateautomation();
-      unlockautomate("ip");
-      return;
-    }
+    if (type == 'x' && user.ip.x.gte(2000) && !user.automation.inc.x) {user.ip.x = user.ip.x.minus(2000); user.automation.inc.x = true; automate("incx"); updateip(); updateautomation(); unlockautomate("ip"); return}
+    if (type == 'p' && user.ip.x.gte(25000) && !user.automation.inc.p) {user.ip.x = user.ip.x.minus(25000); user.automation.inc.p = true; automate("incp", 1); for (let i = 2; i <= 5; i++) {if (user.ip.x.gte(goals.ip[goals.ip.indexOf("incp" + i)])) {automate("incp", i)}}; updateip(); updateautomation(); unlockautomate("ip"); return}
+    if (type == 'm' && user.ip.x.gte(1e12) && !user.automation.inc.m) {user.ip.x = user.ip.x.minus(1e12); user.automation.inc.m = true; for (let i = 1; i <= 5; i++) {if (user.ip.x.gte(goals.ip[goals.ip.indexOf("incm" + i)])) {automate("incm", i)}}; updateip(); updateautomation(); unlockautomate("ip"); return}
+    if (type == 'e' && user.ip.x.gte(1e185) && !user.automation.inc.e) {user.ip.x = user.ip.x.minus(1e185); user.automation.inc.e = true; for (let i = 1; i <= 5; i++) {if (user.ip.x.gte(goals.ip[goals.ip.indexOf("ince" + i)])) {automate("ince", i)}}; updateip(); updateautomation(); unlockautomate("ip"); return}
   }
 }
 const autoInterval = {
@@ -194,24 +165,23 @@ function unlockautomate(layer) {
   if (layer == "ip") {
     let sac = user.ip.sac;
     let sacx = user.sacrifice.ip;
-    if (user.automation.inc.x) {s("automateincx")}
-    else {h("automateincx")}
+    if (user.automation.inc.x) {s("automateincx")} else {h("automateincx")}
     if (user.automation.inc.p) {
       s("automateincp1");
-      if (sac.gte(100)) {s("automateincp2"); if (user.active.aeAutomates && !user.automate.inc.p[2]) {automate("incp", 2)}} else {h("automateincp2"); if (user.automate.inc.p[2]) {automate("incp", 2)}}
-      if (sac.gte(10000)) {s("automateincp3"); if (user.active.aeAutomates && !user.automate.inc.p[3]) {automate("incp", 3)}} else {h("automateincp3"); if (user.automate.inc.p[3]) {automate("incp", 3)}}
-      if (sac.gte(500000)) {s("automateincp4"); if (user.active.aeAutomates && !user.automate.inc.p[4]) {automate("incp", 4)}} else {h("automateincp4"); if (user.automate.inc.p[4]) {automate("incp", 4)}}
-      if (sac.gte(2e6)) {s("automateincp5"); if (user.active.aeAutomates && !user.automate.inc.p[5]) {automate("incp", 5)}} else {h("automateincp5"); if (user.automate.inc.p[5]) {automate("incp", 5)}}
+      if (sac.gte(100)) {s("automateincp2")} else {h("automateincp2")}
+      if (sac.gte(10000)) {s("automateincp3")} else {h("automateincp3")}
+      if (sac.gte(500000)) {s("automateincp4")} else {h("automateincp4")}
+      if (sac.gte(2e6)) {s("automateincp5")} else {h("automateincp5")}
     }
     else {for (let i = 1; i <= 5; i++) {h("automateincp" + i)}}
     if (user.automation.inc.m) {
-      if (sac.gte(1e7)) {s("automateincm1"); if (user.active.aeAutomates && !user.automate.inc.m[1]) {automate("incm", 1)}} else {h("automateincm1"); if (user.automate.inc.m[1]) {automate("incm", 1)}}
-      if (sac.gte(1e8)) {s("automateincm2"); if (user.active.aeAutomates && !user.automate.inc.m[2]) {automate("incm", 2)}} else {h("automateincm2"); if (user.automate.inc.m[2]) {automate("incm", 2)}}
-      if (sac.gte(2e10)) {s("automateincm3"); if (user.active.aeAutomates && !user.automate.inc.m[3]) {automate("incm", 3)}} else {h("automateincm3"); if (user.automate.inc.m[3]) {automate("incm", 3)}}
-      if (sac.gte(1e15)) {s("automateincm4"); if (user.active.aeAutomates && !user.automate.inc.m[4]) {automate("incm", 4)}} else {h("automateincm4"); if (user.automate.inc.m[4]) {automate("incm", 4)}}
-      if (sac.gte(1e19)) {s("automateincm5"); if (user.active.aeAutomates && !user.automate.inc.m[5]) {automate("incm", 5)}} else {h("automateincm5"); if (user.automate.inc.m[5]) {automate("incm", 5)}}
+      if (sac.gte(1e7)) {s("automateincm1")} else {h("automateincm1")}
+      if (sac.gte(1e8)) {s("automateincm2")} else {h("automateincm2")}
+      if (sac.gte(2e10)) {s("automateincm3")} else {h("automateincm3")}
+      if (sac.gte(1e15)) {s("automateincm4")} else {h("automateincm4")}
+      if (sac.gte(1e19)) {s("automateincm5")} else {h("automateincm5")}
     }
-    else {for (let i = 1; i <= 5; i++) {h("automateincm" + i)}} 
+    else {for (let i = 1; i <= 5; i++) {h("automateincm" + i)}}
     if (user.automation.inc.e) {
       if (sac.gte(1e30) && sacx.gte(10000)) {s("automateince1")} else {h("automateince1")}
       if (sac.gte(1e37) && sacx.gte(33333)) {s("automateince2")} else {h("automateince2")}
@@ -219,10 +189,13 @@ function unlockautomate(layer) {
       if (sac.gte(5e84) && sacx.gte(1e6)) {s("automateince4")} else {h("automateince4")}
       if (sac.gte(1e202) && sacx.gte(1e14)) {s("automateince5")} else {h("automateince5")}
     }
-    else {for (let i = 1; i <= 5; i++) {h("automateince" + i)}} 
-    if (user.automation.scale.inc.p) {s("automationscaleincp"); if (sac.gte(100000)) {s("automatescaleincp")} else {h("automatescaleincp")}} else {h("automatescaleincp")}
-    if (user.automation.scale.inc.m) {s("automationscaleincm"); if (sac.gte(1e13)) {s("automatescaleincm")} else {h("automatescaleincm")}} else {h("automatescaleincm")}
-    if (user.automation.scale.inc.e) {s("automationscaleince"); if (sac.gte(1e68)) {s("automatescaleince")} else {h("automatescaleince")}} else {h("automatescaleince")}
+    else {for (let i = 1; i <= 5; i++) {h("automateince" + i)}}
+    if (user.automation.scale.inc.p) {s("automationscaleincp"); if (sac.gte(100000)) {s("automatescaleincp")} else {h("automatescaleincp")}}
+    else {h("automatescaleincp")}
+    if (user.automation.scale.inc.m) {s("automationscaleincm"); if (sac.gte(1e13)) {s("automatescaleincm")} else {h("automatescaleincm")}}
+    else {h("automatescaleincm")}
+    if (user.automation.scale.inc.e) {s("automationscaleince"); if (sac.gte(1e68)) {s("automatescaleince")} else {h("automatescaleince")}}
+    else {h("automatescaleince")}
     return;
   }
 }
@@ -243,7 +216,9 @@ function confirmReset() {
   }
   else {reset()}
 }
+var resetting = false;
 function reset() {
+  resetting = true;
   console.log("Game reset");
   user = setUser();
   brokenUser = setUser();
@@ -259,6 +234,7 @@ function reset() {
   d("loading").style.opacity = 0;
   d("game").style.opacity = 1;
   setTimeout(() => {h("loading")}, 750);
+  setTimeout(() => {resetting = false}, 11);
 }
 function qol(name) {
   if (name == 'shortendisplay') {

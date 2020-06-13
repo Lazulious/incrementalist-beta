@@ -76,20 +76,21 @@ function loadOffline(ms) {
     var skipping = false;
     let runTick = () => {
       setTimeout (() => {
-        /*if (revealed) {unreveal()}
-        s("offline");*/
         if (skipped && !skipping) {skipping = true; checkTicks = Math.floor((ticks - ticksRan) / 100)/*ticksRan = ticks - checkTicks*/}
         ticksRan += checkTicks;
+        if (user.automate.scale.inc.p && user.ip.x.gte(getscaleincpcost(rate.minus(1)).times(rate))) {user.scale.inc.p += rate.toNumber()}
+        if (user.automate.scale.inc.m && user.ip.x.gte(getscaleincmcost(rate.minus(1)).times(rate))) {user.scale.inc.m += rate.toNumber()}
+        if (user.automate.scale.inc.e && user.ip.x.gte(getscaleincecost(rate.minus(1)).times(rate))) {user.scale.inc.e += rate.toNumber()}
         if (user.automate.inc.x) {gainip(tickSpeed * checkTicks)}
         for (let i = 1; i <= 5; i++) {
-          if (user.automate.inc.p[i] && user.ip.x.gte(getincp(i, "cost", rate.minus(1)).times(100))) {user.inc.p[i] += Number(e(rate))}
-          if (user.automate.inc.m[i] && user.ip.x.gte(getincm(i, "cost", rate.minus(1)).times(100))) {user.inc.m[i] += Number(e(rate))}
-          if (user.automate.inc.e[i] && user.ip.x.gte(getince(i, "cost", rate.minus(1)).times(100))) {user.inc.e[i] += Number(e(rate))}
+          if (user.automate.inc.p[i] && user.ip.x.gte(getincp(i, "cost", rate.minus(1)).times(rate))) {user.inc.p[i] += rate.toNumber()}
+          if (user.automate.inc.m[i] && user.ip.x.gte(getincm(i, "cost", rate.minus(1)).times(rate))) {user.inc.m[i] += rate.toNumber()}
+          if (user.automate.inc.e[i] && user.ip.x.gte(getince(i, "cost", rate.minus(1)).times(rate))) {user.inc.e[i] += rate.toNumber()}
         }
         if (ticksRan < ticks) {
           d("pboffline").style.width = 100 * ticksRan / ticks + "%";
           d("ticksOffline").innerHTML = e(nd(ticksRan)) + "/" + e(nd(ticks)) + "<br>" + time(nd(ticks).minus(ticksRan).plus(1000), false, true);
-          if (!revealed) {runTick()}
+          if (!revealed && !resetting) {runTick()}
         }
         else {
           d("pboffline").style.width = "100%";
@@ -98,8 +99,8 @@ function loadOffline(ms) {
         }
       }, 10);
     }
-    if (ticks >= checkTicks) {runTick()}
-    else if (ticksRan >= ticks) {reveal()}
+    if (ticks >= checkTicks && !resetting) {runTick()}
+    else {reveal()}
   }
   updates();
   unlocking();

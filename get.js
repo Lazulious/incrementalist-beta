@@ -15,19 +15,19 @@ function getautomationincp(num, type) {if (type == "rate") {return nd(1)}}
 function getscaleincp(num) {
   let x = nd(1).divide(nd(1).minus(nd(0.1).times(nd(0.5).pow(num - 1))).pow(user.scale.inc.p));
   let y = nd(x.log10()).divide(3).floor();
-  for (let i = 1; i <= y; i++) {if (x.gte(nd(1000).pow(i))) {x = nd(1000).pow(i).divide(nd(1).minus(nd(0.1).times(nd(0.5).pow(num - 1))).pow(nd(user.scale.inc.p).divide(nd(12.5).pow(i))))}}
+  for (let i = 1; i <= y; i++) {if (x.gte(nd(1000).pow(i))) {x = nd(1000).pow(i).divide(nd(1).minus(nd(0.1).times(nd(0.5).pow(num - 1))).pow(nd(user.scale.inc.p).divide(nd(12.5).pow(i))))} else {return x}}
   return x;
 }
 function getscaleincm(num) {
   let x = nd(1).divide(nd(1).minus(nd(0.1).times(nd(0.5).pow(num - 1))).pow(nd(user.scale.inc.m).divide(2)));
   let y = nd(x.log10()).divide(2).floor();
-  for (let i = 1; i <= y; i++) {if (x.gte(nd(100).pow(i))) {x = nd(100).pow(i).divide(nd(1).minus(nd(0.1).times(nd(0.5).pow(num - 1))).pow(nd(user.scale.inc.m).divide(nd(25).pow(i))))}}
+  for (let i = 1; i <= y; i++) {if (x.gte(nd(100).pow(i))) {x = nd(100).pow(i).divide(nd(1).minus(nd(0.1).times(nd(0.5).pow(num - 1))).pow(nd(user.scale.inc.m).divide(nd(25).pow(i))))} else {return x}}
   return x;
 }
 function getscaleince(num) {
   let x = nd(1).divide(nd(1).minus(nd(0.0141).times(nd(0.5).pow(num - 1))).pow(nd(user.scale.inc.e).divide(4)));
   let y = nd(x.log10()).floor();
-  for (let i = 1; i <= y; i++) {if (x.gte(nd(10).pow(i))) {x = nd(10).pow(i).divide(nd(1).minus(nd(0.0141).times(nd(0.5).pow(num - 1))).pow(nd(user.scale.inc.e).divide(nd(50).pow(i))))}}
+  for (let i = 1; i <= y; i++) {if (x.gte(nd(10).pow(i))) {x = nd(10).pow(i).divide(nd(1).minus(nd(0.0141).times(nd(0.5).pow(num - 1))).pow(nd(user.scale.inc.e).divide(nd(50).pow(i))))} else {return x}}
   return x;
 }
 function getscaleincpcost(count) {

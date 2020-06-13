@@ -39,7 +39,7 @@ function ee(obj, exp, dec) {
     return newObj.m.toFixed(exp) + "ee" + newObj.e;
   }
   else if (obj.e >= 6) {
-    if (obj.m.toFixed(exp) >= 10) {obj.m /= 10; obj.e++};
+    if (obj.m.toFixed(exp) >= 10) {obj.m /= 10; obj.m -= 0.01; obj.e++};
     return obj.m.toFixed(exp) + "e" + comma(obj.e);
   }
   else {return comma((obj.m * (10 ** obj.e)).toFixed(dec))}
@@ -133,14 +133,12 @@ function reveal() {
   d("game").style.opacity = 1;
   setTimeout(() => {h("loading")}, 750);
   revealed = true;
-  console.log(revealed);
 }
 function unreveal() {
   d("loading").style.opacity = 1;
   d("game").style.opacity = 0;
   s("loading");
   revealed = false;
-  console.log(revealed);
 }
 function tab(t) {
   for (let i = 0; i < tabs.length; i++) {h("tab" + tabs[i])}
