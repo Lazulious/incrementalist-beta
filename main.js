@@ -11,7 +11,7 @@ function setUser() {
     scale: {inc: {p: 0, m: 0, e: 0}},
     sacrifice: {ip: nd(1), pp: nd(1), ap: nd(1), tp: nd(1), dp: nd(1), gp: nd(1)},
     inc: {x: 0, p: ["null", 0, 0, 0, 0, 0], m: ["null", 0, 0, 0, 0, 0], e: ["null", 0, 0, 0, 0, 0]},
-    active: {shortendisplay: false, progressbar: false, displaypause: false, aeAutomates: true},
+    active: {shortendisplay: false, progressbar: false, displaypause: true, aeAutomates: true},
     confirm: {creset: true, csacrifice: true},
     tab: "ip",
     time: 0,
@@ -234,7 +234,7 @@ function reset() {
   d("loading").style.opacity = 0;
   d("game").style.opacity = 1;
   setTimeout(() => {h("loading")}, 750);
-  setTimeout(() => {resetting = false}, 11);
+  setTimeout(() => {resetting = false}, 25);
 }
 function qol(name) {
   if (name == 'shortendisplay') {
