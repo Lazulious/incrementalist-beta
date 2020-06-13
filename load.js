@@ -33,7 +33,6 @@ function loadData(data) {
   }
   if (user.version == "0.1.0") {
     console.log("Loaded version " + user.version);
-    console.log(typeof user.sacrifice.ip.x);
     if (typeof user.sacrifice.ip.x == "undefined") {user.sacrifice.ip = user.sacrifice.ip} else {user.sacrifice.ip = user.sacrifice.ip.x}
     if (typeof user.sacrifice.pp.x == "undefined") {user.sacrifice.pp = user.sacrifice.pp} else {user.sacrifice.pp = user.sacrifice.pp.x}
     if (typeof user.sacrifice.ap.x == "undefined") {user.sacrifice.ap = user.sacrifice.ap} else {user.sacrifice.ap = user.sacrifice.ap.x}
@@ -46,6 +45,8 @@ function loadData(data) {
   if (user.version == "0.1.1") {
     console.log("Loaded version " + user.version);
     user.pp.extra = 0;
+    user.active.aeAutomates = setUser().active.aeAutomates;
+    user.active.displaypause = true;
     user.version = "0.1.2";
   }
   if (user.version == "0.1.2") {
@@ -58,55 +59,59 @@ function loadData(data) {
 }
 let skipped = false;
 function loadOffline(ms) {
-  s("offline");
-  unreveal();
-  let timeOffline = 0;
+  let timeOffline = ms;
   if (typeof ms == "undefined") {timeOffline = Math.abs(user.time - Date.now())}
-  else {timeOffline = ms}
-  d("timeOffline").textContent = time(nd(timeOffline));
-  let maxTicks = 1e6;
-  let tickSpeed = 20; //Milliseconds per Tick
-  if (false) {} //Are you buying max?
-  else {
-    let ticks = timeOffline / tickSpeed;
-    if (ticks > maxTicks) {ticks = maxTicks; tickSpeed = timeOffline / ticks} //Cap for ticks
-    let checkTicks = 10; //Ticks checking every iteration
-    let rate = getautomaterate().times(tickSpeed).times(checkTicks).divide(1000); //Clicks per tick
-    let ticksRan = 0; //Ticks already checked
-    var skipping = false;
-    let runTick = () => {
-      setTimeout (() => {
-        if (skipped && !skipping) {skipping = true; checkTicks = Math.floor((ticks - ticksRan) / 100)/*ticksRan = ticks - checkTicks*/}
-        ticksRan += checkTicks;
-        if (user.automate.scale.inc.p && user.ip.x.gte(getscaleincpcost(rate.minus(1)).times(rate))) {user.scale.inc.p += rate.toNumber()}
-        if (user.automate.scale.inc.m && user.ip.x.gte(getscaleincmcost(rate.minus(1)).times(rate))) {user.scale.inc.m += rate.toNumber()}
-        if (user.automate.scale.inc.e && user.ip.x.gte(getscaleincecost(rate.minus(1)).times(rate))) {user.scale.inc.e += rate.toNumber()}
-        if (user.automate.inc.x) {gainip(tickSpeed * checkTicks)}
-        for (let i = 1; i <= 5; i++) {
-          if (user.automate.inc.p[i] && user.ip.x.gte(getincp(i, "cost", rate.minus(1)).times(rate))) {user.inc.p[i] += rate.toNumber()}
-          if (user.automate.inc.m[i] && user.ip.x.gte(getincm(i, "cost", rate.minus(1)).times(rate))) {user.inc.m[i] += rate.toNumber()}
-          if (user.automate.inc.e[i] && user.ip.x.gte(getince(i, "cost", rate.minus(1)).times(rate))) {user.inc.e[i] += rate.toNumber()}
-        }
-        if (ticksRan < ticks) {
-          d("pboffline").style.width = 100 * ticksRan / ticks + "%";
-          d("ticksOffline").innerHTML = e(nd(ticksRan)) + "/" + e(nd(ticks)) + "<br>" + time(nd(ticks).minus(ticksRan).plus(1000), false, true);
-          if (!revealed && !resetting) {runTick()}
-        }
-        else {
-          d("pboffline").style.width = "100%";
-          d("ticksOffline").innerHTML = e(nd(ticks)) + "/" + e(nd(ticks)) + "<br>" + time(nd(0), false, true);
-          reveal();
-        }
-      }, 10);
+  if (timeOffline >= 1000) {
+    s("offline");
+    unreveal();
+    d("timeOffline").textContent = time(nd(timeOffline));
+    let maxTicks = 1e6;
+    let tickSpeed = 20; //Milliseconds per tick
+    if (false) {} //Are you buying max?
+    else {
+      let ticks = timeOffline / tickSpeed;
+      if (ticks > maxTicks) {ticks = maxTicks; tickSpeed = timeOffline / ticks} //Cap for ticks
+      let checkTicks = 10; //Ticks checking every iteration
+      let rate = getautomaterate().times(tickSpeed).times(checkTicks).divide(1000); //Clicks per tick
+      let ticksRan = 0; //Ticks already checked
+      var skipping = false;
+      let runTick = () => {
+        setTimeout (() => {
+          /*if (revealed) {unreveal()}
+          s("offline");*/
+          if (skipped && !skipping) {skipping = true; checkTicks = Math.floor((ticks - ticksRan) / 100)/*ticksRan = ticks - checkTicks*/}
+          ticksRan += checkTicks;
+          if (user.automate.scale.inc.p && user.ip.x.gte(getscaleincpcost(rate.minus(1)).times(rate))) {user.scale.inc.p += rate.toNumber()}
+          if (user.automate.scale.inc.m && user.ip.x.gte(getscaleincmcost(rate.minus(1)).times(rate))) {user.scale.inc.m += rate.toNumber()}
+          if (user.automate.scale.inc.e && user.ip.x.gte(getscaleincecost(rate.minus(1)).times(rate))) {user.scale.inc.e += rate.toNumber()}
+          if (user.automate.inc.x) {gainip(tickSpeed * checkTicks)}
+          for (let i = 1; i <= 5; i++) {
+            if (user.automate.inc.p[i] && user.ip.x.gte(getincp(i, "cost", rate.minus(1)).times(rate))) {user.inc.p[i] += rate.toNumber()}
+            if (user.automate.inc.m[i] && user.ip.x.gte(getincm(i, "cost", rate.minus(1)).times(rate))) {user.inc.m[i] += rate.toNumber()}
+            if (user.automate.inc.e[i] && user.ip.x.gte(getince(i, "cost", rate.minus(1)).times(rate))) {user.inc.e[i] += rate.toNumber()}
+          }
+          if (ticksRan < ticks) {
+            d("pboffline").style.width = 100 * ticksRan / ticks + "%";
+            d("ticksOffline").innerHTML = e(nd(ticksRan)) + "/" + e(nd(ticks)) + "<br>" + time(nd(ticks).minus(ticksRan).plus(1000), false, true);
+            if (!revealed && !resetting) {runTick()}
+          }
+          else {
+            d("pboffline").style.width = "100%";
+            d("ticksOffline").innerHTML = e(nd(ticks)) + "/" + e(nd(ticks)) + "<br>" + time(nd(0), false, true);
+            reveal();
+          }
+        }, 10);
+      }
+      if (ticks >= checkTicks && !resetting) {runTick()}
+      else {reveal()}
     }
-    if (ticks >= checkTicks && !resetting) {runTick()}
-    else {reveal()}
   }
+  else {reveal()}
   updates();
   unlocking();
   user.time = Date.now();
   save();
-  console.log("Offline time: " + time(nd(timeOffline)));
+  console.log("Time offline: " + time(nd(timeOffline), true))
 }
 function skipOffline() {skipped = true}
 function loadAutomate() {
