@@ -105,8 +105,6 @@ function loadOffline(ms) {
       if (ticks >= checkTicks && !resetting) {runTick()}
       else {reveal()}
     }
-    if (ticks >= checkTicks && !resetting && timeOffline >= 1000) {runTick()}
-    else {reveal()}
   }
   else {reveal()}
   updates();
