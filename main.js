@@ -13,8 +13,8 @@ const updateRate = 20;
 
 //Unlock Data
 function unlocking() {unlockip(); unlockAutomation()}
-const goalsIP = [nd(1000), nd(2500), nd(10000), nd(50000), nd(250000)];
-const unlocksIP = ["Variable P<sub>1</sub>", "Automate IP", "Variable P<sub>2</sub>", "Variable P<sub>3</sub>", "Automate P Gain"];
+const goalsIP = [nd(1000), nd(2500), nd(10000), nd(50000), nd(250000), nd(1e6)];
+const unlocksIP = ["Variable P<sub>1</sub>", "Automate IP", "Variable P<sub>2</sub>", "Variable P<sub>3</sub>", "Automate P Gain", "Variable P<sub>4</sub>"];
 function unlockip() {
   let sac = user.ip.sac;
   if (sac.gte(1000)) {sc("ipIncrementP1Unlocks")} else {hc("ipIncrementP1Unlocks")}
@@ -22,6 +22,7 @@ function unlockip() {
   if (sac.gte(10000)) {sc("ipIncrementP2Unlocks")} else {hc("ipIncrementP2Unlocks")}
   if (sac.gte(50000)) {sc("ipIncrementP3Unlocks")} else {hc("ipIncrementP3Unlocks")}
   if (sac.gte(250000)) {s("autoP")} else {h("autoP")}
+  if (sac.gte(1e6)) {sc("ipIncrementP4Unlocks")} else {hc("ipIncrementP4Unlocks")}
 }
 function unlockAutomation() {
   if (user.auto.ip >= 1) {s("autoIPState")} else {h("autoIPState")}
@@ -36,7 +37,7 @@ unlocking();
 updater();
 tab("Increment");
 
-const tempHideA = ["autoIncrementP0State", "autoIncrementP1State", "autoIncrementP2State", "autoIncrementP3State", "autoIncrementP4State"];
+const tempHideA = [];
 for (let i = 0; i < tempHideA.length; i++) {h(tempHideA[i])}
 const tempHideB = ["ipEquationMUnlocks", "ipEquationEUnlocks", "ipIncrementP4Unlocks", "coefficient"];
 for (let i = 0; i < tempHideB.length; i++) {hc(tempHideB[i])}
