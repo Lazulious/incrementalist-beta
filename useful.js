@@ -19,7 +19,7 @@ function wel(a, b) {window.addEventListener(a, b)}/** */
 function cb(str) {var el = document.createElement("textarea"); el.value = str; el.setAttribute("readonly", ""); el.style = {position: "absolute", left: "-9999px"}; document.body.appendChild(el); cb2(el); document.body.removeChild(el); alert("Copied to clipboard")}/** */
 function cb2(el) {el = (typeof el === "string") ? document.querySelector(el) : el; if (navigator.userAgent.match(/ipad|ipod|iphone/i)) {var editable = el.contentEditable; var readOnly = el.readOnly; el.contentEditable = true; el.readOnly = true; var range = document.createRange(); range.selectNodeContents(el); var selection = window.getSelection(); selection.removeAllRanges(); selection.addRange(range); el.setSelectionRange(0, 999999); el.contentEditable = editable; el.readOnly = readOnly} else {el.select()} document.execCommand("copy")}/** */
 function ndn(m, e) {return new Decimal(m).times(nd(10).pow(e))}
-function comma(x) {if (x.isFinite()) {return x.toNumber().toLocaleString()} else {return x}}
+function comma(x) {if (isFinite(x)) {return x.toNumber().toLocaleString()} else {return x}}
 /*function comma(x) {return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}*/
 function ac(cl, id) {id = document.getElementById(id); let arr = id.className.split(" "); if (arr.indexOf(cl) == -1) {id.className += " " + cl}}
 function rc(cl, id) {id = document.getElementById(id); let arr = id.className.split(" "); let reg = new RegExp(cl, "g"); if (arr.indexOf(cl) >= 0) {id.className = id.className.replace(reg, "")}}
