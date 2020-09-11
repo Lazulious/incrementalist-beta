@@ -3,7 +3,7 @@ function e(obj, exp, dec) {
   if (typeof exp == "undefined") {exp = 2}
   if (typeof dec == "undefined") {dec = 0}
   if (obj.e >= 6) {return obj.m.toFixed(exp) + "e" + comma(obj.e)}
-  else {return ((obj.m * (Math.pow(10, obj.e))).toFixed(dec)).toLocalString()}
+  else {return ((obj.m * (Math.pow(10, obj.e))).toFixed(dec)).toLocaleString()}
 }
 
 function nd(x) {return new Decimal(x)}
