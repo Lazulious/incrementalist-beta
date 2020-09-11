@@ -3,7 +3,7 @@ function e(obj, exp, dec) {
   if (typeof exp == "undefined") {exp = 2}
   if (typeof dec == "undefined") {dec = 0}
   if (obj.e >= 6) {return obj.m.toFixed(exp) + "e" + comma(obj.e)}
-  else {return comma((obj.m * (Math.pow(10, obj.e))).toFixed(dec))}
+  else {return ((obj.m * (Math.pow(10, obj.e))).toFixed(dec)).toLocalString()}
 }
 
 function nd(x) {return new Decimal(x)}
@@ -19,8 +19,6 @@ function wel(a, b) {window.addEventListener(a, b)}/** */
 function cb(str) {var el = document.createElement("textarea"); el.value = str; el.setAttribute("readonly", ""); el.style = {position: "absolute", left: "-9999px"}; document.body.appendChild(el); cb2(el); document.body.removeChild(el); alert("Copied to clipboard")}/** */
 function cb2(el) {el = (typeof el === "string") ? document.querySelector(el) : el; if (navigator.userAgent.match(/ipad|ipod|iphone/i)) {var editable = el.contentEditable; var readOnly = el.readOnly; el.contentEditable = true; el.readOnly = true; var range = document.createRange(); range.selectNodeContents(el); var selection = window.getSelection(); selection.removeAllRanges(); selection.addRange(range); el.setSelectionRange(0, 999999); el.contentEditable = editable; el.readOnly = readOnly} else {el.select()} document.execCommand("copy")}/** */
 function ndn(m, e) {return new Decimal(m).times(nd(10).pow(e))}
-function comma(x) {if (x.lt(Number.MAX_VALUE)) {return x.toNumber().toLocaleString()} else {return x}}
-/*function comma(x) {return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}*/
 function ac(cl, id) {id = document.getElementById(id); let arr = id.className.split(" "); if (arr.indexOf(cl) == -1) {id.className += " " + cl}}
 function rc(cl, id) {id = document.getElementById(id); let arr = id.className.split(" "); let reg = new RegExp(cl, "g"); if (arr.indexOf(cl) >= 0) {id.className = id.className.replace(reg, "")}}
 function rpc(cl1, cl2, id) {id = document.getElementById(id); let arr = id.className.split(" "); let reg = new RegExp(cl1, "g"); if (arr.indexOf(cl1) >= 0 && arr.indexOf(cl2) == -1) {id.className = id.className.replace(reg, cl2)}}
