@@ -2,7 +2,7 @@ function e(obj, exp, dec) {
   if (typeof obj == "undefined") {return "error-e1"}
   if (typeof exp == "undefined") {exp = 2}
   if (typeof dec == "undefined") {dec = 0}
-  if (obj.e >= 6) {return obj.m.toFixed(exp) + "e" + comma(obj.e)}
+  if (obj.e >= 6) {return obj.m.toFixed(exp) + "e" + (obj.e).toLocaleString()}
   else {return ((obj.m * (Math.pow(10, obj.e))).toFixed(dec)).toLocaleString()}
 }
 
