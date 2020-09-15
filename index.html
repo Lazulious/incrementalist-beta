@@ -8,179 +8,166 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 -->
 <html lang="en">
   <head>
-    <title>Incrementalist-Beta</title>
-	  <meta charset="utf-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<link rel="stylesheet" href="style.css" />
-		<script src="break_eternity.js" defer="defer"></script>
-		<script src="useful.js" defer="defer"></script>
-		<script src="automation.js" defer="defer"></script>
-		<script src="increment.js" defer="defer"></script>
-		<script src="load.js" defer="defer"></script>
+    <title>Incrementalist</title>
+    <meta charset="utf-8" />
+	 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	 <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="break_eternity.js" defer="defer"></script>
+    <script src="useful.js" defer="defer"></script>
+    <script src="automation.js" defer="defer"></script>
+    <script src="sacrifice.js" defer="defer"></script>
+    <script src="scaling.js" defer="defer"></script>
+    <script src="increment.js" defer="defer"></script>
+    <script src="options.js" defer="defer"></script>
+    <script src="load.js" defer="defer"></script>
     <script src="main.js" defer="defer"></script>
-	</head>
-  <body>
+  </head>
+  <body onresize="resize()">
     <div>
-			<div class="ch grayBorder" style="width: 90%; max-width: 1000px">
-				<div class="grayBorder" style="width: 100%; height: 25px; position: relative; right: 2px">
-					<div style="height: 25px; width: 100%; display: table; table-layout: fixed">
-						<div class="tab ch2" id="tabAutomationb" onmouseup="tab('Automation')">Automation</div>
-						<div class="tab ch2 tabPurple" id="tabIncrementb" onmouseup="tab('Increment')">Increment</div>
-					</div>
-  			</div>
-				<div class="grayBorder" style="width: 100%; position: relative; right: 2px">
-					<div style="display: flex; justify-content: center">
-			  		<div class="ch2 ipInfo" style="width: 33%">
-		  	 			<span class="text" style="font-size: 14px"><span class="ba purpleText" id="ipx" style="font-size: 26px">0</span> Increment Points</span><br>
-				 			<span class="text" style="font-size: 12px">You are gaining <span class="ba purpleText" style="font-size: 16px">0</span> IP per second</span>
-				 			<div class="pb ch"><div class="ch" id="pbip"><span class="ch text" style="color: rgb(0, 0, 0)"><span class="ba" id="pbipsac">0</span>/<span class="ba" id="pbipgoal">0</span></span></div></div>
-				 			<span class="text purpleText" id="pbipunlock">Nothing</span>
-				 	  </div>
-			   		<!--<div class="ch2 ipInfo" style="width: 33%">
-		    			<span class="text"><span class="ba blueText" id="ppx" style="font-size: 26px">0</span> Prestige Points</span><br>
-			  			<span class="text" style="font-size: 12px">You are gaining <span class="ba blueText" style="font-size: 16px">0</span> PP per second</span>
-			  			<div class="pb ch"><div class="ch" id="pbpp"><span class="ch text" style="color: rgb(0, 0, 0)"><span class="ba" id="pbppsac">0</span>/<span class="ba" id="pbppgoal">0</span></span></div></div>
-			  			<span class="text blueText">Nothing</span>
-				 	  </div>
-			   		<div class="ch2 ipInfo" style="width: 33%">
-		  	 			<span class="text"><span class="ba greenText" id="apx" style="font-size: 26px">0</span> Ascension Points</span><br>
-				 			<span class="text" style="font-size: 12px">You are gaining <span class="ba greenText" style="font-size: 16px">0</span> AP per second</span>
-				 			<div class="pb ch"><div class="ch" id="pbap"><span class="ch text" style="color: rgb(0, 0, 0)"><span class="ba" id="pbapsac">0</span>/<span class="ba" id="pbapgoal">0</span></span></div></div>
-				 			<span class="text greenText">Nothing</span>
-				 	  </div>-->
-				 	</div>
-				</div>
-				<div id="tabAutomation">
-					<div id="autoIP" style="height: 34px; width: 100%">
-						<div class="grayBorder2 cantBuy" id="autoIPb" style="height: 30px; overflow: hidden; position: relative" onmouseup="buyAutomationIP()">
-							<span class="cv text" style="float: left; left: 2px">Automate IP Gain (<span class="purpleText"><span class="ba" id="autoIPx">0</span>x</span>/sec)</span>
-							<span class="cv text" style="float: right; right: 2px">Cost: <span class="ba purpleText" id="autoIPCost">0</span> IP</span>
-						</div>
-					</div>
-					<div id="autoP" style="height: 34px; width: 100%">
-						<div class="grayBorder2 cantBuy" id="autoPb" style="height: 30px; overflow: hidden; position: relative" onmouseup="buyAutomationIncrementP()">
-							<span class="cv text" style="float: left; left: 2px">Automate P Variables (<span class="purpleText"><span class="ba" id="autoPx">0</span>x</span>/sec)</span>
-							<span class="cv text" style="float: right; right: 2px">Cost: <span class="ba purpleText" id="autoPCost">0</span> IP</span>
-						</div>
-					</div>
-				</div>
-				<div id="tabSacrifice">
-					
-				</div>
-				<div id="tabScaling">
-					
-				</div>
-				<div id="tabIncrement">
-					<div style="position: relative; height: 50px; width: 100%">
-						<div class="autoipState canBuy" id="autoIPState" style="width: 46px; height: 46px; float: left" onmouseup="automateIP()"></div>
-						<div class="grayBorder2 canBuy" style="height: 46px; overflow: hidden; position: relative" onmouseup="increment()">
-  						<span class="cv text" style="font-size: 20px; position: absolute; left: 2px">IP = IP+(P<span class="ipEquationMUnlocks">xM</span>)<sup class="text ipEquationEUnlocks">E</sup> &rArr; IP = IP+(<span class="ba purpleText" id="equationP">0</span><span class="ipEquationMUnlocks">x<span class="ba purpleText">0</span></span>)<sup class="purpleText ipEquationEUnlocks">0</sup><span class="ipEquationMUnlocks"> &rArr; <span class="ba purpleText">0</span></span></span>
-						</div>
-					</div>
-					<div id="incrementP0" style="position: relative; height: 34px; width: 100%">
-						<div class="autoipState canBuy autoIncrementPUnlocks" id="autoIncrementP0State" style="float: left" onmouseup="automateIncrementP(0)"></div>
-						<div class="grayBorder2 cantBuy" id="incrementP0b" style="height: 30px; overflow: hidden; position: relative" onmouseup="buyIncrementP(0)">
-							<span class="cv text" style="position: absolute; left: 2px">P = <span class="ipIncrementP1Unlocks"><span class="ba purpleText coefficient">0</span>P<sub>1</sub> + </span><span class="ba purpleText" id="incrementP0x">0</span></span>
-							<span class="cv text" style="position: absolute; right: 2px">Cost: <span class="ba purpleText" id="incrementP0Cost">0</span> IP</span>
-						</div>
-					</div>
-					<div class="ipIncrementP1Unlocks" id="incrementP1" style="position: relative; height: 34px; width: 100%">
-						<div class="autoipState canBuy autoIncrementPUnlocks" id="autoIncrementP1State" style="float: left" onmouseup="automateIncrementP(1)"></div>
-						<div class="grayBorder2 cantBuy" id="incrementP1b" style="height: 30px; overflow: hidden; position: relative" onmouseup="buyIncrementP(1)">
-							<span class="cv text" style="position: absolute; left: 2px">P<sub>1</sub> = <span class="ipIncrementP2Unlocks"><span class="ba purpleText coefficient">0</span>P<sub>2</sub> + </span><span class="ba purpleText" id="incrementP1x">0</span></span>
-							<span class="cv text" style="position: absolute; right: 2px">Cost: <span class="ba purpleText" id="incrementP1Cost">0</span> IP</span>
-						</div>
-					</div>
-					<div class="ipIncrementP2Unlocks" id="incrementP2" style="position: relative; height: 34px; width: 100%">
-						<div class="autoipState canBuy autoIncrementPUnlocks" id="autoIncrementP2State" style="float: left" onmouseup="automateIncrementP(2)"></div>
-						<div class="grayBorder2 cantBuy" id="incrementP2b" style="height: 30px; overflow: hidden; position: relative" onmouseup="buyIncrementP(2)">
-							<span class="cv text" style="position: absolute; left: 2px">P<sub>2</sub> = <span class="ipIncrementP3Unlocks"><span class="ba purpleText coefficient">0</span>P<sub>3</sub> + </span><span class="ba purpleText" id="incrementP2x">0</span></span>
-							<span class="cv text" style="position: absolute; right: 2px">Cost: <span class="ba purpleText" id="incrementP2Cost">0</span> IP</span>
-						</div>
-					</div>
-					<div class="ipIncrementP3Unlocks" id="incrementP3" style="position: relative; height: 34px; width: 100%">
-						<div class="autoipState canBuy autoIncrementPUnlocks" id="autoIncrementP3State" style="float: left" onmouseup="automateIncrementP(3)"></div>
-						<div class="grayBorder2 cantBuy" id="incrementP3b" style="height: 30px; overflow: hidden; position: relative" onmouseup="buyIncrementP(3)">
-							<span class="cv text" style="position: absolute; left: 2px">P<sub>3</sub> = <span class="ipIncrementP4Unlocks"><span class="ba purpleText coefficient">0</span>P<sub>4</sub> + </span><span class="ba purpleText" id="incrementP3x">0</span></span>
-							<span class="cv text" style="position: absolute; right: 2px">Cost: <span class="ba purpleText" id="incrementP3Cost">0</span> IP</span>
-						</div>
-					</div>
-					<div class="ipIncrementP4Unlocks" id="incrementP4" style="position: relative; height: 34px; width: 100%">
-						<div class="autoipState canBuy autoIncrementPUnlocks" id="autoIncrementP4State" style="float: left" onmouseup="automateIncrementP(4)"></div>
-						<div class="grayBorder2 cantBuy" id="incrementP4b" style="height: 30px; overflow: hidden; position: relative" onmouseup="buyIncrementP(4)">
-							<span class="cv text" style="position: absolute; left: 2px">P<sub>4</sub> = <span class="ba purpleText" id="incrementP4x">0</span></span>
-							<span class="cv text" style="position: absolute; right: 2px">Cost: <span class="ba purpleText" id="incrementP4Cost">0</span> IP</span>
-						</div>
-					</div>
-					<!--<div style="position: relative; height: 29px; width: 100%; margin-top: 10px">
-						<div class="grayBorder2" style="height: 25px; overflow-x: hidden; position: relative">
-							<span class="cv text" style="position: absolute; left: 2px">M = <span><span class="ba purpleText">0</span>M<sub>1</sub> + <span class="ba purpleText">0</span></span></span>
-							<span class="cv text" style="position: absolute; right: 2px">Cost: <span class="ba purpleText">0</span> IP</span>
-						</div>
-					</div>
-					<div style="position: relative; height: 29px; width: 100%">
-						<div class="grayBorder2" style="height: 25px; overflow-x: hidden; position: relative">
-							<span class="cv text" style="position: absolute; left: 2px">M<sub>1</sub> = <span><span class="ba purpleText">0</span>M<sub>2</sub> + <span class="ba purpleText">0</span></span></span>
-							<span class="cv text" style="position: absolute; right: 2px">Cost: <span class="ba purpleText">0</span> IP</span>
-						</div>
-					</div>
-					<div style="position: relative; height: 29px; width: 100%">
-						<div class="grayBorder2" style="height: 25px; overflow-x: hidden; position: relative">
-							<span class="cv text" style="position: absolute; left: 2px">M<sub>2</sub> = <span><span class="ba purpleText">0</span>M<sub>3</sub> + <span class="ba purpleText">0</span></span></span>
-							<span class="cv text" style="position: absolute; right: 2px">Cost: <span class="ba purpleText">0</span> IP</span>
-						</div>
-					</div>
-					<div style="position: relative; height: 29px; width: 100%">
-						<div class="grayBorder2" style="height: 25px; overflow-x: hidden; position: relative">
-							<span class="cv text" style="position: absolute; left: 2px">M<sub>3</sub> = <span><span class="ba purpleText">0</span>M<sub>4</sub> + <span class="ba purpleText">0</span></span></span>
-							<span class="cv text" style="position: absolute; right: 2px">Cost: <span class="ba purpleText">0</span> IP</span>
-						</div>
-					</div>
-					<div style="position: relative; height: 29px; width: 100%">
-						<div class="grayBorder2" style="height: 25px; overflow-x: hidden; position: relative">
-							<span class="cv text" style="position: absolute; left: 2px">M<sub>4</sub> = <span class="ba purpleText">0</span></span>
-							<span class="cv text" style="position: absolute; right: 2px">Cost: <span class="ba purpleText">0</span> IP</span>
-						</div>
-					</div>
-					<div style="position: relative; height: 29px; width: 100%; margin-top: 10px">
-						<div class="grayBorder2" style="height: 25px; overflow-x: hidden; position: relative">
-							<span class="cv text" style="position: absolute; left: 2px">E = <span><span class="ba purpleText">0</span>E<sub>1</sub> + <span class="ba purpleText">0</span></span></span>
-							<span class="cv text" style="position: absolute; right: 2px">Cost: <span class="ba purpleText">0</span> IP</span>
-						</div>
-					</div>
-					<div style="position: relative; height: 29px; width: 100%">
-						<div class="grayBorder2" style="height: 25px; overflow-x: hidden; position: relative">
-							<span class="cv text" style="position: absolute; left: 2px">E<sub>1</sub> = <span><span class="ba purpleText">0</span>E<sub>2</sub> + <span class="ba purpleText">0</span></span></span>
-							<span class="cv text" style="position: absolute; right: 2px">Cost: <span class="ba purpleText">0</span> IP</span>
-						</div>
-					</div>
-					<div style="position: relative; height: 29px; width: 100%">
-						<div class="grayBorder2" style="height: 25px; overflow-x: hidden; position: relative">
-							<span class="cv text" style="position: absolute; left: 2px">E<sub>2</sub> = <span><span class="ba purpleText">0</span>E<sub>3</sub> + <span class="ba purpleText">0</span></span></span>
-							<span class="cv text" style="position: absolute; right: 2px">Cost: <span class="ba purpleText">0</span> IP</span>
-						</div>
-					</div>
-					<div style="position: relative; height: 29px; width: 100%">
-						<div class="grayBorder2" style="height: 25px; overflow-x: hidden; position: relative">
-							<span class="cv text" style="position: absolute; left: 2px">E<sub>3</sub> = <span><span class="ba purpleText">0</span>E<sub>4</sub> + <span class="ba purpleText">0</span></span></span>
-							<span class="cv text" style="position: absolute; right: 2px">Cost: <span class="ba purpleText">0</span> IP</span>
-						</div>
-					</div>
-					<div style="position: relative; height: 29px; width: 100%">
-						<div class="grayBorder2" style="height: 25px; overflow-x: hidden; position: relative">
-							<span class="cv text" style="position: absolute; left: 2px">E<sub>4</sub> = <span class="ba purpleText">0</span></span>
-							<span class="cv text" style="position: absolute; right: 2px">Cost: <span class="ba purpleText">0</span> IP</span>
-						</div>
-					</div>-->
-				</div>
-				<div id="tabPrestige">
-					
-				</div>
-				<div id="tabAscension">
-					
-				</div>
-		  </div>
-		</div>
+      <div class="ch grayBorder" style="width: 90%; min-width: 100px; max-width: 1000px">
+        <div style="height: 25px; width: 100%; display: table; table-layout: fixed">
+          <div class="tab ch2" id="tabOptionsb" onmouseup="tab('Options')">Options</div>
+          <div class="tab ch2" id="tabAutomationb" onmouseup="tab('Automation')">Automation</div>
+          <div class="tab ch2" id="tabSacrificeb" onmouseup="tab('Sacrifice')">Sacrifice</div>
+          <div class="tab ch2" id="tabScalingb" onmouseup="tab('Scaling')">Scaling</div>
+          <div class="tab ch2 tabPurple" id="tabIncrementb" onmouseup="tab('Increment')">Increment</div>
+        </div>
+        <div class="grayBorder" style="width: 100%; position: relative; right: 2px">
+          <div style="display: flex; justify-content: center">
+            <div class="ch2 ipInfo" id="ipInfo" style="width: 33%">
+              <span class="text" style="font-size: 14px"><span class="ba purpleText" id="ipx" style="font-size: 26px">0</span> <span id="ipText">Increment Points</span></span>><br>
+              <span class="text" style="font-size: 12px"><span id="ipSecText">You are gaining </span><span class="ba purpleText" id="ipSecx" style="font-size: 16px">0</span> IP per second</span>
+              <div class="pb ch"><div class="ch" id="pbip"><span class="ch text" style="color: rgb(0, 0, 0)"><span class="ba" id="pbipsac">0</span>/<span class="ba" id="pbipgoal">0</span></span></div></div>
+              <span class="text purpleText" id="pbipunlock">Nothing</span>
+            </div>
+          </div>
+        </div>
+        <div id="tabOptions">
+          
+        </div>
+        <div id="tabAutomation">
+          <div id="autoIP" style="height: 34px; width: 100%">
+            <div class="grayBorder2 cantBuy" id="autoIPb" style="height: 30px; overflow: hidden; position: relative" onmouseup="buyAutomationIP()">
+              <span class="cv text" style="float: left; left: 2px"><span id="autoIPText">Automate IP Gain </span>(<span class="purpleText"><span class="ba" id="autoIPx">0</span>x</span>/sec)</span>
+              <span class="cv text" style="float: right; right: 2px">Cost: <span class="ba purpleText" id="autoIPCost">0</span> IP</span>
+            </div>
+          </div>
+          <div id="autoP" style="height: 34px; width: 100%">
+            <div class="grayBorder2 cantBuy" id="autoPb" style="height: 30px; overflow: hidden; position: relative" onmouseup="buyAutomationIncrementP()">
+              <span class="cv text" style="float: left; left: 2px"><span id="autoPText">Automate P Variables </span>(<span class="purpleText"><span class="ba" id="autoPx">0</span>x</span>/sec)</span>
+              <span class="cv text" style="float: right; right: 2px">Cost: <span class="ba purpleText" id="autoPCost">0</span> IP</span>
+            </div>
+          </div>
+          <div id="autoM" style="height: 34px; width: 100%">
+            <div class="grayBorder2 cantbuy" id="autoMb" style="height: 30px; overflow: hidden; position: relative" onmouseup="buyAutomationIncrementM()">
+              <span class="cv text" style="float: left; left: 2px"><span id="autoMText">Automate M Variables </span>(<span class="purpleText"><span class="ba" id="autoMx">0</span>x</span>/sec)</span>
+              <span class="cv text" style="float: right; right: 2px">Cost: <span class="ba purpleText" id="autoMCost">0</span> IP</span>
+            </div>
+          </div>
+        </div>
+        <div id="tabSacrifice">
+          <div class="grayBorder2 ch2 cantBuy" id="sacrificeIP" style="overflow-x: hidden" onmouseup="sacrificeIP()">
+            <span class="text">Sacrifice your IP and Variables for a boost</span><br>
+            <span class="text" id="sacrificeIPPUnlock">Multipliers per variable: P&rArr;<span class="purpleText"><span class="ba" id="sacrificeIPP">0</span>x</span><span id="sacrificeIPMUnlock">; M&rArr;<span class="purpleText"><span class="ba" id="sacrificeIPM">0</span>x</span></span><span class="sacrificeIPEUnlocks">; E&rArr;<span class="purpleText"><span class="ba" id="sacrificeIPE">0</span>x</span></span></span><br>
+            <span class="text">Unlock: <span class="purpleText" id="sacrificeIPUnlock">Variable: M</span></span><br>
+            <span class="text">Need: <span class="ba purpleText" id="sacrificeIPCost">0</span> IP</span>
+          </div>
+        </div>
+        <div id="tabScaling">
+          <div id="scalingP" style="height: 34px; width: 100%">
+            <div class="grayBorder2 cantBuy" id="scalingPb" style="height: 30px; overflow: hidden; position: relative" onmouseup="buyScalingP()">
+              <span class="cv text" style="float: left; left: 2px">Reduce P Costs (<span class="purpleText">x<span class="ba" id="scalingPx">0</span></span>)</span>
+              <span class="cv text" style="float: right; right: 2px">Cost: <span class="ba purpleText" id="scalingPCost">0</span> IP</span>
+            </div>
+          </div>
+        </div>
+        <div id="tabIncrement">
+          <div style="position: relative; height: 50px; width: 100%">
+            <div class="autoipState canBuy" id="autoIPState" style="width: 46px; height: 46px; float: left" onmouseup="automateIP()"></div>
+            <div class="grayBorder2 canBuy" style="height: 46px; overflow: hidden; position: relative" onmouseup="increment()">
+              <span class="cv text" style="font-size: 20px; position: absolute; left: 2px">IP = IP+(P<span class="incrementM0Unlocks">xM</span>)<sup class="text ipEquationEUnlocks">E</sup> &rArr; IP = IP+(<span class="ba purpleText" id="equationP">0</span><span class="incrementM0Unlocks">x<span class="ba purpleText" id="equationM">0</span></span>)<sup class="purpleText ipEquationEUnlocks">0</sup><span class="incrementM0Unlocks"> &rArr; <span class="ba purpleText" id="equationResult">0</span></span></span>
+            </div>
+          </div>
+          <div id="incrementP0" style="position: relative; height: 34px; width: 100%">
+            <div class="autoipState canBuy autoIncrementPUnlocks" id="autoIncrementP0State" style="float: left" onmouseup="automateIncrementP(0)"></div>
+            <div class="grayBorder2 cantBuy" id="incrementP0b" style="height: 30px; overflow: hidden; position: relative" onmouseup="buyIncrementP(0)">
+              <span class="cv text" style="position: absolute; left: 2px">P = <span class="incrementP1Unlocks"><span class="ba purpleText coefficientP">0</span>P<sub>1</sub> + </span><span class="ba purpleText" id="incrementP0x">0</span></span>
+              <span class="cv text" style="position: absolute; right: 2px">Cost: <span class="ba purpleText" id="incrementP0Cost">0</span> IP</span>
+            </div>
+          </div>
+          <div class="incrementP1Unlocks" id="incrementP1" style="position: relative; height: 34px; width: 100%">
+            <div class="autoipState canBuy autoIncrementPUnlocks" id="autoIncrementP1State" style="float: left" onmouseup="automateIncrementP(1)"></div>
+            <div class="grayBorder2 cantBuy" id="incrementP1b" style="height: 30px; overflow: hidden; position: relative" onmouseup="buyIncrementP(1)">
+              <span class="cv text" style="position: absolute; left: 2px">P<sub>1</sub> = <span class="incrementP2Unlocks"><span class="ba purpleText coefficientP">0</span>P<sub>2</sub> + </span><span class="ba purpleText" id="incrementP1x">0</span></span>
+              <span class="cv text" style="position: absolute; right: 2px">Cost: <span class="ba purpleText" id="incrementP1Cost">0</span> IP</span>
+            </div>
+          </div>
+          <div class="incrementP2Unlocks" id="incrementP2" style="position: relative; height: 34px; width: 100%">
+            <div class="autoipState canBuy autoIncrementPUnlocks" id="autoIncrementP2State" style="float: left" onmouseup="automateIncrementP(2)"></div>
+            <div class="grayBorder2 cantBuy" id="incrementP2b" style="height: 30px; overflow: hidden; position: relative" onmouseup="buyIncrementP(2)">
+              <span class="cv text" style="position: absolute; left: 2px">P<sub>2</sub> = <span class="incrementP3Unlocks"><span class="ba purpleText coefficientP">0</span>P<sub>3</sub> + </span><span class="ba purpleText" id="incrementP2x">0</span></span>
+              <span class="cv text" style="position: absolute; right: 2px">Cost: <span class="ba purpleText" id="incrementP2Cost">0</span> IP</span>
+            </div>
+          </div>
+          <div class="incrementP3Unlocks" id="incrementP3" style="position: relative; height: 34px; width: 100%">
+            <div class="autoipState canBuy autoIncrementPUnlocks" id="autoIncrementP3State" style="float: left" onmouseup="automateIncrementP(3)"></div>
+            <div class="grayBorder2 cantBuy" id="incrementP3b" style="height: 30px; overflow: hidden; position: relative" onmouseup="buyIncrementP(3)">
+              <span class="cv text" style="position: absolute; left: 2px">P<sub>3</sub> = <span class="incrementP4Unlocks"><span class="ba purpleText coefficientP">0</span>P<sub>4</sub> + </span><span class="ba purpleText" id="incrementP3x">0</span></span>
+              <span class="cv text" style="position: absolute; right: 2px">Cost: <span class="ba purpleText" id="incrementP3Cost">0</span> IP</span>
+            </div>
+          </div>
+          <div class="incrementP4Unlocks" id="incrementP4" style="position: relative; height: 34px; width: 100%">
+            <div class="autoipState canBuy autoIncrementPUnlocks" id="autoIncrementP4State" style="float: left" onmouseup="automateIncrementP(4)"></div>
+            <div class="grayBorder2 cantBuy" id="incrementP4b" style="height: 30px; overflow: hidden; position: relative" onmouseup="buyIncrementP(4)">
+              <span class="cv text" style="position: absolute; left: 2px">P<sub>4</sub> = <span class="ba purpleText" id="incrementP4x">0</span></span>
+              <span class="cv text" style="position: absolute; right: 2px">Cost: <span class="ba purpleText" id="incrementP4Cost">0</span> IP</span>
+            </div>
+          </div>
+          <div class="incrementM0Unlocks" id="incrementM0" style="position: relative; height: 34px; width: 100%; margin-top: 10px">
+            <div class="autoipState canBuy autoIncrementMUnlocks" id="autoIncrementM0State" style="float: left" onmouseup="automateIncrementM(0)"></div>
+            <div class="grayBorder2 cantBuy" id="incrementM0b" style="height: 30px; overflow: hidden; position: relative" onmouseup="buyIncrementM(0)">
+              <span class="cv text" style="position: absolute; left: 2px">M = <span class="incrementM1Unlocks"><span class="ba purpleText coefficientM">0</span>M<sub>1</sub> x </span><span class="ba purpleText" id="incrementM0x">0</span></span>
+              <span class="cv text" style="position: absolute; right: 2px">Cost: <span class="ba purpleText" id="incrementM0Cost">0</span> IP</span>
+            </div>
+          </div>
+          <div class="incrementM1Unlocks" id="incrementM1" style="position: relative; height: 34px; width: 100%">
+            <div class="autoipState canBuy autoIncrementMUnlocks" id="autoIncrementM1State" style="float: left" onmouseup="automateIncrementM(1)"></div>
+            <div class="grayBorder2 cantBuy" id="incrementM1b" style="height: 30px; overflow: hidden; position: relative" onmouseup="buyIncrementM(1)">
+              <span class="cv text" style="position: absolute; left: 2px">M<sub>1</sub> = <span class="incrementM2Unlocks"><span class="ba purpleText coefficientM">0</span>M<sub>2</sub> x </span><span class="ba purpleText" id="incrementM1x">0</span></span>
+              <span class="cv text" style="position: absolute; right: 2px">Cost: <span class="ba purpleText" id="incrementM1Cost">0</span> IP</span>
+            </div>
+          </div>
+          <div class="incrementM2Unlocks" id="incrementM2" style="position: relative; height: 34px; width: 100%">
+            <div class="autoipState canBuy autoIncrementMUnlocks" id="autoIncrementM2State" style="float: left" onmouseup="automateIncrementM(2)"></div>
+            <div class="grayBorder2 cantBuy" id="incrementM2b" style="height: 30px; overflow: hidden; position: relative" onmouseup="buyIncrementM(2)">
+              <span class="cv text" style="position: absolute; left: 2px">M<sub>2</sub> = <span class="incrementM3Unlocks"><span class="ba purpleText coefficientM">0</span>M<sub>3</sub> x </span><span class="ba purpleText" id="incrementM2x">0</span></span>
+              <span class="cv text" style="position: absolute; right: 2px">Cost: <span class="ba purpleText" id="incrementM2Cost">0</span> IP</span>
+            </div>
+          </div>
+          <div class="incrementM3Unlocks" id="incrementM3" style="position: relative; height: 34px; width: 100%">
+            <div class="autoipState canBuy autoIncrementMUnlocks" id="autoIncrementM3State" style="float: left" onmouseup="automateIncrementM(3)"></div>
+            <div class="grayBorder2 cantBuy" id="incrementM3b" style="height: 30px; overflow: hidden; position: relative" onmouseup="buyIncrementM(3)">
+              <span class="cv text" style="position: absolute; left: 2px">M<sub>3</sub> = <span class="incrementM4Unlocks"><span class="ba purpleText coefficientM">0</span>M<sub>4</sub> x </span><span class="ba purpleText" id="incrementM3x">0</span></span>
+              <span class="cv text" style="position: absolute; right: 2px">Cost: <span class="ba purpleText" id="incrementM3Cost">0</span> IP</span>
+            </div>
+          </div>
+          <div class="incrementM4Unlocks" id="incrementM4" style="position: relative; height: 34px; width: 100%">
+            <div class="autoipState canBuy autoIncrementMUnlocks" id="autoIncrementM4State" style="float: left" onmouseup="automateIncrementM(4)"></div>
+            <div class="grayBorder2 cantBuy" id="incrementM4b" style="height: 30px; overflow: hidden; position: relative" onmouseup="buyIncrementM(4)">
+              <span class="cv text" style="position: absolute; left: 2px">M<sub>4</sub> = <span class="ba purpleText" id="incrementM4x">0</span></span>
+              <span class="cv text" style="position: absolute; right: 2px">Cost: <span class="ba purpleText" id="incrementM4Cost">0</span> IP</span>
+            </div>
+          </div>
+        </div>
+        <div id="tabPrestige">
+          
+        </div>
+        <div id="tabAscension">
+          
+        </div>
+      </div>
+    </div>
+    <div style="display: none"><div class="nul" id="nul"></div></div>
   </body>
 </html>
