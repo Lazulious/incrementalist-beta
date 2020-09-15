@@ -27,7 +27,6 @@ sup {font-family: Book Antiqua}
 .center {text-align: center}
 .ba {font-family: Book Antiqua}
 .ab {font-family: Book Antiqua}
-/*.hotkey {position: relative; bottom: 1.25px}*/
 
 .ch {position: absolute; left: 50%; transform: translateX(-50%)}
 .ch2 {text-align: center}
@@ -80,12 +79,8 @@ sup {font-family: Book Antiqua}
 .tabOrange:hover {color: rgb(0, 0, 0); background-color: rgb(255, 165, 0)}
 .tabRed {color: rgb(220, 20, 60); background-color: rgb(0, 0, 0); border-color: rgb(220, 20, 60)}
 .tabRed:hover {color: rgb(0, 0, 0); background-color: rgb(220, 20, 60)}
-/*.button {cursor: pointer; outline: none; transition: background-color .2s}
-.button:hover {background-color: rgb(30, 30, 30)}*/
 .canBuy {background-color: rgb(0, 0, 0); cursor: pointer; outline: none; transition: background-color .2s}
-/*.canBuy:hover {background-color: rgb(30, 30, 30)}*/
 .cantBuy {background-color: rgb(30, 30, 30);outline: none; transition: background-color .2s}
-/*.cantBuy:hover {background-color: rgb(50, 50, 50)}*/
 
 .pb {
   background-color: rgb(100, 100, 100);
