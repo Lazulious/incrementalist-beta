@@ -1,13 +1,3 @@
-function e(obj, exp, dec) {
-  if (typeof obj == "undefined") {return "error-e1"}
-  if (typeof exp == "undefined") {exp = 2}
-  if (typeof dec == "undefined") {dec = 0}
-  if (obj.e >= 6) {
-    if (obj.m.toFixed(exp) >= 10) {return (obj.m.toFixed(exp) / 10).toFixed(exp) + "e" + (obj.e + 1).toLocaleString()}
-    else {return obj.m.toFixed(exp) + "e" + obj.e.toLocaleString()}
-  }
-  else {return comma((obj.m * (Math.pow(10, obj.e))).toFixed(dec))}
-}
 function d(x) {return document.getElementById(x)}
 function dc(x) {return document.getElementsByClassName(x)}
 function h(x) {document.getElementById(x).style.display = "none"}
@@ -29,9 +19,10 @@ function cb2(el) {el = (typeof el === "string") ? document.querySelector(el) : e
 function as(arr, index, del, value) {if (typeof value == "undefined") {value = "Nothing"} let remove = 0; if (del) {remove = 1} else {remove = 0} arr.splice(index, remove, value)} /**/
 function of(element) {return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth}/*?*/
 
-var tabs = ["Options", "Automation", "Sacrifice", "Scaling", "Increment", "Prestige", "Ascension"];
+var tabs = ["Options", "Achievements"/*, "Statistics"*/, "Automation", "Sacrifice", "Scaling", "Increment", "Prestige", "Ascension"];
 function tab(t) {
   for (let i = 0; i < tabs.length; i++) {h("tab" + tabs[i])}
   s("tab" + t);
   user.tab = t;
+  updateTab(t);
 }

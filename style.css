@@ -1,3 +1,4 @@
+/* Base Elements */
 body {
   background-color: rgb(0, 0, 0);
   -webkit-user-select: none;
@@ -11,11 +12,12 @@ body {
   font-size: 18px;
 }
 body::-webkit-scrollbar {display: none}
-table {margin-left: auto; margin-right: auto; empty-cells: hide}
+table {margin-left: auto; margin-right: auto}
 sub {font-family: Book Antiqua}
 sup {font-family: Book Antiqua}
 
-.text {color: rgb(150, 150, 150); font-family: Lucida Console}
+/* Text */
+.text {color: rgb(150, 150, 150); font-family: Lucida Console; overflow-wrap: break-word}
 .redText {color: rgb(220, 20, 60)}
 .orangeText {color: rgb(255, 165, 0)}
 .yellowText {color: rgb(222, 222, 0)}
@@ -27,41 +29,142 @@ sup {font-family: Book Antiqua}
 .center {text-align: center}
 .ba {font-family: Book Antiqua}
 .ab {font-family: Book Antiqua}
+.lc {font-family: Lucida Console}
+.cl {font-family: Lucida Console}
+.top {position: absolute; top: 2px; right: 0px; left: 0px}
+.bottom {position: absolute; right: 0px; bottom: 2px; left: 0px}
+.achReward {font-size: 13px}
 
+/* Position */
 .ch {position: absolute; left: 50%; transform: translateX(-50%)}
 .ch2 {text-align: center}
 .cv {position: absolute; top: 50%; transform: translateY(-50%)}
 .chv {position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%)}
 .cvh {position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%)}
 
+/* General Display */
 .grayBorder {border-color: rgb(127, 127, 127); border-width: 2px; border-style: solid}
 .grayBorder2 {border-color: rgb(63, 63, 63); border-width: 2px; border-style: solid}
+.dropdown {position: relative}
+.dropdown:hover .dropdown-content {display: block}
+.dropdown-content {
+  background-color: rgb(15, 15, 15);
+  border: 2px solid rgb(35, 140, 35);
+  border-radius: 10px;
+  width: 100%;
+  position: absolute;
+  top: 66px;
+  display: none;
+  z-index: 1;
+}
+.dropdown-item {border: 2px solid rgb(35, 140, 35); margin: 1px; transition: background-color .2s}
+.dropdown-item:hover {background-color: rgb(50, 50, 50)}
+.title {
+  background-color: rgb(25, 25, 25);
+  border: 0px;
+  border-radius: 44px;
+}
+.table {
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: space-around;
+}
+.tableRow {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+}
+.tableCell {
+  height: 150px;
+  vertical-align: 0;
+}
+
+/* Buttons */
+.increments {
+  border: 2px solid;
+  border-radius: 10px;
+  margin: 1px 0px 1px 0px;
+}
+.automations {
+  border: 2px solid;
+  border-radius: 10px;
+  margin: 1px 0px 1px 0px;
+}
+.sacrifices {
+  border: 2px solid;
+  border-radius: 10px;
+  margin: 1px 0px 1px 0px;
+}
+.scalings {
+  border: 2px solid;
+  border-radius: 10px;
+  margin: 1px 0px 1px 0px;
+}
 .autoipState {
-  border-color: rgb(220, 20, 60);
-  border-width: 2px;
-  border-style: solid;
+  border: 2px solid rgb(220, 20, 60);
   width: 30px;
   height: 30px;
 }
-.tabInfoDiv {
-  border-color: rgb(127, 127, 127);
-  border-width: 2px;
+.option {
+  border: 2px solid rgb(35, 140, 35);
+  border-radius: 10px;
+  outline: none;
+  cursor: pointer;
+  height: 64px;
+  width: 25%;
+  position: relative;
+  display: table-cell;
+}
+.achComplete {
+  background-color: rgb(25, 85, 25);
+  border: 2px solid rgb(35, 140, 35);
+  border-radius: 10px;
+  height: 150px;
+  width: 150px;
+  position: relative;
+}
+.achIncomplete {
+  background-color: rgb(25, 25, 25);
+  border: 2px solid rgb(35, 140, 35);
+  border-radius: 10px;
+  height: 150px;
+  width: 150px;
+  position: relative;
+}
+
+/* Tooltips */
+.tooltip-content {
+  background-color: rgb(25, 25, 25);
+  border-radius: 10px;
+  padding: 5px;
+  position: absolute;
+  bottom: 110%;
+  left: 50%;
+  z-index: 1;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity .5s;
+}
+.tooltip-content::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -10px;
+  border-width: 10px;
   border-style: solid;
-  width: 100%;
-  height: 125px;
-  position: relative;
-  right: 2px;
-  bottom: 4px;
+  border-color: rgb(25, 25, 25) transparent transparent transparent;
 }
-.tabInfoSpan {
-  color: rgb(150, 150, 150);
-  font-family: Lucida Console;
-  position: relative;
-  left: 2px;
+.tooltip-element:hover .tooltip-content {
+  visibility: visible;
+  opacity: 1;
 }
+
+/* Tabs */
 .tab {
   background-color: rgb(255, 255, 255);
   border: 2px solid rgb(200, 200, 200);
+  border-radius: 25px;
   cursor: pointer;
   outline: none;
   transition: color .2s, background-color .2s;
@@ -80,10 +183,12 @@ sup {font-family: Book Antiqua}
 .tabRed {color: rgb(220, 20, 60); background-color: rgb(0, 0, 0); border-color: rgb(220, 20, 60)}
 .tabRed:hover {color: rgb(0, 0, 0); background-color: rgb(220, 20, 60)}
 .canBuy {background-color: rgb(0, 0, 0); cursor: pointer; outline: none; transition: background-color .2s}
-.cantBuy {background-color: rgb(30, 30, 30);outline: none; transition: background-color .2s}
+.cantBuy {background-color: rgb(30, 30, 30); outline: none; transition: background-color .2s}
 
+/* Progress Bars */
 .pb {
   background-color: rgb(100, 100, 100);
+  border-radius: 20px;
   width: 95%;
   height: 20px;
   position: relative;
@@ -91,6 +196,7 @@ sup {font-family: Book Antiqua}
 }
 #pbip {
   background-color: rgb(150, 0, 210);
+  border-radius: 20px;
   width: 0%;
   height: 100%;
 }
