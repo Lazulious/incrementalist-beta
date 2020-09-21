@@ -51,7 +51,14 @@ function loadData(data) {
   user = data;
   if (user.version == "0.2.0-beta-v4") {
     console.log("Loaded Version " + user.version);
+    decompleteAchievements();
+    user = setUser();
+    user.version = "0.2.0-beta-v4.1";
   }
+  if (user.version == "0.2.0-beta-v4.1") {
+    console.log("Loaded Version " + user.version)
+  }
+  d("version").textContent = user.version;
   fixnd();
   tab(user.tab);
   completeAchievements();
@@ -74,13 +81,14 @@ function loadAutomation() {
 //Reset Data
 function confirmResetAll() {
   if (user.confirmation.reset) {
-    alertify.confirm("Are you sure you want to reset? You will lose all of your previous progress!", () => {alertify.warning("Game Reset"); resetAll()});
+    alertify.confirm("Are you sure you want to reset? You will lose all of your previous progress!", () => {alertify.warning("Game Reset")}, resetAll());
   }
   else {resetAll()}
 }
 function resetAll() {
   decompleteAchievements();
   user = setUser();
+  unlocking();
   save();
   console.log("Game Reset");
 }
@@ -103,11 +111,11 @@ function resetSacrificeIP() {
 
 //Other
 function progress() {
-  /*let x = nd(1e38).minus(1);
+  let x = nd(1e39).minus(1);
   user.ip.x = user.ip.x.plus(x);
   user.ip.sac = user.ip.sac.plus(x);
   user.sacrifice.ip += 6;
   for (let i = 1; i <= 6; i++) {completeAchievement("ach1-" + i)}
   for (let i = 1; i <= 3; i++) {completeAchievement("ach2-" + i)}
-  user.increment.ip += 1000;*/
+  user.increment.ip += 2500;
 }
