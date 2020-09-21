@@ -74,7 +74,7 @@ function loadAutomation() {
 //Reset Data
 function confirmResetAll() {
   if (user.confirmation.reset) {
-    alertify.confirm("Are you sure you want to reset? You will lose all of your previous progress!", () => {alertify.warning("Game Reset")});
+    alertify.confirm("Are you sure you want to reset? You will lose all of your previous progress!", () => {alertify.warning("Game Reset"); resetAll()});
   }
   else {resetAll()}
 }
