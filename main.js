@@ -10,7 +10,7 @@ function setUser() {
     confirmation: {reset: true, sacrifice: true},
     achievements: [],
     tab: "Increment",
-    version: "0.2.0-beta-v4",
+    version: "0.2.0-beta-v4.1",
   }
 }
 //Data
