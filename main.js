@@ -132,8 +132,8 @@ updateAchievement();
 updateConfirmations();
 resize();
 
-progress();
-unlocking();
+/*progress();
+unlocking();*/
 
 const tempHideA = ["sacrificeIPEUnlock"];
 for (let i = 0; i < tempHideA.length; i++) {h(tempHideA[i])}
