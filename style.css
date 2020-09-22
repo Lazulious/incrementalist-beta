@@ -34,6 +34,7 @@ sup {font-family: Book Antiqua}
 .top {position: absolute; top: 2px; right: 0px; left: 0px}
 .bottom {position: absolute; right: 0px; bottom: 2px; left: 0px}
 .achReward {font-size: 13px}
+.statText {font-size: 16px}
 
 /* Position */
 .ch {position: absolute; left: 50%; transform: translateX(-50%)}
@@ -188,15 +189,15 @@ sup {font-family: Book Antiqua}
 /* Progress Bars */
 .pb {
   background-color: rgb(100, 100, 100);
-  border-radius: 20px;
+  border-radius: 25px;
   width: 95%;
-  height: 20px;
+  height: 25px;
   position: relative;
   margin-top: 2px;
 }
 #pbip {
   background-color: rgb(150, 0, 210);
-  border-radius: 20px;
+  border-radius: 25px;
   width: 0%;
   height: 100%;
 }

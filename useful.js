@@ -19,7 +19,41 @@ function cb2(el) {el = (typeof el === "string") ? document.querySelector(el) : e
 function as(arr, index, del, value) {if (typeof value == "undefined") {value = "Nothing"} let remove = 0; if (del) {remove = 1} else {remove = 0} arr.splice(index, remove, value)} /**/
 function of(element) {return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth}/*?*/
 
-var tabs = ["Options", "Achievements"/*, "Statistics"*/, "Automation", "Sacrifice", "Scaling", "Increment", "Prestige", "Ascension"];
+function time(obj, full, noDecimals) {
+  let x = obj.divide(1000);
+  if (x == "Infinity" || typeof x == "null" || typeof obj == "undefined") {return "Infinite Time"}
+  let y = e(x.divide(31536000).floor());
+  let yy = (y == 1) ? " Year " : " Years ";
+  let d = x.divide(31536000).minus(x.divide(31536000).floor()).times(31536000).floor().divide(86400).floor();
+  let dd = (d == 1) ? " Day " : " Days ";
+  let h = x.divide(86400).minus(x.divide(86400).floor()).times(86400).floor().divide(3600).floor();
+  let hh = (h == 1) ? " Hour " : " Hours ";
+  let m = x.divide(3600).minus(x.divide(3600).floor()).times(3600).floor().divide(60).floor();
+  let mm = (m == 1) ? " Minute " : " Minutes ";
+  let s = nd(0);
+  if (!noDecimals) {s = x.divide(60).minus(x.divide(60).floor()).times(60).toFixed(3)}
+  else {s = x.divide(60).minus(x.divide(60).floor()).times(60).floor()}
+  let ss = (s == 1) ? " Second " : " Seconds ";
+  /*let ms = x.minus(x.floor()).times(1000).floor();
+  let msms = (ms == 1) ? " Millisecond" : " Milliseconds";*/
+  if (!full) {
+    if (y == 0) {y = ""; yy = ""}
+    if (d == 0 || Number(y) > 1000) {d = ""; dd = ""}
+    if (h == 0 || Number(y.replace(",", "")) > 0) {h = ""; hh = ""}
+    if (m == 0 || d > 0 || Number(y.replace(",", "") > 0)) {m = ""; mm = ""}
+    if (h > 0 || d > 0 || Number(y.replace(",", "") > 0)) {s = ""; ss = ""}
+    /*if (m > 0 || h > 0 || d > 0 || y > 0) {ms = ""; msms = ""}*/
+  }
+  else {
+    if (y == 0) {y = ""; yy = ""}
+    if (d == 0) {d = ""; dd = ""}
+    if (h == 0) {h = ""; hh = ""}
+    if (m == 0) {m = ""; mm = ""}
+  }
+  return y + yy + d + dd + h + hh + m + mm + s + ss/* + ms + msms*/;
+}
+
+var tabs = ["Options", "Achievements", "Statistics", "Automation", "Sacrifice", "Scaling", "Increment", "Prestige", "Ascension"];
 function tab(t) {
   for (let i = 0; i < tabs.length; i++) {h("tab" + tabs[i])}
   s("tab" + t);

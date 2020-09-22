@@ -34,19 +34,19 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   </head>
   <body onresize="resize()">
     <div>
-      <div class="ch grayBorder" style="width: 90%; min-width: 415px; max-width: 1000px">
-        <div style="height: 75px; width: 100%">
-          <div style="height: 25px; width: 100%; display: table; table-layout: fixed">
+      <div class="ch grayBorder" style="width: 90%; min-width: 250px; max-width: 1000px">
+        <div style="width: 100%">
+          <div style="width: 100%; display: table; table-layout: fixed">
             <div class="tab ch2" id="tabOptionsb" style="display: table-cell" onmouseup="tab('Options')">Options</div>
-            <div class="tab ch2" id="tabAchievementsb" style="display: table-cell" onmouseup="tab('Achievements')"><span id="tabAchievementsText">Achievements</span></div>
-            <!--<div class="tab ch2" id="tabStatisticsb" onmouseup="tab('Statistics')">Statistics</div>-->
+            <div class="tab ch2" id="tabAchievementsb" style="display: table-cell" onmouseup="tab('Achievements')"><span id="tabAchievementsText" style="font-size: clamp(13px, 4.8vw, 18px)">Achievements</span></div>
+            <div class="tab ch2" id="tabStatisticsb" onmouseup="tab('Statistics')">Statistics</div>
           </div>
-          <div style="height: 25px; width: 100%; display: table; table-layout: fixed">
-            <div class="tab ch2" id="tabAutomationb" onmouseup="tab('Automation')"><span id="tabAutomationText">Automation</span></div>
+          <div style="width: 100%; display: table; table-layout: fixed">
+            <div class="tab ch2" id="tabAutomationb" onmouseup="tab('Automation')"><span id="tabAutomationText" style="font-size: clamp(16px, 5.5vw, 18px)">Automation</span></div>
             <div class="tab ch2" id="tabSacrificeb" onmouseup="tab('Sacrifice')">Sacrifice</div>
             <div class="tab ch2" id="tabScalingb" onmouseup="tab('Scaling')">Scaling</div>
           </div>
-            <div style="height: 25px; width: 100%; display: table; table-layout: fixed">
+            <div style="width: 100%; display: table; table-layout: fixed">
             <div class="tab ch2 tabPurple" id="tabIncrementb" style="display: table-cell" onmouseup="tab('Increment')">Increment</div>
           </div>
         </div>
@@ -55,7 +55,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             <div class="ch2 ipInfo" id="ipInfo" style="width: 33%">
               <span class="text" style="font-size: 14px"><span class="ba purpleText" id="ipx" style="font-size: 26px">0</span> <span id="ipText">Increment Points</span></span>><br>
               <span class="text" style="font-size: 12px"><span id="ipSecText">You are gaining </span><span class="ba purpleText" id="ipSecx" style="font-size: 16px">0</span> IP per second</span>
-              <div class="pb ch"><div class="ch" id="pbip"></div><span class="ch text notationBlind notationTrueblind" style="width: 100%; color: rgb(0, 0, 0)"><span class="ba" id="pbipsac">0</span>/<span class="ba" id="pbipgoal">0</span></span></div>
+              <div class="pb ch"><div class="ch" id="pbip"></div><span class="cvh text notationBlind notationTrueblind" style="width: 100%; color: rgb(0, 0, 0); font-size: clamp(10px, 2.28vw, 18px)"><span class="ba" id="pbipsac">0</span> / <span class="ba" id="pbipgoal">0</span></span></div>
               <span class="notationTrueblind"><span class="text purpleText" id="pbipunlock">Nothing</span></span>
             </div>
           </div>
@@ -69,7 +69,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
           <div style="height: 44px; width: 100%; display: table">
             <div class="grayBorder option" style="cursor: default"><span class="cvh text"></span></div>
             <div class="grayBorder ch2 option dropdown">
-              <span class="chv text" style="width: 100%; overflow-wrap: break-word">Notation: <span class="text" id="notation">Standard</span></span>
+              <span class="chv text" style="width: 100%; overflow-wrap: break-word">Notation: <span class="text" id="notation">Scientific</span></span>
               <div class="dropdown-content ch">
                 <div class="dropdown-item" style="border-top-left-radius: 10px; border-top-right-radius: 10px"><span class="text" onmouseup="setNotation('Scientific')">Scientific</span></div>
                 <div class="dropdown-item"><span class="text" onmouseup="setNotation('Engineering')">Engineering</span></div>
@@ -126,21 +126,29 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
               <div class="ch2 tableCell achIncomplete tooltip-element" id="ach1-3"><span class="text top" id="ach1-3Title">Was it worth it?</span><span class="text tooltip-content" style="width: 200px; margin-left: -105px">Sacrifice for the first time</span><span class="text bottom achReward"></span></div>
               <div class="ch2 tableCell achIncomplete tooltip-element" id="ach1-4"><span class="text top" id="ach1-4Title">New variables</span><span class="text tooltip-content" style="width: 200px; margin-left: -105px">Buy your first M variable</span><span class="text bottom achReward"></span></div>
               <div class="ch2 tableCell achIncomplete tooltip-element" id="ach1-5"><span class="text top" id="ach1-5Title">I think it was worth it</span><span class="text tooltip-content" style="width: 200px; margin-left: -105px">Sacrifice two times</span><span class="text bottom achReward">Reward: Automation is 2x faster</span></div>
-              <div class="ch2 tableCell achIncomplete tooltip-element" id="ach1-6"><span class="text top" id="ach1-6Title">Yea, it was worth it</span><span class="text tooltip-content" style="width: 200px; margin-left: -105px">Sacrifice three times</span><span class="text bottom achReward"></span></div>
+              <div class="ch2 tableCell achIncomplete tooltip-element" id="ach1-6"><span class="text top" id="ach1-6Title">Click a few times</span><span class="text tooltip-content" style="width: 200px; margin-left: -105px">Click the equation <span id="ach1-6Req">0</span> times</span><span class="text bottom achReward">Reward: Clicking is <span id="ach1-6Reward">0</span> times more effective</span></div>
             </div>
             <div class="tableRow">
-              <div class="ch2 tableCell achIncomplete tooltip-element" id="ach2-1"><span class="text top" id="ach2-1Title">Click a few times</span><span class="text tooltip-content" style="width: 200px; margin-left: -105px">Click the equation <span id="ach2-1Req">0</span> times</span><span class="text bottom achReward">Reward: Clicking is <span id="ach2-1Reward">0</span> times more effective</span></div>
-              <div class="ch2 tableCell achIncomplete tooltip-element" id="ach2-2"><span class="text top" id="ach2-2Title">It's still not better</span><span class="text tooltip-content" style="width: 200px; margin-left: -105px">Get more P than P<sub>1</sub> after <span id="ach2-2Req">0</span></span><span class="text bottom achReward">Reward: P's cost scales <span id="ach2-2Reward">0</span>x slower</span></div>
-              <div class="ch2 tableCell achIncomplete tooltip-element" id="ach2-3"><span class="text top" id="ach2-3Title">Exponentiation</span><span class="text tooltip-content" style="width: 200px; margin-left: -105px">Buy your first E variable</span><span class="text bottom achReward"></span></div>
+              <div class="ch2 tableCell achIncomplete tooltip-element" id="ach2-1"><span class="text top" id="ach2-1Title">It's still not better</span><span class="text tooltip-content" style="width: 200px; margin-left: -105px">Get more P than P<sub>1</sub> after <span id="ach2-1Req">0</span></span><span class="text bottom achReward">Reward: P's cost scales <span id="ach2-1Reward">0</span>x slower</span></div>
+              <div class="ch2 tableCell achIncomplete tooltip-element" id="ach2-2"><span class="text top" id="ach2-2Title">Exponentiation</span><span class="text tooltip-content" style="width: 200px; margin-left: -105px">Buy your first E variable</span><span class="text bottom achReward"></span></div>
+              <div class="ch2 tableCell achIncomplete tooltip-element" id="ach2-3"><span class="text top" id="ach2-3Title">Is this too op?</span><span class="text tooltip-content" style="width: 200px; margin-left: -105px">Sacrifice seven times</span><span class="text bottom achReward">Reward: the first automation is 10x faster</span></div>
               <div class="ch2 tableCell achIncomplete tooltip-element" id="ach2-4"><span class="text top" id="ach2-4Title">[WIP]</span><span class="text tooltip-content" style="width: 200px; margin-left: -105px">[WIP]</span><span class="text bottom achReward"></span></div>
               <div class="ch2 tableCell achIncomplete tooltip-element" id="ach2-5"><span class="text top" id="ach2-5Title">[WIP]</span><span class="text tooltip-content" style="width: 200px; margin-left: -105px">[WIP]</span><span class="text bottom achReward"></span></div>
               <div class="ch2 tableCell achIncomplete tooltip-element" id="ach2-6"><span class="text top" id="ach2-6Title">[WIP]</span><span class="text tooltip-content" style="width: 200px; margin-left: -105px">[WIP]</span><span class="text bottom achReward"></span></div>
             </div>
           </div>
         </div>
-        <!--<div id="tabStatistics">
-          
-        </div>-->
+        <div id="tabStatistics">
+          <div class="ch2" style="width: 100%">
+            <span class="text statText">You have gained a total of <span class="ba purpleText" id="statIPTotal">0</span> IP</span><br>
+            <span class="text statText">Your highest IP is <span class="ba purpleText" id="statIPHighest">0</span> IP</span><br>
+            <span class="text statText">You have clicked the equation <span class="ba purpleText" id="statIPEquationClicks">0</span> times</span>
+          </div>
+          <br>
+          <div class="ch2" style="width: 100%">
+            <span class="text statText">You have been playing for <span class="ba purpleText" id="statTimePlayed">0</span></span>
+          </div>
+        </div>
         <div id="tabAutomation">
           <div id="autoIP" style="height: 34px; width: 100%">
             <div class="cantBuy automations" id="autoIPb" style="height: 30px; overflow: hidden; position: relative; border-color: rgb(75, 0, 125)" onmouseup="buyAutomationIP()">
@@ -176,12 +184,18 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
               <span class="cv text" style="float: right; right: 2px">Cost: <span class="ba purpleText" id="scalingPCost">0</span> IP</span>
             </div>
           </div>
+          <div id="scalingM" style="height: 34px; width: 100%">
+            <div class="cantBuy scalings" id="scalingMb" style="height: 30px; overflow: hidden; position: relative; border-color: rgb(75, 0, 125)" onmouseup="buyScalingM()">
+              <span class="cv text" style="float: left; left: 2px">Reduce M Costs (<span class="purpleText">x<span class="ba" id="scalingMx">0</span></span>)</span>
+              <span class="cv text" style="float: right; right: 2px">Cost: <span class="ba purpleText" id="scalingMCost">0</span> IP</span>
+            </div>
+          </div>
         </div>
         <div id="tabIncrement">
           <div style="position: relative; height: 50px; width: 100%">
             <div class="autoipState canBuy" id="autoIPState" style="width: 46px; height: 46px; float: left" onmouseup="automateIP()"></div>
             <div class="grayBorder2 canBuy" style="height: 46px; overflow: hidden; position: relative" onmouseup="clickIncrement()">
-              <span class="cv text" style="font-size: 20px; position: absolute; left: 2px"><span id="ipEquationText">IP = IP+(P<span class="incrementM0Unlocks">xM</span>)<sup class="text incrementE0Unlocks">E</sup> &rArr; </span>IP = IP+(<span class="ba purpleText" id="ipEquationP">0</span><span class="incrementM0Unlocks">x<span class="ba purpleText" id="ipEquationM">0</span></span>)<sup class="purpleText incrementE0Unlocks" id="ipEquationE">0</sup><span class="incrementM0Unlocks"> &rArr; <span class="ba purpleText" id="ipEquationResult">0</span></span><span class="text ach2-1Unlocks"> &rArr; <span class="ba purpleText" id="ipEquationClickResult">0</span><span style="font-size: 16px">/Click</span></span></span>
+              <span class="cv text" style="font-size: 20px; position: absolute; left: 2px; font-size: clamp(12px, 2.4vw, 18px)"><span id="ipEquationText">IP = IP+(P<span class="incrementM0Unlocks">xM</span>)<sup class="text incrementE0Unlocks">E</sup> &rArr; </span>IP = IP+(<span class="ba purpleText" id="ipEquationP">0</span><span class="incrementM0Unlocks">x<span class="ba purpleText" id="ipEquationM">0</span></span>)<sup class="purpleText incrementE0Unlocks" id="ipEquationE">0</sup><span class="incrementM0Unlocks"> &rArr; <span class="ba purpleText" id="ipEquationResult">0</span></span><span class="text ach1-6Unlocks"> &rArr; <span class="ba purpleText" id="ipEquationClickResult">0</span><span>/Click</span></span></span>
             </div>
           </div>
           <div id="incrementP0" style="position: relative; height: 34px; width: 100%">
@@ -264,8 +278,29 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
           <div class="incrementE1Unlocks" id="incrementE1" style="position: relative; height: 34px; width: 100%">
             <div class="autoipState canBuy autoIncrementEUnlocks" id="autoIncrementE1State" style="float: left" onmouseup="automateIncrementE(1)"></div>
             <div class="cantBuy increments" id="incrementE1b" style="height: 30px; overflow: hidden; position: relative; border-color: rgb(75, 0, 125)" onmouseup="buyIncrementE(1)">
-              <span class="cv text" style="position: absolute; left: 2px">E<sub>1</sub> = <span class="incrementE2Unlocks"><span class="ba purpleText coefficientE">0</span>E<sub>2</sub> x </span><span class="ba purpleText" id="incrementE1x">0</span></span>
+              <span class="cv text" style="position: absolute; left: 2px">E<sub>1</sub> = <span class="incrementE2Unlocks"><span class="ba purpleText coefficientE">0</span>E<sub>2</sub> + </span><span class="ba purpleText" id="incrementE1x">0</span></span>
               <span class="cv text" style="position: absolute; right: 2px">Cost: <span class="ba purpleText" id="incrementE1Cost">0</span> IP</span>
+            </div>
+          </div>
+          <div class="incrementE2Unlocks" id="incrementE2" style="position: relative; height: 34px; width: 100%">
+            <div class="autoipState canBuy autoIncrementEUnlocks" id="autoIncrementE2State" style="float: left" onmouseup="automateIncrementE(2)"></div>
+            <div class="cantBuy increments" id="incrementE2b" style="height: 30px; overflow: hidden; position: relative; border-color: rgb(75, 0, 125)" onmouseup="buyIncrementE(2)">
+              <span class="cv text" style="position: absolute; left: 2px">E<sub>2</sub> = <span class="incrementE3Unlocks"><span class="ba purpleText coefficientE">0</span>E<sub>3</sub> + </span><span class="ba purpleText" id="incrementE2x">0</span></span>
+              <span class="cv text" style="position: absolute; right: 2px">Cost: <span class="ba purpleText" id="incrementE2Cost">0</span> IP</span>
+            </div>
+          </div>
+          <div class="incrementE3Unlocks" id="incrementE3" style="position: relative; height: 34px; width: 100%">
+            <div class="autoipState canBuy autoIncrementEUnlocks" id="autoIncrementE3State" style="float: left" onmouseup="automateIncrementE(3)"></div>
+            <div class="cantBuy increments" id="incrementE3b" style="height: 30px; overflow: hidden; position: relative; border-color: rgb(75, 0, 125)" onmouseup="buyIncrementE(3)">
+              <span class="cv text" style="position: absolute; left: 2px">E<sub>3</sub> = <span class="incrementE4Unlocks"><span class="ba purpleText coefficientE">0</span>E<sub>4</sub> + </span><span class="ba purpleText" id="incrementE3x">0</span></span>
+              <span class="cv text" style="position: absolute; right: 2px">Cost: <span class="ba purpleText" id="incrementE3Cost">0</span> IP</span>
+            </div>
+          </div>
+          <div class="incrementE4Unlocks" id="incrementE4" style="position: relative; height: 34px; width: 100%">
+            <div class="autoipState canBuy autoIncrementEUnlocks" id="autoIncrementE4State" style="float: left" onmouseup="automateIncrementE(4)"></div>
+            <div class="cantBuy increments" id="incrementE4b" style="height: 30px; overflow: hidden; position: relative; border-color: rgb(75, 0, 125)" onmouseup="buyIncrementE(4)">
+              <span class="cv text" style="position: absolute; left: 2px">E<sub>4</sub> = <span class="ba purpleText" id="incrementE4x">0</span></span>
+              <span class="cv text" style="position: absolute; right: 2px">Cost: <span class="ba purpleText" id="incrementE4Cost">0</span> IP</span>
             </div>
           </div>
         </div>
