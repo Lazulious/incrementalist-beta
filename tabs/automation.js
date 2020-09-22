@@ -139,21 +139,25 @@ function runAutomationIncrementM(n) {
 
 //Get Data
 function getAutoIPx() {
-  if (user.achievements.includes("ach1-5")) {return nd(user.auto.ip).times(2)}
-  else {return nd(user.auto.ip)}
+  let multi = 1;
+  if (user.achievements.includes("ach1-5")) {multi *= 2}
+  if (user.achievements.includes("ach2-3")) {multi *= 10}
+  return nd(user.auto.ip).times(multi);
 }
 function getAutoIPCost() {return nd(1000).times(nd(10).pow(user.auto.ip)).round()}
 function getAutomateIPRate() {
-  let rate;
-  if (user.achievements.includes("ach1-5")) {rate = nd(user.auto.ip * 2)}
-  else {rate = nd(user.auto.ip)}
+  let multi = 1;
+  if (user.achievements.includes("ach1-5")) {multi *= 2}
+  if (user.achievements.includes("ach2-3")) {multi *= 10}
+  let rate = nd(user.auto.ip * multi);
   if (rate.gt(20)) {return nd(20)}
   else {return rate}
 }
 function getAutomateIPBulk() {
-  let rate;
-  if (user.achievements.includes("ach1-5")) {rate = nd(user.auto.ip * 2)}
-  else {rate = nd(user.auto.ip)}
+  let multi = 1;
+  if (user.achievements.includes("ach1-5")) {multi *= 2}
+  if (user.achievements.includes("ach2-3")) {multi *= 10}
+  let rate = nd(user.auto.ip * multi);
   if (rate.gt(20)) {return rate.divide(20)}
   else {return nd(1)}}
 function getAutoIncrementPx() {
@@ -197,4 +201,11 @@ function updateAutoIncrementM() {
 function updateAutomateIncrementM(n) {
   if (user.automate.incrementM[n]) {d("autoIncrementM" + n + "State").style.borderColor = "rgb(100, 200, 50)"}
   else {d("autoIncrementM" + n + "State").style.borderColor = "rgb(220, 20, 60)"}
+}
+
+//Unlock Data
+function unlockAutomation() {
+  if (user.auto.ip >= 1) {s("autoIPState")} else {h("autoIPState")}
+  if (user.auto.incrementP >= 1) {sc("autoIncrementPUnlocks")} else {hc("autoIncrementPUnlocks")}
+  if (user.auto.incrementM >= 1) {sc("autoIncrementMUnlocks")} else {hc("autoIncrementMUnlocks")}
 }

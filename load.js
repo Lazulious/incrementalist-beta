@@ -4,27 +4,6 @@ function updater() {
   updating = true;
   setTimeout(() => {
     updateTab(user.tab);
-    /*if (user.tab == "Automation") {
-      updateAutoIP();
-      updateAutoIncrementP();
-      updateAutoIncrementM();
-    }
-    if (user.tab == "Sacrifice") {
-      updateSacrificeIP();
-      updateSacrificeIPCost();
-    }
-    if (user.tab == "Scaling") {
-      updateScalingP();
-    }
-    if (user.tab == "Increment") {
-      for (let i = 0; i < 5; i++) {
-        updateIncrementP(i);
-        updateIncrementM(i);
-      }
-      updateCoefficientP();
-      updateCoefficientM();
-      updateEquationIP();
-    }*/
     updateip();
     updatepbip();
     updater();
@@ -56,7 +35,15 @@ function loadData(data) {
     user.version = "0.2.0-beta-v4.1";
   }
   if (user.version == "0.2.0-beta-v4.1") {
-    console.log("Loaded Version " + user.version)
+    console.log("Loaded Version " + user.version);
+    user.timeStart = Date.now();
+    if (user.achievements.includes("ach2-1")) {user.achievements.splice(user.achievements.indexOf("ach2-1"), 1, "ach1-6")}
+    if (user.achievements.includes("ach2-2")) {user.achievements.splice(user.achievements.indexOf("ach2-2"), 1, "ach2-1")}
+    if (user.achievements.includes("ach2-3")) {user.achievements.splice(user.achievements.indexOf("ach2-3"), 1, "ach2-2")}
+    user.version = "0.2.0-beta-v5";
+  }
+  if (user.version == "0.2.0-beta-v5") {
+    console.log("Loaded Version " + user.version);
   }
   d("version").textContent = user.version;
   fixnd();
@@ -71,10 +58,10 @@ function loadOffline() {
   save();
 }
 function loadAutomation() {
-  if (user.automate.ip) {runAutomationIP()}
+  if (user.automate.ip) {runAutomationIP(); updateAutomateIP()}
   for (let i = 0; i < 6; i++) {
-    if (user.automate.incrementP[i]) {runAutomationIncrementP(i)}
-    if (user.automate.incrementM[i]) {runAutomationIncrementM(i)}
+    if (user.automate.incrementP[i]) {runAutomationIncrementP(i); updateAutomateIncrementP(i)}
+    if (user.automate.incrementM[i]) {runAutomationIncrementM(i); updateAutomateIncrementM(i)}
   }
 }
 
@@ -88,6 +75,7 @@ function confirmResetAll() {
 function resetAll() {
   decompleteAchievements();
   user = setUser();
+  user.timeStart = Date.now();
   unlocking();
   save();
   console.log("Game Reset");
@@ -104,18 +92,10 @@ function resetSacrificeIP() {
   for (let i = 0; i <= 4; i++) {
     user.increment.p[i] = 0;
     user.increment.m[i] = 0;
+    user.increment.e[i] = 0;
   }
+  user.scaling.p = 0;
+  user.scaling.m = 0;
   user.ip.x = nd(1);
   user.ip.sac = nd(1);
-}
-
-//Other
-function progress() {
-  let x = nd(1e39).minus(1);
-  user.ip.x = user.ip.x.plus(x);
-  user.ip.sac = user.ip.sac.plus(x);
-  user.sacrifice.ip += 6;
-  for (let i = 1; i <= 6; i++) {completeAchievement("ach1-" + i)}
-  for (let i = 1; i <= 3; i++) {completeAchievement("ach2-" + i)}
-  user.increment.ip += 2500;
 }

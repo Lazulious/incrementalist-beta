@@ -19,10 +19,10 @@ setInterval(() => {
   if (!user.achievements.includes("ach1-3") && user.sacrifice.ip >= 1) {completeAchievement("ach1-3")}
   if (!user.achievements.includes("ach1-4") && user.increment.m[0] >= 1) {completeAchievement("ach1-4")}
   if (!user.achievements.includes("ach1-5") && user.sacrifice.ip >= 2) {completeAchievement("ach1-5")}
-  if (!user.achievements.includes("ach1-6") && user.sacrifice.ip >= 3) {completeAchievement("ach1-6")}
-  if (!user.achievements.includes("ach2-1") && user.increment.ip >= 2500) {completeAchievement("ach2-1"); unlockAchievement()}
-  if (!user.achievements.includes("ach2-2") && user.increment.p[0] >= 1000 && user.increment.p[1] >= 500 && (user.increment.p[0] > (user.increment.p[1] * 2))) {completeAchievement("ach2-2")}
-  if (!user.achievements.includes("ach2-3") && user.increment.e[0] >= 1) {completeAchievement("ach2-3")}
+  if (!user.achievements.includes("ach1-6") && user.increment.ip >= 2500) {completeAchievement("ach1-6"); unlockAchievement()}
+  if (!user.achievements.includes("ach2-1") && user.increment.p[0] >= 1000 && user.increment.p[1] >= 500 && (user.increment.p[0] > (user.increment.p[1] * 2))) {completeAchievement("ach2-1")}
+  if (!user.achievements.includes("ach2-2") && user.increment.e[0] >= 1) {completeAchievement("ach2-2")}
+  if (!user.achievements.includes("ach2-3") && user.sacrifice.ip >= 7) {completeAchievement("ach2-3")}
   /*if (!user.achievements.includes("ach2-4")) {completeAchievement("ach2-4")}
   if (!user.achievements.includes("ach2-5")) {completeAchievement("ach2-5")}
   if (!user.achievements.includes("ach2-6")) {completeAchievement("ach2-6")}*/
@@ -43,12 +43,12 @@ function decompleteAchievement(id) {
 }
 function decompleteAchievements() {for (let i = 0; i < user.achievements.length; i++) {rpc("achComplete", "achIncomplete", user.achievements[i])}}
 function updateAchievement() {
-  d("ach2-1Req").textContent = e(2500);
-  d("ach2-1Reward").textContent = e(100);
-  d("ach2-2Req").textContent = e(1000);
-  d("ach2-2Reward").textContent = e(5);
+  d("ach1-6Req").textContent = e(2500);
+  d("ach1-6Reward").textContent = e(100);
+  d("ach2-1Req").textContent = e(1000);
+  d("ach2-1Reward").textContent = e(5);
 }
 function unlockAchievement() {
   let ach = user.achievements;
-  if (ach.includes("ach2-1")) {sc("ach2-1Unlocks")} else {hc("ach2-1Unlocks")}
+  if (ach.includes("ach1-6")) {sc("ach1-6Unlocks")} else {hc("ach1-6Unlocks")}
 }

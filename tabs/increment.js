@@ -1,6 +1,6 @@
 //Buttons
 function clickIncrement() {
-  if (user.achievements.includes("ach2-1")) {increment(100)}
+  if (user.achievements.includes("ach1-6")) {increment(100)}
   else {increment(1)}
   user.increment.ip++;
 }
@@ -46,24 +46,24 @@ function getIncrementx(bulk) {
   let m = getIncrementM(mn);
   for (let i = (mn - 1); i > -1; i--) {m = m.times(getSacrificeIPM()).times(getIncrementM(i))}
   let En = -1;
-  for (let i = 0; i < 2; i++) {if (d("incrementE" + i).style.display != "none") {En = i}}
+  for (let i = 0; i < 5; i++) {if (d("incrementE" + i).style.display != "none") {En = i}}
   let E = getIncrementE(En);
-  for (let i = (En - 1); i > -1; i--) {E = E.plus(getIncrementE(i))}
+  for (let i = (En - 1); i > -1; i--) {E = E.times(getSacrificeIPE()).plus(getIncrementE(i))}
   E = E.plus(1);
   return p.times(m).pow(E).times(bulk);
 }
 function getIncrementP(n) {return nd(n + 1).pow(nd(n)).times(user.increment.p[n])}
 function getIncrementPCost(n) {
-  if (user.achievements.includes("ach2-2")) {return nd(1).plus(nd(0.125).times(nd(2).pow(n)).times(nd(0.9).pow(user.scaling.p)).divide(5)).pow(user.increment.p[n]).round()}
-  else {return nd(1).plus(nd(0.125).times(nd(2).pow(n)).times(nd(0.9).pow(user.scaling.p))).pow(user.increment.p[n]).round()}
+  if (user.achievements.includes("ach2-1")) {return nd(1).plus(nd(0.125).times(nd(2).pow(n)).times(nd(0.9).pow(user.scaling.p)).divide(5)).pow(user.increment.p[n]).round()}
+  else {return nd(1).plus(nd(0.125).times(nd(2).pow(n)).times(nd(0.75).pow(nd(Math.pow(user.scaling.p, 4.2) + 1).log10()))).pow(user.increment.p[n]).round()}
 }
 function getIncrementPRatio(n) {
-  if (user.achievements.includes("ach2-2")) {return nd(1).plus(nd(0.125).times(nd(2).pow(n)).times(nd(0.9).pow(user.scaling.p)).divide(5))}
-  else {return nd(1).plus(nd(0.125).times(nd(2).pow(n)).times(nd(0.9).pow(user.scaling.p)))}
+  if (user.achievements.includes("ach2-1")) {return nd(1).plus(nd(0.125).times(nd(2).pow(n)).times(nd(0.9).pow(user.scaling.p)).divide(5))}
+  else {return nd(1).plus(nd(0.125).times(nd(2).pow(n)).times(nd(0.75).pow(nd(Math.pow(user.scaling.p, 4.2) + 1).log10())))}
 }
 function getIncrementM(n) {return nd(3).pow(n).times(user.increment.m[n]).plus(1)}
-function getIncrementMCost(n) {return nd(1e7).times(nd(1).plus(0.3579).pow(n + 1).pow(user.increment.m[n]))}
-function getIncrementMRatio(n) {return nd(1).plus(0.3579).pow(n + 1)}
+function getIncrementMCost(n) {return nd(1e7).times(nd(1).plus(nd(1).plus(0.3579).pow(n + 1).minus(1).times(nd(0.5).pow(nd(Math.pow(user.scaling.m, 1.25) + 1).log10()))).pow(user.increment.m[n]))}
+function getIncrementMRatio(n) {return nd(1).plus(nd(1).plus(0.3579).pow(n + 1).minus(1).times(nd(0.5).pow(nd(Math.pow(user.scaling.m, 1.25) + 1).log10())))}
 function getIncrementE(n) {return nd(user.increment.e[n] + 1).log10().divide(3.5 / (Math.sqrt(n + 1)))}
 function getIncrementECost(n) {return nd(1e30).times(nd(1e30).pow(user.increment.e[n] * (n + 1)))}
 function getIncrementERatio(n) {return nd(1e30).pow(n)}
@@ -98,13 +98,13 @@ function updateEquationIP() {
   for (let i = (mn - 1); i > -1; i--) {m = m.times(getSacrificeIPM()).times(getIncrementM(i))}
   d("ipEquationM").textContent = e(m);
   let En = -1;
-  for (let i = 0; i < 2; i++) {if (d("incrementE" + i).style.display != "none") {En = i}}
+  for (let i = 0; i < 5; i++) {if (d("incrementE" + i).style.display != "none") {En = i}}
   let E = getIncrementE(En);
-  for (let i = (En - 1); i > -1; i--) {E = E.plus(getIncrementE(i))}
+  for (let i = (En - 1); i > -1; i--) {E = E.times(getSacrificeIPE()).plus(getIncrementE(i))}
   E = E.plus(1);
   d("ipEquationE").textContent = e(E, 2, 2);
   d("ipEquationResult").textContent = e(p.times(m).pow(E));
-  if (user.achievements.includes("ach2-1")) {d("ipEquationClickResult").textContent = e(p.times(m).pow(E).times(100))}
+  if (user.achievements.includes("ach1-6")) {d("ipEquationClickResult").textContent = e(p.times(m).pow(E).times(100))}
 }
 function updateCoefficientP() {
   let arr = dc("coefficientP");
@@ -116,7 +116,7 @@ function updateCoefficientM() {
 }
 function updateCoefficientE() {
   let arr = dc("coefficientE");
-  for (let i = 0; i < arr.length; i++) {arr[i].textContent = e(getSacrificeIPE())}
+  for (let i = 0; i < arr.length; i++) {arr[i].textContent = e(getSacrificeIPE(), 2, 2)}
 }
 
 function updateIncrementP(n) {
