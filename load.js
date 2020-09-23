@@ -30,6 +30,9 @@ function load() {
 }
 function loadData(data) {
   user = data;
+  if (!user.version.includes("beta")) {
+    resetAll();
+  }
   if (user.version == "0.2.0-beta-v4") {
     console.log("Loaded Version " + user.version);
     resetAll();
