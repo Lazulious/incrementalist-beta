@@ -6,6 +6,7 @@ function setNotation(note) {
   /*updateNotation();*/
 }
 function e(obj, exp, dec) {
+  if (typeof obj == "string") {return obj}
   if (typeof exp == "undefined") {exp = 2}
   if (typeof dec == "undefined") {dec = 0}
   if (user.notation == "Blind" || user.notation == "True blind") {return " "}

@@ -1,33 +1,66 @@
 //Buttons
 function buyScalingP() {
-  if (user.ip.x.gte(getScalingPCost())) {
-    user.ip.x = user.ip.x.minus(getScalingPCost());
+  let cost = getScalingPCost();
+  if (user.ip.x.gte(cost) && cost.lt(infinite)) {
+    user.ip.x = user.ip.x.minus(cost);
     user.scaling.p++;
   }
 }
 function buyScalingM() {
-  if (user.ip.x.gte(getScalingMCost())) {
-    user.ip.x = user.ip.x.minus(getScalingMCost());
+  let cost = getScalingMCost();
+  if (user.ip.x.gte(cost) && cost.lt(infinite)) {
+    user.ip.x = user.ip.x.minus(cost);
     user.scaling.m++;
+  }
+}
+function buyScalingE() {
+  let cost = getScalingECost();
+  if (user.ip.x.gte(cost) && cost.lt(infinite)) {
+    user.ip.x = user.ip.x.minus(cost);
+    user.scaling.e++;
   }
 }
 
 //Get Data
 function getScalingP() {return nd(0.75).pow(nd(Math.pow(user.scaling.p, 4.2) + 1).log10())}
-function getScalingPCost() {return nd(10).pow(nd(user.scaling.p).times(Math.floor(nd(user.scaling.p).divide(7.5).plus(1))).plus(15))}
+function getScalingPCost() {
+  let cost = nd(10).pow(nd(user.scaling.p).times(Math.floor(nd(user.scaling.p).divide(7.5).plus(1))).plus(15));
+  if (cost.gte(1e33)) {cost = nd(1e33).pow(nd(1.075).pow(user.scaling.p - 9))}
+  return cost;
+}
 function getScalingM() {return nd(0.5).pow(nd(Math.pow(user.scaling.m, 1.25) + 1).log10())}
-function getScalingMCost() {return nd(10).pow(nd(2).times(user.scaling.m).times(Math.floor(nd(user.scaling.m).divide(7.5).plus(1))).plus(37))}
+function getScalingMCost() {
+  let cost = nd(1e37).pow(nd(1.11).pow(user.scaling.m));
+  return cost;
+}
+function getScalingE() {return nd(1).divide(nd(user.scaling.e / 11.25 + 1).log10().plus(1))}
+function getScalingECost() {
+  let cost = nd(1e87).pow(nd(2).pow(user.scaling.e));
+  return cost;
+}
 
 //Update Data
 function updateScalingP() {
+  let cost = getScalingPCost();
+  if (cost.gte(infinite)) {cost = "Infinite"}
   d("scalingPx").textContent = e(getScalingP(), 0, 2);
-  d("scalingPCost").textContent = e(getScalingPCost());
-  if (user.ip.x.lt(getScalingPCost())) {rpc("canBuy", "cantBuy", "scalingPb")}
+  d("scalingPCost").textContent = e(cost);
+  if (user.ip.x.lt(cost) || cost == "Infinite") {rpc("canBuy", "cantBuy", "scalingPb")}
   else {rpc("cantBuy", "canBuy", "scalingPb")}
 }
 function updateScalingM() {
+  let cost = getScalingMCost();
+  if (cost.gte(infinite)) {cost = "Infinite"}
   d("scalingMx").textContent = e(getScalingM(), 0, 2);
-  d("scalingMCost").textContent = e(getScalingMCost());
-  if (user.ip.x.lt(getScalingMCost())) {rpc("canBuy", "cantBuy", "scalingMb")}
+  d("scalingMCost").textContent = e(cost);
+  if (user.ip.x.lt(cost) || cost == "Infinite") {rpc("canBuy", "cantBuy", "scalingMb")}
   else {rpc("cantBuy", "canBuy", "scalingMb")}
+}
+function updateScalingE() {
+  let cost = getScalingECost();
+  if (cost.gte(infinite)) {cost = "Infinite"}
+  d("scalingEx").textContent = e(getScalingE(), 0, 2);
+  d("scalingECost").textContent = e(cost);
+  if (user.ip.x.lt(cost) || cost == "Infinite") {rpc("canBuy", "cantBuy", "scalingEb")}
+  else {rpc("cantBuy", "canBuy", "scalingEb")}
 }
