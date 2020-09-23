@@ -5,23 +5,25 @@ function setUser() {
     auto: {ip: 0, incrementP: 0, incrementM: 0, incrementE: 0},
     automate: {ip: false, incrementP: [false, false, false, false, false], incrementM: [false, false, false, false, false], incrementE: [false, false, false, false, false]},
     sacrifice: {ip: 0},
-    scaling: {p: 0, m: 0},
+    scaling: {p: 0, m: 0, e: 0},
     notation: "Scientific",
     confirmation: {reset: true, sacrifice: true},
     achievements: [],
     tab: "Increment",
     timeStart: "now",
-    version: "0.2.0-beta-v5",
+    version: "0.2.0-beta-v6",
   }
 }
 //Data
 var user = setUser();
 const updateRate = 20;
+var infinite = nd(1e100);
 
 //Unlock Data
 function unlocking() {unlockIP(); unlockAutomation(); unlockSacrifice(); unlockAchievement()}
-const goalsIP = [nd(1000), nd(2500), nd(10000), nd(50000), nd(250000), nd(1e6), nd(5e9), nd(1e13), nd(5e15), nd(1e21), nd(2.5e21), nd(7.5e21), nd(3.3e33), nd(1e38), nd(1e44), nd(2.25e45), nd(5.8e58), nd(1e308)];
-const unlocksIP = ["Variable P<sub>1</sub>", "Automate IP", "Variable P<sub>2</sub>", "Variable P<sub>3</sub>", "Automate P", "Variable P<sub>4</sub>", "Variable M<sub>1</sub>", "Variable M<sub>2</sub>", "Variable M<sub>3</sub>", "Automate M", "Scaling P", "Variable M<sub>4</sub>", "Variable E<sub>1</sub>", "Variable E<sub>2</sub>", "Scaling M", "Variable E<sub>3</sub>", "Variable E<sub>4</sub>", "End Game"];
+const goalsIP = [nd(1000), nd(2500), nd(10000), nd(50000), nd(250000), nd(1e6), nd(5e9), nd(1e13), nd(5e15), nd(1e21), nd(2.5e21), nd(7.5e21), nd(3.33e33), nd(5e37), nd(1e44), nd(2.25e45), nd(1e58), nd(8.7e87), nd(1e88), nd(1e100)];
+const goalsIPSac = [0, 0, 0, 0, 0, 0, 1, 2, 2, 3, 3, 3, 5, 6, 7, 7, 8, 10, 10, 11];
+const unlocksIP = ["Variable P<sub>1</sub>", "Automate IP", "Variable P<sub>2</sub>", "Variable P<sub>3</sub>", "Automate P", "Variable P<sub>4</sub>", "Variable M<sub>1</sub>", "Variable M<sub>2</sub>", "Variable M<sub>3</sub>", "Automate M", "Scaling P", "Variable M<sub>4</sub>", "Variable E<sub>1</sub>", "Variable E<sub>2</sub>", "Scaling M", "Variable E<sub>3</sub>", "Variable E<sub>4</sub>", "Automate E", "Scaling E", "End Game"];
 function unlockIP() {
   let sac = user.ip.sac;
   let ip = user.sacrifice.ip;
@@ -40,11 +42,13 @@ function unlockIP() {
   if ((sac.gte(2.5e21) && ip >= 3) || ip >= 4) {st("tabScalingb")} else {h("tabScalingb")}
   if (sac.gte(2.5e21) && ip >= 3) {s("scalingP")} else {h("scalingP")}
   if (sac.gte(7.5e21) && ip >= 3) {sc("incrementM4Unlocks")} else {hc("incrementM4Unlocks")}
-  if (sac.gte(3.3e33) && ip >= 5) {sc("incrementE1Unlocks")} else {hc("incrementE1Unlocks")}
-  if (sac.gte(1e38) && ip >= 6) {sc("incrementE2Unlocks")} else {hc("incrementE2Unlocks")}
+  if (sac.gte(3.33e33) && ip >= 5) {sc("incrementE1Unlocks")} else {hc("incrementE1Unlocks")}
+  if (sac.gte(5e37) && ip >= 6) {sc("incrementE2Unlocks")} else {hc("incrementE2Unlocks")}
   if (sac.gte(1e44) && ip >= 7) {s("scalingM")} else {h("scalingM")}
   if (sac.gte(2.25e45) && ip >= 7) {sc("incrementE3Unlocks")} else {hc("incrementE3Unlocks")}
-  if (sac.gte(5.8e58) && ip >= 8) {sc("incrementE4Unlocks")} else {hc("incrementE4Unlocks")}
+  if (sac.gte(1e58) && ip >= 8) {sc("incrementE4Unlocks")} else {hc("incrementE4Unlocks")}
+  if (sac.gte(8.7e87) && ip >= 10) {s("autoE")} else {h("autoE")}
+  if (sac.gte(1e88) && ip >= 10) {s("scalingE")} else {h("scalingE")}
 }
 
 //Update Data
@@ -67,14 +71,15 @@ function updateTab(str) {
     updateAutoIP();
     updateAutoIncrementP();
     updateAutoIncrementM();
+    updateAutoIncrementE();
   }
   else if (str == "Sacrifice") {
     updateSacrificeIP();
-    updateSacrificeIPCost();
   }
   else if (str == "Scaling") {
     updateScalingP();
     updateScalingM();
+    updateScalingE();
   }
   else if (str == "Increment") {
     for (let i = 0; i < 5; i++) {
@@ -90,55 +95,34 @@ function updateTab(str) {
 }
 
 //Event Listeners
-function resize() {
-  /*if (window.innerWidth < 825) {
-    d("ipText").textContent = " IP";
-    d("ipSecText").textContent = "";
-  }
-  else {
-    d("ipText").textContent = " Increment Points";
-    d("ipSecText").textContent = "You are gaining ";
-  }
-  if (window.innerWidth < 550) {
-    d("autoIPText").textContent = "IP ";
-    d("autoPText").textContent = "P ";
-    d("autoMText").textContent = "M ";
-    d("ipEquationText").innerHTML = "";
-  }
-  else {
-    d("autoIPText").textContent = "Automate IP Gain ";
-    d("autoPText").textContent = "Automate P Variables ";
-    d("autoMText").textContent = "Automate M Variables ";
-    d("tabAutomationText").textConetnt = "Automation";
-    d("ipEquationText").innerHTML = "IP = IP+(P<span class=\"incrementM0Unlocks\">xM</span>)<sup class=\"text ipEquationEUnlocks\">E</sup> &rArr; ";
-  }*/
-}
 
 //Initialization
-/*setNotation("Mixed scientific");*/
 load();
+unlocking();
+updater();
+tab(user.tab);
 save();
 
 updateAchievement();
 updateConfirmations();
-resize();
+d("version").textContent = user.version;
 if (user.timeStart === "now") {user.timeStart = Date.now()}
 
 //Dev Stuff
 function progress() {
-  /*let x = nd(1e86);
+  /*let x = ndn(1, 103);
   user.ip.x = x;
   user.ip.sac = x;
   user.ip.total = x;
-  user.sacrifice.ip = 10;*/
-  /*for (let i = 1; i <= 6; i++) {completeAchievement("ach1-" + i)}
-  for (let i = 1; i <= 3; i++) {completeAchievement("ach2-" + i)}*/
-  /*user.increment.ip = 2500;*/
+  user.sacrifice.ip = 11;
+  for (let i = 1; i <= 6; i++) {completeAchievement("ach1-" + i)}
+  for (let i = 1; i <= 4; i++) {completeAchievement("ach2-" + i)}
+  user.increment.ip = 8000;*/
 }
 progress();
 unlocking();
 
-const tempHideA = [];
-for (let i = 0; i < tempHideA.length; i++) {h(tempHideA[i])}
-const tempHideB = ["autoIncrementEUnlocks"];
-for (let i = 0; i < tempHideB.length; i++) {hc(tempHideB[i])}
+const tempHideIds = [];
+for (let i = 0; i < tempHideIds.length; i++) {h(tempHideIds[i])}
+const tempHideClasses = [];
+for (let i = 0; i < tempHideClasses.length; i++) {hc(tempHideClasses[i])}

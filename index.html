@@ -32,7 +32,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     <script src="load.js" defer="defer"></script>
     <script src="main.js" defer="defer"></script>
   </head>
-  <body onresize="resize()">
+  <body>
     <div>
       <div class="ch grayBorder" style="width: 90%; min-width: 250px; max-width: 1000px">
         <div style="width: 100%">
@@ -101,8 +101,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
           </div>
           <div style="height: 44px; width: 100%; display: table">
             <div class="grayBorder option" style="height: 40px; width: 25%; position: relative; display: table-cell" onmouseup="save()"><span class="cvh text">Save</span></div>
-            <div class="grayBorder option" style="height: 40px; width: 25%; position: relative; display: table-cell"><span class="cv ch2 text" style="width: 100%">Export [WIP]</span></div>
-            <div class="grayBorder option" style="height: 40px; width: 25%; position: relative; display: table-cell"><span class="cv ch2 text" style="width: 100%">Import [WIP]</span></div>
+            <div class="grayBorder option" style="height: 40px; width: 25%; position: relative; display: table-cell" onmouseup="exporty()"><span class="cv ch2 text" style="width: 100%">Export</span></div>
+            <div class="grayBorder option" style="height: 40px; width: 25%; position: relative; display: table-cell" onmouseup="importy()"><span class="cv ch2 text" style="width: 100%">Import</span></div>
             <div class="grayBorder option" style="height: 40px; width: 25%; position: relative; display: table-cell" onmouseup="confirmResetAll()"><span class="cvh text">Reset</span></div>
           </div>
           <br>
@@ -113,7 +113,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
           </div>
           <div style="height: 44px; width: 100%; display: table">
             <div class="grayBorder option" style="height: 40px; width: 25%; position: relative; display: table-cell; cursor: default"><span class="cvh text"></span></div>
-            <div class="grayBorder option" style="height: 40px; width: 25%; position: relative; display: table-cell"><span class="cvh text" onmouseup="window.open('https://discord.gg/DKMmAap')">Discord</span></div>
+            <div class="grayBorder option" style="height: 40px; width: 25%; position: relative; display: table-cell"><span class="cv ch2 text" style="width: 100%" onmouseup="window.open('https://discord.gg/DKMmAap')">Discord</span></div>
             <div class="grayBorder option" style="height: 40px; width: 25%; position: relative; display: table-cell"><span class="cv ch2 text" style="width: 100%">Changelog [WIP]</span></div>
             <div class="grayBorder option" style="height: 40px; width: 25%; position: relative; display: table-cell; cursor: default"><span class="cvh text"></span></div>
           </div>
@@ -129,10 +129,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
               <div class="ch2 tableCell achIncomplete tooltip-element" id="ach1-6"><span class="text top" id="ach1-6Title">Click a few times</span><span class="text tooltip-content" style="width: 200px; margin-left: -105px">Click the equation <span id="ach1-6Req">0</span> times</span><span class="text bottom achReward">Reward: Clicking is <span id="ach1-6Reward">0</span> times more effective</span></div>
             </div>
             <div class="tableRow">
-              <div class="ch2 tableCell achIncomplete tooltip-element" id="ach2-1"><span class="text top" id="ach2-1Title">It's still not better</span><span class="text tooltip-content" style="width: 200px; margin-left: -105px">Get more P than P<sub>1</sub> after <span id="ach2-1Req">0</span></span><span class="text bottom achReward">Reward: P's cost scales <span id="ach2-1Reward">0</span>x slower</span></div>
+              <div class="ch2 tableCell achIncomplete tooltip-element" id="ach2-1"><span class="text top" id="ach2-1Title">It's still not better</span><span class="text tooltip-content" style="width: 200px; margin-left: -105px">Get more P than P<sub>1</sub> after <span id="ach2-1Req">0</span></span><span class="text bottom achReward">Reward: P's cost scales 5x slower</span></div>
               <div class="ch2 tableCell achIncomplete tooltip-element" id="ach2-2"><span class="text top" id="ach2-2Title">Exponentiation</span><span class="text tooltip-content" style="width: 200px; margin-left: -105px">Buy your first E variable</span><span class="text bottom achReward"></span></div>
-              <div class="ch2 tableCell achIncomplete tooltip-element" id="ach2-3"><span class="text top" id="ach2-3Title">Is this too op?</span><span class="text tooltip-content" style="width: 200px; margin-left: -105px">Sacrifice seven times</span><span class="text bottom achReward">Reward: the first automation is 10x faster</span></div>
-              <div class="ch2 tableCell achIncomplete tooltip-element" id="ach2-4"><span class="text top" id="ach2-4Title">[WIP]</span><span class="text tooltip-content" style="width: 200px; margin-left: -105px">[WIP]</span><span class="text bottom achReward"></span></div>
+              <div class="ch2 tableCell achIncomplete tooltip-element" id="ach2-3"><span class="text top" id="ach2-3Title">Is this too op?</span><span class="text tooltip-content" style="width: 200px; margin-left: -105px">Sacrifice seven times</span><span class="text bottom achReward">Reward: The first automation is 10x faster</span></div>
+              <div class="ch2 tableCell achIncomplete tooltip-element" id="ach2-4"><span class="text top" id="ach2-4Title">Exponential Age</span><span class="text tooltip-content" style="width: 200px; margin-left: -105px">Buy your first Scaling E Upgrade</span><span class="text bottom achReward">Reward: The E multiplier is 7.5% more effective</span></div>
               <div class="ch2 tableCell achIncomplete tooltip-element" id="ach2-5"><span class="text top" id="ach2-5Title">[WIP]</span><span class="text tooltip-content" style="width: 200px; margin-left: -105px">[WIP]</span><span class="text bottom achReward"></span></div>
               <div class="ch2 tableCell achIncomplete tooltip-element" id="ach2-6"><span class="text top" id="ach2-6Title">[WIP]</span><span class="text tooltip-content" style="width: 200px; margin-left: -105px">[WIP]</span><span class="text bottom achReward"></span></div>
             </div>
@@ -152,20 +152,26 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         <div id="tabAutomation">
           <div id="autoIP" style="height: 34px; width: 100%">
             <div class="cantBuy automations" id="autoIPb" style="height: 30px; overflow: hidden; position: relative; border-color: rgb(75, 0, 125)" onmouseup="buyAutomationIP()">
-              <span class="cv text" style="float: left; left: 2px"><span id="autoIPText">Automate IP Gain </span>(<span class="purpleText notationBlind notationTrueblind"><span class="ba" id="autoIPx">0</span>x</span>/sec)</span>
+              <span class="cv text" style="float: left; left: 2px"><span>Automate IP Gain </span>(<span class="purpleText notationBlind notationTrueblind"><span class="ba" id="autoIPx">0</span>x</span>/sec)</span>
               <span class="cv text" style="float: right; right: 2px">Cost: <span class="ba purpleText" id="autoIPCost">0</span> IP</span>
             </div>
           </div>
           <div id="autoP" style="height: 34px; width: 100%">
             <div class="cantBuy automations" id="autoPb" style="height: 30px; overflow: hidden; position: relative; border-color: rgb(75, 0, 125)" onmouseup="buyAutomationIncrementP()">
-              <span class="cv text" style="float: left; left: 2px"><span id="autoPText">Automate P Variables </span>(<span class="purpleText notationBlind notationTrueblind"><span class="ba" id="autoPx">0</span>x</span>/sec)</span>
+              <span class="cv text" style="float: left; left: 2px"><span>Automate P Variables </span>(<span class="purpleText notationBlind notationTrueblind"><span class="ba" id="autoPx">0</span>x</span>/sec)</span>
               <span class="cv text" style="float: right; right: 2px">Cost: <span class="ba purpleText" id="autoPCost">0</span> IP</span>
             </div>
           </div>
           <div id="autoM" style="height: 34px; width: 100%">
             <div class="cantbuy automations" id="autoMb" style="height: 30px; overflow: hidden; position: relative; border-color: rgb(75, 0, 125)" onmouseup="buyAutomationIncrementM()">
-              <span class="cv text" style="float: left; left: 2px"><span id="autoMText">Automate M Variables </span>(<span class="purpleText notationBlind notationTrueblind"><span class="ba" id="autoMx">0</span>x</span>/sec)</span>
+              <span class="cv text" style="float: left; left: 2px"><span>Automate M Variables </span>(<span class="purpleText notationBlind notationTrueblind"><span class="ba" id="autoMx">0</span>x</span>/sec)</span>
               <span class="cv text" style="float: right; right: 2px">Cost: <span class="ba purpleText" id="autoMCost">0</span> IP</span>
+            </div>
+          </div>
+          <div id="autoE" style="height: 34px; width: 100%">
+            <div class="cantBuy automations" id="autoEb" style="height: 30px; overflow: hidden; position: relative; border-color: rgb(75, 0, 125)" onmouseup="buyAutomationIncrementE()">
+              <span class="cv text" style="float: left; left: 2px"><span>Automate E Variables </span>(<span class="purpleText notationBlind notationTrueBlind"><span class="ba" id="autoEx">0</span>x</span>/sec)</span>
+              <span class="cv text" style="float: right; right: 2px">Cost: <span class="ba purpleText" id="autoECost">0</span> IP</span>
             </div>
           </div>
         </div>
@@ -188,6 +194,12 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             <div class="cantBuy scalings" id="scalingMb" style="height: 30px; overflow: hidden; position: relative; border-color: rgb(75, 0, 125)" onmouseup="buyScalingM()">
               <span class="cv text" style="float: left; left: 2px">Reduce M Costs (<span class="purpleText">x<span class="ba" id="scalingMx">0</span></span>)</span>
               <span class="cv text" style="float: right; right: 2px">Cost: <span class="ba purpleText" id="scalingMCost">0</span> IP</span>
+            </div>
+          </div>
+          <div id="scalingE" style="height: 34px; width: 100%">
+            <div class="cantBuy scalings" id="scalingEb" style="height: 30px; overflow: hidden; position: relative; border-color: rgb(75, 0, 125)" onmouseup="buyScalingE()">
+              <span class="cv text" style="float: left; left: 2px">Reduce E Costs (<span class="purpleText">x<span class="ba" id="scalingEx">0</span></span>)</span>
+              <span class="cv text" style="float: right; right: 2px">Cost: <span class="ba purpleText" id="scalingECost">0</span> IP</span>
             </div>
           </div>
         </div>
