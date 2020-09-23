@@ -21,6 +21,8 @@ function save() {localStorage.setItem("user", JSON.stringify(user)); alertify.su
 setInterval(() => {save()}, 60000);
 
 //Load Data
+function exporty() {cb(btoa(JSON.stringify(user)))}
+function importy() {let data = JSON.parse(atob(prompt("Paste your save code here"))); if (data != null) {loadData(data)}}
 function load() {
   let data = JSON.parse(localStorage.getItem("user"));
   if (data != null) {loadData(data)}
@@ -30,8 +32,7 @@ function loadData(data) {
   user = data;
   if (user.version == "0.2.0-beta-v4") {
     console.log("Loaded Version " + user.version);
-    decompleteAchievements();
-    user = setUser();
+    resetAll();
     user.version = "0.2.0-beta-v4.1";
   }
   if (user.version == "0.2.0-beta-v4.1") {
@@ -44,8 +45,13 @@ function loadData(data) {
   }
   if (user.version == "0.2.0-beta-v5") {
     console.log("Loaded Version " + user.version);
+    user.scaling.e = 0;
+    if (user.increment.ip >= 2500 && user.increment.ip < 5000) {decompleteAchievement("ach1-6")}
+    user.version = "0.2.0-beta-v6";
   }
-  d("version").textContent = user.version;
+  if (user.version == "0.2.0-beta-v6") {
+    console.log("Loaded Version " + user.version);
+  }
   fixnd();
   tab(user.tab);
   completeAchievements();
@@ -62,6 +68,7 @@ function loadAutomation() {
   for (let i = 0; i < 6; i++) {
     if (user.automate.incrementP[i]) {runAutomationIncrementP(i); updateAutomateIncrementP(i)}
     if (user.automate.incrementM[i]) {runAutomationIncrementM(i); updateAutomateIncrementM(i)}
+    if (user.automate.incrementE[i]) {runAutomationIncrementE(i); updateAutomateIncrementE(i)}
   }
 }
 
@@ -82,13 +89,15 @@ function resetAll() {
 }
 function resetSacrificeIP() {
   if (user.automate.ip) {automateIP()}
-  for (let i = 0; i <= 4; i++) {
+  for (let i = 0; i < 5; i++) {
     if (user.automate.incrementP[i]) {automateIncrementP(i)}
     if (user.automate.incrementM[i]) {automateIncrementM(i)}
+    if (user.automate.incrementE[i]) {automateIncrementE(i)}
   }
   user.auto.ip = 0;
   user.auto.incrementP = 0;
   user.auto.incrementM = 0;
+  user.auto.incrementE = 0;
   for (let i = 0; i <= 4; i++) {
     user.increment.p[i] = 0;
     user.increment.m[i] = 0;
@@ -96,6 +105,7 @@ function resetSacrificeIP() {
   }
   user.scaling.p = 0;
   user.scaling.m = 0;
+  user.scaling.e = 0;
   user.ip.x = nd(1);
   user.ip.sac = nd(1);
 }
