@@ -168,7 +168,12 @@ function loadData(data) {
     user.achievements = [];
     user.version = "0.2.0";*/
   }
-  if (user.version == "0.2.0") {
+  if (user.version == "0.2.0" || user.version == "0.2.0-beta-v6") {
+    console.log("Loaded Version " + user.version);
+    user.timeLastOnline = Date.now();
+    user.version = "0.2.0-beta-v7";
+  }
+  if (user.version == "0.2.0-beta-v7") {
     console.log("Loaded Version " + user.version);
   }
   fixnd();
