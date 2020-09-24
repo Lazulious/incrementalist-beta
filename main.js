@@ -11,13 +11,18 @@ function setUser() {
     achievements: [],
     tab: "Increment",
     timeStart: "now",
-    version: "0.2.0-beta-v6",
+    timeLastOnline: "now",
+    version: "0.2.0-beta-v7",
   }
 }
+
 //Data
 var user = setUser();
+var brokenUser = setUser();
 const updateRate = 20;
 var infinite = nd(1e100);
+const maxTicks = 100000;
+const tickSpeed = 50;
 
 //Unlock Data
 function unlocking() {unlockIP(); unlockAutomation(); unlockSacrifice(); unlockAchievement()}
@@ -49,6 +54,29 @@ function unlockIP() {
   if (sac.gte(1e58) && ip >= 8) {sc("incrementE4Unlocks")} else {hc("incrementE4Unlocks")}
   if (sac.gte(8.7e87) && ip >= 10) {s("autoE")} else {h("autoE")}
   if (sac.gte(1e88) && ip >= 10) {s("scalingE")} else {h("scalingE")}
+}
+
+//Manipulate Data
+function simulateTime(ms) {
+  let seconds = ms / 1000;
+  if (seconds > 100000) {seconds = 100000}
+  secondsDone = 0;
+  for (secondsDone = 0; secondsDone < seconds; secondsDone++) {
+    passiveTick(1000 / tickSpeed);
+    automationTick(10);
+  }
+  
+  /*let ticks = ms / tickSpeed;
+  if (ticks > maxTicks) {ticks = maxTicks}
+  let ticksDone = 0;
+  for (ticksDone = 0; ticksDone < ticks; ticksDone++) {
+    passiveTick();
+    if ((ticksDone / 2) == Math.floor(ticksDone / 2)) {automationTick()}
+  }*/
+}
+function passiveTick(ticks) {
+  if (typeof ticks == "undefined") {ticks = 1}
+  if (user.automate.ip) {increment(getAutomateIPBulk().times(ticks))}
 }
 
 //Update Data
@@ -94,19 +122,19 @@ function updateTab(str) {
   }
 }
 
-//Event Listeners
-
 //Initialization
+var setBrokenUser = true;
+if (user.timeStart === "now") {user.timeStart = Date.now()}
 load();
-unlocking();
+setBrokenUser = true;
 updater();
 tab(user.tab);
-save();
+
+initiateAutomation();
 
 updateAchievement();
 updateConfirmations();
 d("version").textContent = user.version;
-if (user.timeStart === "now") {user.timeStart = Date.now()}
 
 //Dev Stuff
 function progress() {
