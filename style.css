@@ -15,6 +15,7 @@ body::-webkit-scrollbar {display: none}
 table {margin-left: auto; margin-right: auto}
 sub {font-family: Book Antiqua}
 sup {font-family: Book Antiqua}
+hr {background-color: rgb(100, 100, 100); border: none; height: 2px}
 
 /* Text */
 .text {color: rgb(150, 150, 150); font-family: Lucida Console; overflow-wrap: break-word}
@@ -35,6 +36,7 @@ sup {font-family: Book Antiqua}
 .bottom {position: absolute; right: 0px; bottom: 2px; left: 0px}
 .achReward {font-size: 13px}
 .statText {font-size: 16px}
+.incrementText {font-size: clamp(10px, 3.75vw, 18px)}
 
 /* Position */
 .ch {position: absolute; left: 50%; transform: translateX(-50%)}
@@ -201,4 +203,33 @@ sup {font-family: Book Antiqua}
   border-radius: 25px;
   width: 0%;
   height: 100%;
+}
+#pbOffline {
+  background-color: rgb(200, 200, 200);
+  border-radius: 25px;
+  width: 0%;
+  height: 100%;
+}
+
+/* Loading Screen */
+#gameScreen {
+  opacity: 0;
+  transition: opacity 1s;
+}
+#loadingScreen {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  width: 100%;
+  opacity: 1;
+  z-index: 1;
+  transition: opacity 1s;
+}
+#offlineBox {
+  background-color: rgb(25, 25, 25);
+  border: 2px solid rgb(35, 140, 35);
+  width: 50%;
+  max-width: 500px;
+  padding: 10px 0px 10px 0px;
 }

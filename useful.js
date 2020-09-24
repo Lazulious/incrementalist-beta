@@ -53,6 +53,12 @@ function time(obj, full, noDecimals) {
   return y + yy + d + dd + h + hh + m + mm + s + ss/* + ms + msms*/;
 }
 
+function reveal() {
+  d("gameScreen").style.opacity = 1;
+  d("loadingScreen").style.opacity = 0;
+  setTimeout(() => {h("loadingScreen")}, 750);
+}
+
 var tabs = ["Options", "Achievements", "Statistics", "Automation", "Sacrifice", "Scaling", "Increment", "Prestige", "Ascension"];
 function tab(t) {
   for (let i = 0; i < tabs.length; i++) {h("tab" + tabs[i])}

@@ -4,13 +4,13 @@ function buyAutomationIP() {
   if (user.ip.x.gte(cost) && cost.lt(infinite)) {
     user.ip.x = user.ip.x.minus(cost);
     user.auto.ip++;
-    if (user.automate.ip) {automateIP(); automateIP()}
+    /*if (user.automate.ip) {automateIP(); automateIP()}*/
     unlockAutomation();
   }
 }
 function automateIP() {
   user.automate.ip = !user.automate.ip;
-  runAutomationIP();
+  /*runAutomationIP();*/
   updateAutomateIP();
 }
 function buyAutomationIncrementP() {
@@ -18,13 +18,13 @@ function buyAutomationIncrementP() {
   if (user.ip.x.gte(cost) && cost.lt(infinite)) {
     user.ip.x = user.ip.x.minus(cost);
     user.auto.incrementP++;
-    for (let i = 0; i <= 4; i++) {if (user.automate.incrementP[i]) {automateIncrementP(i); automateIncrementP(i)}}
+    /*for (let i = 0; i <= 4; i++) {if (user.automate.incrementP[i]) {automateIncrementP(i); automateIncrementP(i)}}*/
     unlockAutomation();
   }
 }
 function automateIncrementP(n) {
   user.automate.incrementP[n] = !user.automate.incrementP[n];
-  runAutomationIncrementP(n);
+  /*runAutomationIncrementP(n);*/
   updateAutomateIncrementP(n);
 }
 function buyAutomationIncrementM() {
@@ -32,13 +32,13 @@ function buyAutomationIncrementM() {
   if (user.ip.x.gte(cost)) {
     user.ip.x = user.ip.x.minus(cost);
     user.auto.incrementM++;
-    for (let i = 0; i <= 4; i++) {if (user.automate.incrementM[i]) {automateIncrementM(i); automateIncrementM(i)}}
+    /*for (let i = 0; i <= 4; i++) {if (user.automate.incrementM[i]) {automateIncrementM(i); automateIncrementM(i)}}*/
     unlockAutomation();
   }
 }
 function automateIncrementM(n) {
   user.automate.incrementM[n] = !user.automate.incrementM[n];
-  runAutomationIncrementM(n);
+  /*runAutomationIncrementM(n);*/
   updateAutomateIncrementM(n);
 }
 function buyAutomationIncrementE() {
@@ -46,17 +46,72 @@ function buyAutomationIncrementE() {
   if (user.ip.x.gte(cost)) {
     user.ip.x = user.ip.x.minus(cost);
     user.auto.incrementE++;
-    for (let i = 0; i <= 4; i++) {if (user.automate.incrementE[i]) {automateIncrementE(i); automateIncrementE(i)}}
+    /*for (let i = 0; i <= 4; i++) {if (user.automate.incrementE[i]) {automateIncrementE(i); automateIncrementE(i)}}*/
     unlockAutomation();
   }
 }
 function automateIncrementE(n) {
   user.automate.incrementE[n] = !user.automate.incrementE[n];
-  runAutomationIncrementE(n);
+  /*runAutomationIncrementE(n);*/
   updateAutomateIncrementE(n);
 }
 
 //Automation Functions
+function automationTick(ticks) {
+  if (typeof ticks == "undefined") {ticks = 1}
+  for (let n = 0; n <= 4; n++) {
+    if (user.automate.incrementP[n]) {
+      let ratio = getIncrementPRatio(n);
+      let canBuy = Decimal.affordGeometricSeries(user.ip.x, 1, ratio, user.increment.p[n]);
+      let bulk = getAutoIncrementPBulk().times(ticks);
+      let buy = nd(0);
+      if (canBuy.gte(bulk)) {buy = bulk}
+      else {buy = canBuy}
+      let buyCost = Decimal.sumGeometricSeries(buy, 1, ratio, user.increment.p[n]);
+      if (buyCost.gte(infinite)) {
+        buy = Decimal.affordGeometricSeries(infinite, 1, ratio, user.increment.p[n]);
+        buyCost = Decimal.sumGeometricSeries(buy, 1, ratio, user.increment.p[n]);
+      }
+      user.ip.x = user.ip.x.minus(buyCost);
+      user.increment.p[n] += buy.toNumber();
+    }
+    if (user.automate.incrementM[n]) {
+      let ratio = getIncrementMRatio(n);
+      let canBuy = Decimal.affordGeometricSeries(user.ip.x, 1, ratio, user.increment.m[n]);
+      let bulk = getAutoIncrementMBulk().times(ticks);
+      let buy = nd(0);
+      if (canBuy.gte(bulk)) {buy = bulk}
+      else {buy = canBuy}
+      let buyCost = Decimal.sumGeometricSeries(buy, 1, ratio, user.increment.m[n]);
+      if (buyCost.gte(infinite)) {
+        buy = Decimal.affordGeometricSeries(infinite, 1, ratio, user.increment.m[n]);
+        buyCost = Decimal.sumGeometricSeries(buy, 1, ratio, user.increment.m[n]);
+      }
+      user.ip.x = user.ip.x.minus(buyCost);
+      user.increment.m[n] += buy.toNumber();
+    }
+    if (user.automate.incrementE[n]) {
+      let ratio = getIncrementERatio(n);
+      let canBuy = Decimal.affordGeometricSeries(user.ip.x, 1, ratio, user.increment.e[n]);
+      let bulk = getAutoIncrementEBulk().times(ticks);
+      let buy = nd(0);
+      if (canBuy.gte(bulk)) {buy = bulk}
+      else {buy = canBuy}
+      let buyCost = Decimal.sumGeometricSeries(buy, 1, ratio, user.increment.e[n]);
+      if (buyCost.gte(infinite)) {
+        buy = Decimal.affordGeometricSeries(infinite, 1, ratio, user.increment.e[n]);
+        buyCost = Decimal.sumGeometricSeries(buy, 1, ratio, user.increment.e[n]);
+      }
+      user.ip.x = user.ip.x.minus(buyCost);
+      user.increment.e[n] += buy.toNumber();
+    }
+  }
+}
+function initiateAutomation() {
+  setInterval(() => {automationTick()}, 100);
+  setInterval(() => {passiveTick()}, 50);
+}
+
 var automatingIP = false;
 function runAutomationIP() {
   if (!automatingIP) {
@@ -64,11 +119,11 @@ function runAutomationIP() {
       if (user.automate.ip) {
         increment(getAutomateIPBulk());
       }
-    }, (nd(1000).divide(getAutomateIPRate()).toNumber()));
+    }, (1000 / updateRate));
   }
   else {clearInterval(automatingIP); automatingIP = false}
 }
-var automatingIncrementP = [false, false, false, false, false];
+/*var automatingIncrementP = [false, false, false, false, false];
 function runAutomationIncrementP(n) {
   if (!automatingIncrementP[n]) {
     automatingIncrementP[n] = setInterval(() => {
@@ -135,7 +190,7 @@ function runAutomationIncrementE(n) {
       }
     }, 100);
   }
-}
+}*/
 
 //Get Data
 function getAutoIPx() {
@@ -149,21 +204,12 @@ function getAutoIPCost() {
   if (user.auto.ip > 30) {return nd(1e33).pow(Math.pow(1.1, user.auto.ip - 30))}
   return cost;
 }
-function getAutomateIPRate() {
-  let multi = 1;
-  if (user.achievements.includes("ach1-5")) {multi *= 2}
-  if (user.achievements.includes("ach2-3")) {multi *= 10}
-  let rate = nd(user.auto.ip * multi);
-  if (rate.gt(20)) {return nd(20)}
-  else {return rate}
-}
 function getAutomateIPBulk() {
   let multi = 1;
   if (user.achievements.includes("ach1-5")) {multi *= 2}
   if (user.achievements.includes("ach2-3")) {multi *= 10}
-  let rate = nd(user.auto.ip * multi);
-  if (rate.gt(20)) {return rate.divide(20)}
-  else {return nd(1)}}
+  return nd(user.auto.ip * multi / updateRate);
+}
 function getAutoIncrementPx() {
   let multi = 1;
   if (user.achievements.includes("ach1-5")) {multi *= 2}
@@ -259,6 +305,14 @@ function updateAutoIncrementE() {
 function updateAutomateIncrementE(n) {
   if (user.automate.incrementE[n]) {d("autoIncrementE" + n + "State").style.borderColor = "rgb(100, 200, 50)"}
   else {d("autoIncrementE" + n + "State").style.borderColor = "rgb(220, 20, 60)"}
+}
+function updateAutomates() {
+  updateAutomateIP();
+  for (let i = 0; i <= 4; i++) {
+    updateAutomateIncrementP(i);
+    updateAutomateIncrementM(i);
+    updateAutomateIncrementE(i);
+  }
 }
 
 //Unlock Data
