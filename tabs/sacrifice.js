@@ -1,20 +1,34 @@
 //Buttons
+function confirmSacrificeIP() {
+  if (user.confirmation.sacrifice) {alertify.confirm("Are you sure you want to sacrifice?", () => {sacrificeIP()})}
+  else {sacrificeIP()}
+}
 function sacrificeIP() {
   let cost = getSacrificeIPCost();
   if (user.ip.sac.gte(cost) && cost.lt(infinite)) {
-    resetSacrificeIP();
     user.sacrifice.ip++;
+    resetSacrificeIP();
     unlockIP();
     unlockAutomation();
     unlockSacrifice();
   }
 }
 //Get Data
-function getSacrificeIPP() {return nd(100).times(nd(user.sacrifice.ip / 25 + 1).log10()).plus(1).floor()}
-function getSacrificeIPM() {return nd(100).times(nd((Math.max(2, user.sacrifice.ip) - 2) / 30 + 1).log10()).plus(1).floor()}
+function getSacrificeIPP() {
+  let multi = 1;
+  if (user.pt["pt1-2"]) {multi *= getPrestigeTreex("pt1-2")}
+  return nd(100).times(nd(user.sacrifice.ip / 25 + 1).log10()).plus(1).times(multi).floor();
+}
+function getSacrificeIPM() {
+  let multi = 1;
+  if (user.pt["pt1-2"]) {multi *= getPrestigeTreex("pt1-2")}
+  return nd(100).times(nd((Math.max(2, user.sacrifice.ip) - 2) / 30 + 1).log10()).plus(1).times(multi).floor();
+}
 function getSacrificeIPE() {
-  if (user.achievements.includes("ach2-4")) {return nd((Math.max(6, user.sacrifice.ip) - 6) / 4.2 + 1).log10().times(1.075).plus(1)}
-  else {return nd((Math.max(6, user.sacrifice.ip) - 6) / 4.2 + 1).log10().plus(1)}
+  let multi = 1;
+  if (user.achievements.includes("ach2-4")) {multi *= 1.075}
+  if (user.pt["pt1-2"]) {multi *= getPrestigeTreex("pt1-2")}
+  return nd((Math.max(6, user.sacrifice.ip) - 6) / 4.2 + 1).log10().plus(1).times(multi);
 }
 function getSacrificeIPCost() {
   let cost = nd(1e7).times(nd(1e5).times(user.sacrifice.ip + 1).pow(user.sacrifice.ip)).round();
@@ -23,15 +37,17 @@ function getSacrificeIPCost() {
   return cost;
 }
 
+function getSacrificePPCost() {
+  let cost = nd(10).pow(1000);
+  return cost;
+}
+
 //Update Date
 function updateSacrificeIP() {
   let cost = getSacrificeIPCost();
-  if (cost.gte(infinite)) {cost = "Infinite"}
-  if (cost == "Infinite") {d("sacrificeIPCost").textContent = "Infinite"; rpc("canBuy", "cantBuy", "sacrificeIP")}
+  if (cost.gte(infinite) && showInfinite) {d("sacrificeIPCost").textContent = "Infinite"; rpc("canBuy", "cantBuy", "sacrificeIP")}
   else if (user.ip.sac.lt(cost)) {d("sacrificeIPCost").textContent = e(cost.minus(user.ip.sac)); rpc("canBuy", "cantBuy", "sacrificeIP")}
   else {d("sacrificeIPCost").textContent = 0; rpc("cantBuy", "canBuy", "sacrificeIP")}
-  /*if (user.ip.sac.lt(cost) || cost == "Infinite") {rpc("canBuy", "cantBuy", "sacrificeIP")}
-  else {rpc("cantBuy", "canBuy", "sacrificeIP")}*/
   d("sacrificeIPP").textContent = e(getSacrificeIPP());
   d("sacrificeIPM").textContent = e(getSacrificeIPM());
   d("sacrificeIPE").textContent = e(getSacrificeIPE(), 2, 2);

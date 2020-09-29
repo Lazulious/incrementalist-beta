@@ -5,7 +5,7 @@ function updater() {
   setTimeout(() => {
     updateTab(user.tab);
     updateip();
-    updatepbip();
+    updatepp();
     updater();
   }, (1000 / updateRate));
 }
@@ -14,6 +14,10 @@ function fixnd() {
   user.ip.sac = nd(user.ip.sac);
   user.ip.total = nd(user.ip.total);
   user.ip.highest = nd(user.ip.highest);
+  user.pp.x = nd(user.pp.x);
+  user.pp.sac = nd(user.pp.sac);
+  user.pp.total = nd(user.pp.total);
+  user.pp.highest = nd(user.pp.highest);
 }
 
 //Save Data
@@ -38,28 +42,6 @@ function load() {
 function loadData(data) {
   resetAll(false);
   user = data;
-  /*if (user.version == "0.2.0-beta-v4") {
-    console.log("Loaded Version " + user.version);
-    resetAll();
-    user.version = "0.2.0-beta-v4.1";
-  }
-  if (user.version == "0.2.0-beta-v4.1") {
-    console.log("Loaded Version " + user.version);
-    user.timeStart = Date.now();
-    if (user.achievements.includes("ach2-1")) {user.achievements.splice(user.achievements.indexOf("ach2-1"), 1, "ach1-6")}
-    if (user.achievements.includes("ach2-2")) {user.achievements.splice(user.achievements.indexOf("ach2-2"), 1, "ach2-1")}
-    if (user.achievements.includes("ach2-3")) {user.achievements.splice(user.achievements.indexOf("ach2-3"), 1, "ach2-2")}
-    user.version = "0.2.0-beta-v5";
-  }
-  if (user.version == "0.2.0-beta-v5") {
-    console.log("Loaded Version " + user.version);
-    user.scaling.e = 0;
-    if (user.increment.ip >= 2500 && user.increment.ip < 5000) {decompleteAchievement("ach1-6")}
-    user.version = "0.2.0-beta-v6";
-  }
-  if (user.version == "0.2.0-beta-v6") {
-    console.log("Loaded Version " + user.version);
-  }*/
   if (user.version == "0.0.0") {
     console.log("Loaded version 0.0.0 -> 0.1.0");
     user.active.displaypause = false;
@@ -91,6 +73,7 @@ function loadData(data) {
     let tempObjs = ["auto", "scaling", "confirmation"];
     for (let i = 0; i < tempObjs.length; i++) {user[tempObjs[i]] = {}}
     if (user.automation.inc.x) {user.auto.ip = 1}
+    else {user.auto.ip = 0}
     user.automate.ip = user.automate.inc.x;
     for (let i = 0; i < letters.length; i++) {
       if (user.automation.inc[letters[i]]) {user.auto["increment" + letters[i].toUpperCase()] = 1}
@@ -101,6 +84,8 @@ function loadData(data) {
       user.scaling[letters[i]] = 0;
     }
     user.sacrifice.ip = 0;
+    let ips = ["x", "sac", "total", "highest"];
+    for (let i = 0; i < ips.length; i++) {if (nd(user.ip[ips[i]]).gte(infinite)) {user.ip[ips[i]] = infinite}}
     user.ip.total = nd(user.ip.total);
     while (user.ip.total.gte(getSacrificeIPCost())) {user.sacrifice.ip++}
     user.increment = {ip: 0, p: [0, 0, 0, 0, 0], m: [0, 0, 0, 0, 0], e: [0, 0, 0, 0, 0]}
@@ -168,22 +153,35 @@ function loadData(data) {
     user.achievements = [];
     user.version = "0.2.0";*/
   }
-  if (user.version == "0.2.0" || user.version == "0.2.0-beta-v6") {
-    console.log("Loaded Version " + user.version);
-    user.timeLastOnline = Date.now();
-    user.version = "0.2.0-beta-v7";
+  if (user.version == "0.2.0") {
+    console.log("Loaded Version 0.2.0");
+    user.version = "0.2.1";
   }
-  if (user.version == "0.2.0-beta-v7") {
-    console.log("Loaded Version " + user.version);
+  if (user.version == "0.2.1") {
+    console.log("Loaded Version 0.2.1");
+    user.pp = {x: nd(0), sac: nd(0), total: nd(0), highest: nd(0)}
+    user.sacrifice.pp = 0;
+    user.pt = {"pt1-1": false, "pt1-2": false, "pt1-3": false}
+    user.version = "0.3.0";
   }
+  /*if (user.version == "0.3.0") {
+    console.log("Loaded Version 0.3.0");
+  }*/
+  if (user.version == "0.3.0-beta-v1") {
+    console.log("Loaded Version 0.3.0-beta-v1");
+  }
+  if (user.version == data.version) {alertify.message("Loaded Version " + user.version)}
+  else {alertify.message("Loaded Version " + data.version + "->" + user.version)}
   fixnd();
   tab(user.tab);
+  setNotation(user.notation);
   completeAchievements();
   if (user.timeLastOnline == "now") {user.timeLastOnline = Date.now()}
   loadOffline();
   unlocking();
-  reveal();
   updateAutomates();
+  updateConfirmations();
+  reveal();
   alertify.success("Game Loaded");
 }
 function loadOffline() {
@@ -207,6 +205,7 @@ function resetAll(sav) {
   user = setUser();
   user.timeStart = Date.now();
   unlocking();
+  reveal();
   if (sav) {save()}
   console.log("Game Reset");
 }
@@ -231,4 +230,8 @@ function resetSacrificeIP() {
   user.scaling.e = 0;
   user.ip.x = nd(1);
   user.ip.sac = nd(1);
+}
+function resetPrestige() {
+  resetSacrificeIP();
+  user.sacrifice.ip = 0;
 }
