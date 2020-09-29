@@ -3,6 +3,7 @@ function setNotation(note) {
   user.notation = note;
   d("notation").textContent = user.notation;
   updateAchievement();
+  updatePrestigeTreeCost()
   /*updateNotation();*/
 }
 function e(obj, exp, dec) {
@@ -20,10 +21,12 @@ function toggleConfirmation(str) {
 }
 
 function confirmReset() {
-  
+  user.confirmation.reset = !user.confirmation.reset;
+  updateConfirmation("reset");
 }
 function confirmSacrifice() {
-  
+  user.confirmation.sacrifice = !user.confirmation.sacrifice;
+  updateCOnfirmation("sacrifice");
 }
 
 //Update Data

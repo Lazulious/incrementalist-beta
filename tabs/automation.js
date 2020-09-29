@@ -59,7 +59,7 @@ function automateIncrementE(n) {
 //Automation Functions
 function automationTick(ticks) {
   if (typeof ticks == "undefined") {ticks = 1}
-  for (let n = 0; n <= 4; n++) {
+  for (let n = 4; n >= 0; n--) {
     if (user.automate.incrementP[n]) {
       let ratio = getIncrementPRatio(n);
       let canBuy = Decimal.affordGeometricSeries(user.ip.x, 1, ratio, user.increment.p[n]);
@@ -77,30 +77,30 @@ function automationTick(ticks) {
     }
     if (user.automate.incrementM[n]) {
       let ratio = getIncrementMRatio(n);
-      let canBuy = Decimal.affordGeometricSeries(user.ip.x, 1, ratio, user.increment.m[n]);
+      let canBuy = Decimal.affordGeometricSeries(user.ip.x, 1e7, ratio, user.increment.m[n]);
       let bulk = getAutoIncrementMBulk().times(ticks);
       let buy = nd(0);
       if (canBuy.gte(bulk)) {buy = bulk}
       else {buy = canBuy}
-      let buyCost = Decimal.sumGeometricSeries(buy, 1, ratio, user.increment.m[n]);
+      let buyCost = Decimal.sumGeometricSeries(buy, 1e7, ratio, user.increment.m[n]);
       if (buyCost.gte(infinite)) {
-        buy = Decimal.affordGeometricSeries(infinite, 1, ratio, user.increment.m[n]);
-        buyCost = Decimal.sumGeometricSeries(buy, 1, ratio, user.increment.m[n]);
+        buy = Decimal.affordGeometricSeries(infinite, 1e7, ratio, user.increment.m[n]);
+        buyCost = Decimal.sumGeometricSeries(buy, 1e7, ratio, user.increment.m[n]);
       }
       user.ip.x = user.ip.x.minus(buyCost);
       user.increment.m[n] += buy.toNumber();
     }
     if (user.automate.incrementE[n]) {
       let ratio = getIncrementERatio(n);
-      let canBuy = Decimal.affordGeometricSeries(user.ip.x, 1, ratio, user.increment.e[n]);
+      let canBuy = Decimal.affordGeometricSeries(user.ip.x, 1e30, ratio, user.increment.e[n]);
       let bulk = getAutoIncrementEBulk().times(ticks);
       let buy = nd(0);
       if (canBuy.gte(bulk)) {buy = bulk}
       else {buy = canBuy}
-      let buyCost = Decimal.sumGeometricSeries(buy, 1, ratio, user.increment.e[n]);
+      let buyCost = Decimal.sumGeometricSeries(buy, 1e30, ratio, user.increment.e[n]);
       if (buyCost.gte(infinite)) {
-        buy = Decimal.affordGeometricSeries(infinite, 1, ratio, user.increment.e[n]);
-        buyCost = Decimal.sumGeometricSeries(buy, 1, ratio, user.increment.e[n]);
+        buy = Decimal.affordGeometricSeries(infinite, 1e30, ratio, user.increment.e[n]);
+        buyCost = Decimal.sumGeometricSeries(buy, 1e30, ratio, user.increment.e[n]);
       }
       user.ip.x = user.ip.x.minus(buyCost);
       user.increment.e[n] += buy.toNumber();
@@ -109,7 +109,7 @@ function automationTick(ticks) {
 }
 function initiateAutomation() {
   setInterval(() => {automationTick()}, 100);
-  setInterval(() => {passiveTick()}, 50);
+  setInterval(() => {passiveTick()}, tickSpeed);
 }
 
 var automatingIP = false;
@@ -123,81 +123,14 @@ function runAutomationIP() {
   }
   else {clearInterval(automatingIP); automatingIP = false}
 }
-/*var automatingIncrementP = [false, false, false, false, false];
-function runAutomationIncrementP(n) {
-  if (!automatingIncrementP[n]) {
-    automatingIncrementP[n] = setInterval(() => {
-      if (user.automate.incrementP[n]) {
-        let ratio = getIncrementPRatio(n);
-        let bulk = getAutoIncrementPBulk();
-        let canBuy = Decimal.affordGeometricSeries(user.ip.x, 1, ratio, user.increment.p[n]);
-        let buy = nd(0);
-        if (canBuy.gte(bulk)) {buy = bulk}
-        else {buy = canBuy}
-        let buyCost = Decimal.sumGeometricSeries(buy, 1, ratio, user.increment.p[n]);
-        if (buyCost.gte(infinite)) {
-          buy = Decimal.affordGeometricSeries(infinite, 1, ratio, user.increment.p[n]);
-          buyCost = Decimal.sumGeometricSeries(buy, 1, ratio, user.increment.p[n]);
-        }
-        user.ip.x = user.ip.x.minus(buyCost);
-        user.increment.p[n] += buy.toNumber();
-      }
-    }, 100);
-  }
-  else {clearInterval(automatingIncrementP[n]); automatingIncrementP[n] = false}
-}
-var automatingIncrementM = [false, false, false, false, false];
-function runAutomationIncrementM(n) {
-  if (!automatingIncrementM[n]) {
-    automatingIncrementM[n] = setInterval(() => {
-      if (user.automate.incrementM[n]) {
-        let ratio = getIncrementMRatio(n);
-        let bulk = getAutoIncrementMBulk();
-        let canBuy = Decimal.affordGeometricSeries(user.ip.x, 1e7, ratio, user.increment.m[n]);
-        let buy = nd(0);
-        if (canBuy.gte(bulk)) {buy = bulk}
-        else {buy = canBuy}
-        let buyCost = Decimal.sumGeometricSeries(buy, 1e7, ratio, user.increment.m[n]);
-        if (buyCost.gte(infinite)) {
-          buy = Decimal.affordGeometricSeries(infinite, 1e7, ratio, user.increment.m[n]);
-          buyCost = Decimal.sumGeometricSeries(buy, 1e7, ratio, user.increment.m[n]);
-        }
-        user.ip.x = user.ip.x.minus(buyCost);
-        user.increment.m[n] += buy.toNumber();
-      }
-    }, 100);
-  }
-  else {clearInterval(automatingIncrementM[n]); automatingIncrementM[n] = false}
-}
-var automatingIncrementE = [false, false, false, false, false];
-function runAutomationIncrementE(n) {
-  if (!automatingIncrementE[n]) {
-    automatingIncrementE[n] = setInterval(() => {
-      if (user.automate.incrementE[n]) {
-        let ratio = getIncrementERatio(n);
-        let bulk = getAutoIncrementEBulk();
-        let canBuy = Decimal.affordGeometricSeries(user.ip.x, 1e30, ratio, user.increment.e[n]);
-        let buy = nd(0);
-        if (canBuy.gte(bulk)) {buy = bulk}
-        else {buy = canBuy}
-        let buyCost = Decimal.sumGeometricSeries(buy, 1e30, ratio, user.increment.e[n]);
-        if (buyCost.gte(infinite)) {
-          buy = Decimal.affordGeometricSeries(infinite, 1e30, ratio, user.increment.e[n]);
-          buyCost = Decimal.sumGeometricSeries(buy, 1e30, ratio, user.increment.e[n]);
-        }
-        user.ip.x = user.ip.x.minus(buyCost);
-        user.increment.e[n] += buy.toNumber();
-      }
-    }, 100);
-  }
-}*/
 
 //Get Data
 function getAutoIPx() {
   let multi = 1;
   if (user.achievements.includes("ach1-5")) {multi *= 2}
   if (user.achievements.includes("ach2-3")) {multi *= 10}
-  return nd(user.auto.ip).times(multi);
+  if (user.pt["pt1-1"]) {multi *= getPrestigeTreex("pt1-1")}
+  return nd(user.auto.ip * multi);
 }
 function getAutoIPCost() {
   let cost = nd(1000).times(Math.pow(10, user.auto.ip)).round();
@@ -208,16 +141,19 @@ function getAutomateIPBulk() {
   let multi = 1;
   if (user.achievements.includes("ach1-5")) {multi *= 2}
   if (user.achievements.includes("ach2-3")) {multi *= 10}
+  if (user.pt["pt1-1"]) {multi *= getPrestigeTreex("pt1-1")}
   return nd(user.auto.ip * multi / updateRate);
 }
 function getAutoIncrementPx() {
   let multi = 1;
   if (user.achievements.includes("ach1-5")) {multi *= 2}
+  if (user.pt["pt1-1"]) {multi *= getPrestigeTreex("pt1-1")}
   return nd(user.auto.incrementP * 10 * multi);
 }
 function getAutoIncrementPBulk() {
   let multi = 1;
   if (user.achievements.includes("ach1-5")) {multi *= 2}
+  if (user.pt["pt1-1"]) {multi *= getPrestigeTreex("pt1-1")}
   return nd(user.auto.incrementP * multi);
 }
 function getAutoIncrementPCost() {
@@ -229,11 +165,13 @@ function getAutoIncrementPCost() {
 function getAutoIncrementMx() {
   let multi = 1;
   if (user.achievements.includes("ach1-5")) {multi *= 2}
+  if (user.pt["pt1-1"]) {multi *= getPrestigeTreex("pt1-1")}
   return nd(user.auto.incrementM * 10 * multi);
 }
 function getAutoIncrementMBulk() {
   let multi = 1;
   if (user.achievements.includes("ach1-5")) {multi *= 2}
+  if (user.pt["pt1-1"]) {multi *= getPrestigeTreex("pt1-1")}
   return nd(user.auto.incrementM * multi);
 }
 function getAutoIncrementMCost() {
@@ -245,11 +183,13 @@ function getAutoIncrementMCost() {
 function getAutoIncrementEx() {
   let multi = 1;
   if (user.achievements.includes("ach1-5")) {multi *= 2}
+  if (user.pt["pt1-1"]) {multi *= getPrestigeTreex("pt1-1")}
   return nd(user.auto.incrementE * 10 * multi);
 }
 function getAutoIncrementEBulk() {
   let multi = 1;
   if (user.achievements.includes("ach1-5")) {multi *= 2}
+  if (user.pt["pt1-1"]) {multi *= getPrestigeTreex("pt1-1")}
   return nd(user.auto.incrementE * multi);
 }
 function getAutoIncrementECost() {
@@ -260,11 +200,11 @@ function getAutoIncrementECost() {
 //Update Data
 function updateAutoIP() {
   let cost = getAutoIPCost();
-  if (cost.gte(infinite)) {cost = "Infinite"}
+  if (user.ip.x.lt(cost) || cost.gte(infinite)) {rpc("canBuy", "cantBuy", "autoIPb")}
+  else {rpc("cantBuy", "canBuy", "autoIPb")}
+  if (cost.gte(infinite) && showInfinite) {cost = "Infinite"}
   d("autoIPx").textContent = e(getAutoIPx());
   d("autoIPCost").textContent = e(cost);
-  if (user.ip.x.lt(cost) || cost == "Infinite") {rpc("canBuy", "cantBuy", "autoIPb")}
-  else {rpc("cantBuy", "canBuy", "autoIPb")}
 }
 function updateAutomateIP() {
   if (user.automate.ip) {d("autoIPState").style.borderColor = "rgb(100, 200, 50)"}
@@ -272,11 +212,11 @@ function updateAutomateIP() {
 }
 function updateAutoIncrementP() {
   let cost = getAutoIncrementPCost();
-  if (cost.gte(infinite)) {cost = "Infinite"}
+  if (user.ip.x.lt(cost) || cost.gte(infinite)) {rpc("canBuy", "cantBuy", "autoPb")}
+  else {rpc("cantBuy", "canBuy", "autoPb")}
+  if (cost.gte(infinite) && showInfinite) {cost = "Infinite"}
   d("autoPx").textContent = e(getAutoIncrementPx());
   d("autoPCost").textContent = e(cost);
-  if (user.ip.x.lt(cost) || cost == "Infinite") {rpc("canBuy", "cantBuy", "autoPb")}
-  else {rpc("cantBuy", "canBuy", "autoPb")}
 }
 function updateAutomateIncrementP(n) {
   if (user.automate.incrementP[n]) {d("autoIncrementP" + n + "State").style.borderColor = "rgb(100, 200, 50)"}
@@ -284,11 +224,11 @@ function updateAutomateIncrementP(n) {
 }
 function updateAutoIncrementM() {
   let cost = getAutoIncrementMCost();
-  if (cost.gte(infinite)) {cost = "Infinite"}
+  if (user.ip.x.lt(cost) || cost.gte(infinite)) {rpc("canBuy", "cantBuy", "autoMb")}
+  else {rpc("cantBuy", "canBuy", "autoMb")}
+  if (cost.gte(infinite) && showInfinite) {cost = "Infinite"}
   d("autoMx").textContent = e(getAutoIncrementMx());
   d("autoMCost").textContent = e(cost);
-  if (user.ip.x.lt(cost) || cost == "Infinite") {rpc("canBuy", "cantBuy", "autoMb")}
-  else {rpc("cantBuy", "canBuy", "autoMb")}
 }
 function updateAutomateIncrementM(n) {
   if (user.automate.incrementM[n]) {d("autoIncrementM" + n + "State").style.borderColor = "rgb(100, 200, 50)"}
@@ -296,11 +236,11 @@ function updateAutomateIncrementM(n) {
 }
 function updateAutoIncrementE() {
   let cost = getAutoIncrementECost();
-  if (cost.gte(infinite)) {cost = "Infinite"}
+  if (user.ip.x.lt(cost) || cost.gte(infinite)) {rpc("canBuy", "cantBuy", "autoEb")}
+  else {rpc("cantBuy", "canBuy", "autoEb")}
+  if (cost.gte(infinite) && showInfinite) {cost = "Infinite"}
   d("autoEx").textContent = e(getAutoIncrementEx());
   d("autoECost").textContent = e(cost);
-  if (user.ip.x.lt(cost) || cost == "Infinite") {rpc("canBuy", "cantBuy", "autoEb")}
-  else {rpc("cantBuy", "canBuy", "autoEb")}
 }
 function updateAutomateIncrementE(n) {
   if (user.automate.incrementE[n]) {d("autoIncrementE" + n + "State").style.borderColor = "rgb(100, 200, 50)"}

@@ -19,7 +19,7 @@ setInterval(() => {
   if (!user.achievements.includes("ach1-3") && user.sacrifice.ip >= 1) {completeAchievement("ach1-3")}
   if (!user.achievements.includes("ach1-4") && user.increment.m[0] >= 1) {completeAchievement("ach1-4")}
   if (!user.achievements.includes("ach1-5") && user.sacrifice.ip >= 2) {completeAchievement("ach1-5")}
-  if (!user.achievements.includes("ach1-6") && user.increment.ip >= 3333) {completeAchievement("ach1-6"); unlockAchievement()}
+  if (!user.achievements.includes("ach1-6") && user.increment.ip >= 2500) {completeAchievement("ach1-6"); unlockAchievement()}
   if (!user.achievements.includes("ach2-1") && user.increment.p[0] >= 1000 && user.increment.p[1] >= 500 && (user.increment.p[0] > (user.increment.p[1] * 2))) {completeAchievement("ach2-1")}
   if (!user.achievements.includes("ach2-2") && user.increment.e[0] >= 1) {completeAchievement("ach2-2")}
   if (!user.achievements.includes("ach2-3") && user.sacrifice.ip >= 7) {completeAchievement("ach2-3")}
@@ -29,10 +29,11 @@ setInterval(() => {
 }, 1000);
 
 //Functions
-function completeAchievement(id) {
+function completeAchievement(id, notify) {
+  if (typeof notify == "undefined") {notify = true}
   user.achievements.push(id);
   rpc("achIncomplete", "achComplete", id);
-  alertify.message(achievement.titles[id]);
+  if (notify) {alertify.message(achievement.titles[id])}
 }
 function completeAchievements() {for (let i = 0; i < user.achievements.length; i++) {rpc("achIncomplete", "achComplete", user.achievements[i])}}
 function decompleteAchievement(id) {
@@ -42,7 +43,7 @@ function decompleteAchievement(id) {
   }
 }
 function decompleteAchievements() {
-  for (let i = 1; i <= 2; i++) {
+  for (let i = 1; i <= 2; i++) {   
     for (let k = 1; k <= 6; k++) {
       rpc("achComplete", "achIncomplete", "ach" + i + "-" + k);
     }
@@ -52,10 +53,12 @@ function decompleteAchievements() {
     rpc("achComplete", "achIncomplete", user.achievements[i]);
   }*/
 }
-function updateAchievement() {
-  d("ach1-6Req").textContent = e(3333);
-  d("ach1-6Reward").textContent = e(100);
-  d("ach2-1Req").textContent = e(1000);
+
+function getAchievementReward(id) {
+  if (id == "ach1-6") {return nd(2.5).pow(nd(user.increment.ip).pow(1.35).plus(1).log10())}
+}
+function updateAchievement(id) {
+  if (id == "ach1-6") {d(id + "Reward").textContent = e(getAchievementReward(id))}
 }
 function unlockAchievement() {
   let ach = user.achievements;
