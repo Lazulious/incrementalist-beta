@@ -14,7 +14,7 @@ function setUser() {
     tab: "Increment",
     timeStart: "now",
     timeLastOnline: "now",
-    version: "0.3.0-beta-v1",
+    version: "0.3.0-beta-v1.1",
   }
 }
 
