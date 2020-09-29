@@ -16,18 +16,18 @@ function sacrificeIP() {
 //Get Data
 function getSacrificeIPP() {
   let multi = 1;
-  if (user.pt["pt1-2"]) {multi *= getPrestigeTreex("pt1-2")}
+  if (user.pt["pt1-2"]) {multi *= getPrestigeTreex("pt1-2").plus(1)}
   return nd(100).times(nd(user.sacrifice.ip / 25 + 1).log10()).plus(1).times(multi).floor();
 }
 function getSacrificeIPM() {
   let multi = 1;
-  if (user.pt["pt1-2"]) {multi *= getPrestigeTreex("pt1-2")}
+  if (user.pt["pt1-2"]) {multi *= getPrestigeTreex("pt1-2").plus(1)}
   return nd(100).times(nd((Math.max(2, user.sacrifice.ip) - 2) / 30 + 1).log10()).plus(1).times(multi).floor();
 }
 function getSacrificeIPE() {
   let multi = 1;
   if (user.achievements.includes("ach2-4")) {multi *= 1.075}
-  if (user.pt["pt1-2"]) {multi *= getPrestigeTreex("pt1-2")}
+  if (user.pt["pt1-2"]) {multi *= getPrestigeTreex("pt1-2").plus(1)}
   return nd((Math.max(6, user.sacrifice.ip) - 6) / 4.2 + 1).log10().plus(1).times(multi);
 }
 function getSacrificeIPCost() {

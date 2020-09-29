@@ -169,6 +169,10 @@ function loadData(data) {
   }*/
   if (user.version == "0.3.0-beta-v1") {
     console.log("Loaded Version 0.3.0-beta-v1");
+    user.version = "0.3.0-beta-v1.1";
+  }
+  if (user.version == "0.3.0-beta-v1.1") {
+    console.log("Loaded Version 0.3.0-beta-v1.1");
   }
   if (user.version == data.version) {alertify.message("Loaded Version " + user.version)}
   else {alertify.message("Loaded Version " + data.version + "->" + user.version)}
