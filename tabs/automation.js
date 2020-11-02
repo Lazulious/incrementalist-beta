@@ -1,264 +1,180 @@
+//Data
+const automation = {
+  "IP": {
+    currency: "ip",
+    scaling: [
+      {type: "m", scaleAt: 0, newCost: "1000", effect: 10},
+      {type: "e", scaleAt: 30, newCost: "1e33", effect: 1.1},
+      {type: "e", scaleAt: 42, newCost: "3.7e103", effect: 1.2}
+    ],
+    array: false
+  },
+  "IncrementP": {
+    currency: "ip",
+    scaling: [
+      {type: "m", scaleAt: 0, newCost: "100000", effect: 100},
+      {type: "e", scaleAt: 14, newCost: "1e33", effect: 1.25},
+      {type: "e", scaleAt: 19, newCost: "5.11e100", effect: 1.5}
+    ],
+    array: true
+  },
+  "IncrementM": {
+    currency: "ip",
+    scaling: [
+      {type: "m", scaleAt: 0, newCost: "1e20", effect: 100000},
+      {type: "e", scaleAt: 2, newCost: "1e33", effect: 1.5},
+      {type: "e", scaleAt: 5, newCost: "2.37e111", effect: 2}
+    ],
+    array: true
+  },
+  "IncrementE": {
+    currency: "ip",
+    scaling: [
+      {type: "e", scaleAt: 0, newCost: "1e84", effect: 2},
+      {type: "e", scaleAt: 1, newCost: "1e170", effect: 3}
+    ],
+    array: true
+  },
+  "IncrementT": {
+    currency: "ip",
+    scaling: [
+      {type: "t", scaleAt: 0, newCost: "1e1550", effect: 2}
+    ],
+    array: true
+  },
+  "SacrificeIP": {
+    currency: "pp",
+    scaling: [
+      {type: "m", scaleAt: 0, newCost: "10", effect: 10}
+    ],
+    array: false
+  },
+  "Prestige": {
+    currency: "pp",
+    scaling: [
+      {type: "e", scaleAt: 0, newCost: "250", effect: 2}
+    ],
+    array: false
+  }
+}
+for (let name in automation) {
+  di("auto"+name+"b").addEventListener("click", () => {buyAutomation(name)});
+  di("maxAuto"+name+"State").addEventListener("click", () => {toggleMaxBuyAutomation(name)});
+  if (!automation[name].array) {
+    di("auto"+name+"State").addEventListener("click", () => {toggleAutomation(name)});
+  }
+  else {
+    for (let i=0; i<5; i++) {
+      di("auto"+name+i+"State").addEventListener("click", () => {toggleAutomation(name, i)});
+    }
+  }
+}
+di("prestigeAt").addEventListener("click", (event) => {event.stopPropagation()});
+di("prestigeAt").addEventListener("change", () => {setPrestigeAt(di("prestigeAt").value)});
+
 //Buttons
-function buyAutomationIP() {
-  let cost = getAutoIPCost();
-  if (user.ip.x.gte(cost) && cost.lt(infinite)) {
-    user.ip.x = user.ip.x.minus(cost);
-    user.auto.ip++;
-    /*if (user.automate.ip) {automateIP(); automateIP()}*/
-    unlockAutomation();
+function buyAutomation(name) {
+  let cost = getAutomationCost(name);
+  if (user.automation[name].buyMax) {
+    while (user[automation[name].currency].current.gte(cost) && cost.lt(user[automation[name].currency].infinite)) {
+      user[automation[name].currency].current = user[automation[name].currency].current.minus(cost);
+      user.automation[name].bought++;
+      cost = getAutomationCost(name);
+    }
+  }
+  else {
+    if (user[automation[name].currency].current.gte(cost) && cost.lt(user[automation[name].currency].infinite)) {
+      user[automation[name].currency].current = user[automation[name].currency].current.minus(cost);
+      user.automation[name].bought++;
+    }
   }
 }
-function automateIP() {
-  user.automate.ip = !user.automate.ip;
-  /*runAutomationIP();*/
-  updateAutomateIP();
+function toggleMaxBuyAutomation(name) {
+  user.automation[name].buyMax = !user.automation[name].buyMax;
+  updateMaxAutoState(name);
 }
-function buyAutomationIncrementP() {
-  let cost = getAutoIncrementPCost();
-  if (user.ip.x.gte(cost) && cost.lt(infinite)) {
-    user.ip.x = user.ip.x.minus(cost);
-    user.auto.incrementP++;
-    /*for (let i = 0; i <= 4; i++) {if (user.automate.incrementP[i]) {automateIncrementP(i); automateIncrementP(i)}}*/
-    unlockAutomation();
+function toggleAutomation(name, num) {
+  if (Array.isArray(user.automation[name].enabled)) {
+    user.automation[name].enabled[num] = !user.automation[name].enabled[num];
+    updateAutomationState(name, num);
   }
-}
-function automateIncrementP(n) {
-  user.automate.incrementP[n] = !user.automate.incrementP[n];
-  /*runAutomationIncrementP(n);*/
-  updateAutomateIncrementP(n);
-}
-function buyAutomationIncrementM() {
-  let cost = getAutoIncrementMCost();
-  if (user.ip.x.gte(cost)) {
-    user.ip.x = user.ip.x.minus(cost);
-    user.auto.incrementM++;
-    /*for (let i = 0; i <= 4; i++) {if (user.automate.incrementM[i]) {automateIncrementM(i); automateIncrementM(i)}}*/
-    unlockAutomation();
+  else {
+    user.automation[name].enabled = !user.automation[name].enabled;
+    updateAutomationState(name);
   }
-}
-function automateIncrementM(n) {
-  user.automate.incrementM[n] = !user.automate.incrementM[n];
-  /*runAutomationIncrementM(n);*/
-  updateAutomateIncrementM(n);
-}
-function buyAutomationIncrementE() {
-  let cost = getAutoIncrementECost();
-  if (user.ip.x.gte(cost)) {
-    user.ip.x = user.ip.x.minus(cost);
-    user.auto.incrementE++;
-    /*for (let i = 0; i <= 4; i++) {if (user.automate.incrementE[i]) {automateIncrementE(i); automateIncrementE(i)}}*/
-    unlockAutomation();
-  }
-}
-function automateIncrementE(n) {
-  user.automate.incrementE[n] = !user.automate.incrementE[n];
-  /*runAutomationIncrementE(n);*/
-  updateAutomateIncrementE(n);
 }
 
-//Automation Functions
-function automationTick(ticks) {
-  if (typeof ticks == "undefined") {ticks = 1}
-  for (let n = 4; n >= 0; n--) {
-    if (user.automate.incrementP[n]) {
-      let ratio = getIncrementPRatio(n);
-      let canBuy = Decimal.affordGeometricSeries(user.ip.x, 1, ratio, user.increment.p[n]);
-      let bulk = getAutoIncrementPBulk().times(ticks);
-      let buy = nd(0);
-      if (canBuy.gte(bulk)) {buy = bulk}
-      else {buy = canBuy}
-      let buyCost = Decimal.sumGeometricSeries(buy, 1, ratio, user.increment.p[n]);
-      if (buyCost.gte(infinite)) {
-        buy = Decimal.affordGeometricSeries(infinite, 1, ratio, user.increment.p[n]);
-        buyCost = Decimal.sumGeometricSeries(buy, 1, ratio, user.increment.p[n]);
-      }
-      user.ip.x = user.ip.x.minus(buyCost);
-      user.increment.p[n] += buy.toNumber();
-    }
-    if (user.automate.incrementM[n]) {
-      let ratio = getIncrementMRatio(n);
-      let canBuy = Decimal.affordGeometricSeries(user.ip.x, 1e7, ratio, user.increment.m[n]);
-      let bulk = getAutoIncrementMBulk().times(ticks);
-      let buy = nd(0);
-      if (canBuy.gte(bulk)) {buy = bulk}
-      else {buy = canBuy}
-      let buyCost = Decimal.sumGeometricSeries(buy, 1e7, ratio, user.increment.m[n]);
-      if (buyCost.gte(infinite)) {
-        buy = Decimal.affordGeometricSeries(infinite, 1e7, ratio, user.increment.m[n]);
-        buyCost = Decimal.sumGeometricSeries(buy, 1e7, ratio, user.increment.m[n]);
-      }
-      user.ip.x = user.ip.x.minus(buyCost);
-      user.increment.m[n] += buy.toNumber();
-    }
-    if (user.automate.incrementE[n]) {
-      let ratio = getIncrementERatio(n);
-      let canBuy = Decimal.affordGeometricSeries(user.ip.x, 1e30, ratio, user.increment.e[n]);
-      let bulk = getAutoIncrementEBulk().times(ticks);
-      let buy = nd(0);
-      if (canBuy.gte(bulk)) {buy = bulk}
-      else {buy = canBuy}
-      let buyCost = Decimal.sumGeometricSeries(buy, 1e30, ratio, user.increment.e[n]);
-      if (buyCost.gte(infinite)) {
-        buy = Decimal.affordGeometricSeries(infinite, 1e30, ratio, user.increment.e[n]);
-        buyCost = Decimal.sumGeometricSeries(buy, 1e30, ratio, user.increment.e[n]);
-      }
-      user.ip.x = user.ip.x.minus(buyCost);
-      user.increment.e[n] += buy.toNumber();
-    }
-  }
-}
-function initiateAutomation() {
-  setInterval(() => {automationTick()}, 100);
-  setInterval(() => {passiveTick()}, tickSpeed);
-}
-
-var automatingIP = false;
-function runAutomationIP() {
-  if (!automatingIP) {
-    automatingIP = setInterval(() => {
-      if (user.automate.ip) {
-        increment(getAutomateIPBulk());
-      }
-    }, (1000 / updateRate));
-  }
-  else {clearInterval(automatingIP); automatingIP = false}
+//Set Data
+function setPrestigeAt(at) {
+  at = nd(at).round();
+  if (at.lt(1) || isNaN(at.mag)) {alertify.error("Invalid Input"); at = nd(1)}
+  user.automation.Prestige.at = at;
+  di("prestigeAt").value = e("d", at, 2, 0);
+  di("autoPrestigeAt").textContent = e("d", at, 2, 0)
 }
 
 //Get Data
-function getAutoIPx() {
-  let multi = 1;
-  if (user.achievements.includes("ach1-5")) {multi *= 2}
-  if (user.achievements.includes("ach2-3")) {multi *= 10}
-  if (user.pt["pt1-1"]) {multi *= getPrestigeTreex("pt1-1")}
-  return nd(user.auto.ip * multi);
+function getAutomationRate(name) {
+  let multi = nd(1);
+  if (user.achievements.includes("ach1-5")) {multi = multi.times(getAchievementReward("ach1-5"))}
+  if (user.pp.pt.cells.includes("pt1-1") && automation[name].currency == "ip") {multi = multi.times(getPTReward("pt1-1"))}
+  if (user.pp.pt.cells.includes("pt2-1") && automation[name].currency == "ip") {multi = multi.times(getPTReward("pt2-1"))}
+  if (user.pp.challenge[1].in) {multi = multi.divide(Math.pow(user.achievements.length, 1.5))}
+  
+  if (name == "IP") {
+    if (user.achievements.includes("ach2-3")) {multi = multi.times(getAchievementReward("ach2-3"))}
+    multi = multi.times(getPPChallengeReward(1));
+  }
+  if (name == "IncrementP") {multi = multi.times(10)}
+  if (name == "IncrementM") {multi = multi.times(10)}
+  if (name == "IncrementE") {multi = multi.times(10)}
+  if (name == "IncrementT") {multi = multi.times(10)}
+  if (name == "SacrificeIP") {multi = multi.divide(2/*25*/)}
+  if (name == "Prestige") {multi = multi.divide(2/*50*/)}
+  return nd(user.automation[name].bought).times(multi);
 }
-function getAutoIPCost() {
-  let cost = nd(1000).times(Math.pow(10, user.auto.ip)).round();
-  if (user.auto.ip > 30) {return nd(1e33).pow(Math.pow(1.1, user.auto.ip - 30))}
-  return cost;
-}
-function getAutomateIPBulk() {
-  let multi = 1;
-  if (user.achievements.includes("ach1-5")) {multi *= 2}
-  if (user.achievements.includes("ach2-3")) {multi *= 10}
-  if (user.pt["pt1-1"]) {multi *= getPrestigeTreex("pt1-1")}
-  return nd(user.auto.ip * multi / updateRate);
-}
-function getAutoIncrementPx() {
-  let multi = 1;
-  if (user.achievements.includes("ach1-5")) {multi *= 2}
-  if (user.pt["pt1-1"]) {multi *= getPrestigeTreex("pt1-1")}
-  return nd(user.auto.incrementP * 10 * multi);
-}
-function getAutoIncrementPBulk() {
-  let multi = 1;
-  if (user.achievements.includes("ach1-5")) {multi *= 2}
-  if (user.pt["pt1-1"]) {multi *= getPrestigeTreex("pt1-1")}
-  return nd(user.auto.incrementP * multi);
-}
-function getAutoIncrementPCost() {
-  let cost = nd(100000).times(Math.pow(100, user.auto.incrementP)).round();
-  /*if (user.auto.incrementP > 14) {cost = nd(1e33).pow(Math.pow(1.25, user.auto.incrementP - 14)))}*/
-  if (cost.gte(1e33)) {cost = nd(1e33).pow(Math.pow(1.25, user.auto.incrementP - 14))}
-  return cost;
-}
-function getAutoIncrementMx() {
-  let multi = 1;
-  if (user.achievements.includes("ach1-5")) {multi *= 2}
-  if (user.pt["pt1-1"]) {multi *= getPrestigeTreex("pt1-1")}
-  return nd(user.auto.incrementM * 10 * multi);
-}
-function getAutoIncrementMBulk() {
-  let multi = 1;
-  if (user.achievements.includes("ach1-5")) {multi *= 2}
-  if (user.pt["pt1-1"]) {multi *= getPrestigeTreex("pt1-1")}
-  return nd(user.auto.incrementM * multi);
-}
-function getAutoIncrementMCost() {
-  let cost = nd(1e20).times(nd(100000).pow(user.auto.incrementM));
-  /*if (user.auto.incrementM > 2) {return nd(1e33).pow(nd(1.5).pow(user.auto.incrementM - 2))}*/
-  if (cost.gte(1e33)) {cost = nd(1e33).pow(nd(1.5).pow(user.auto.incrementM - 2))}
-  return cost;
-}
-function getAutoIncrementEx() {
-  let multi = 1;
-  if (user.achievements.includes("ach1-5")) {multi *= 2}
-  if (user.pt["pt1-1"]) {multi *= getPrestigeTreex("pt1-1")}
-  return nd(user.auto.incrementE * 10 * multi);
-}
-function getAutoIncrementEBulk() {
-  let multi = 1;
-  if (user.achievements.includes("ach1-5")) {multi *= 2}
-  if (user.pt["pt1-1"]) {multi *= getPrestigeTreex("pt1-1")}
-  return nd(user.auto.incrementE * multi);
-}
-function getAutoIncrementECost() {
-  let cost = nd(1e87).pow(nd(2).pow(user.auto.incrementE));
-  return cost;
+function getAutomationCost(name) {
+  let index = 0;
+  for (let i=0; i<automation[name].scaling.length; i++) {if (user.automation[name].bought >= automation[name].scaling[i].scaleAt) {index = i}}
+  let data = automation[name].scaling[index];
+  let userData = user.automation[name];
+  if (data.type == "m") {return nd(data.newCost).times(Math.pow(data.effect, userData.bought-data.scaleAt)).round()}
+  if (data.type == "e") {return nd(data.newCost).pow(Math.pow(data.effect, userData.bought-data.scaleAt))}
+  if (data.type == "t") {return nd(data.newCost).tetrate(nd(data.effect).pow(userData.bought-data.scaleAt))}
 }
 
 //Update Data
-function updateAutoIP() {
-  let cost = getAutoIPCost();
-  if (user.ip.x.lt(cost) || cost.gte(infinite)) {rpc("canBuy", "cantBuy", "autoIPb")}
-  else {rpc("cantBuy", "canBuy", "autoIPb")}
-  if (cost.gte(infinite) && showInfinite) {cost = "Infinite"}
-  d("autoIPx").textContent = e(getAutoIPx());
-  d("autoIPCost").textContent = e(cost);
-}
-function updateAutomateIP() {
-  if (user.automate.ip) {d("autoIPState").style.borderColor = "rgb(100, 200, 50)"}
-  else {d("autoIPState").style.borderColor = "rgb(220, 20, 60)"}
-}
-function updateAutoIncrementP() {
-  let cost = getAutoIncrementPCost();
-  if (user.ip.x.lt(cost) || cost.gte(infinite)) {rpc("canBuy", "cantBuy", "autoPb")}
-  else {rpc("cantBuy", "canBuy", "autoPb")}
-  if (cost.gte(infinite) && showInfinite) {cost = "Infinite"}
-  d("autoPx").textContent = e(getAutoIncrementPx());
-  d("autoPCost").textContent = e(cost);
-}
-function updateAutomateIncrementP(n) {
-  if (user.automate.incrementP[n]) {d("autoIncrementP" + n + "State").style.borderColor = "rgb(100, 200, 50)"}
-  else {d("autoIncrementP" + n + "State").style.borderColor = "rgb(220, 20, 60)"}
-}
-function updateAutoIncrementM() {
-  let cost = getAutoIncrementMCost();
-  if (user.ip.x.lt(cost) || cost.gte(infinite)) {rpc("canBuy", "cantBuy", "autoMb")}
-  else {rpc("cantBuy", "canBuy", "autoMb")}
-  if (cost.gte(infinite) && showInfinite) {cost = "Infinite"}
-  d("autoMx").textContent = e(getAutoIncrementMx());
-  d("autoMCost").textContent = e(cost);
-}
-function updateAutomateIncrementM(n) {
-  if (user.automate.incrementM[n]) {d("autoIncrementM" + n + "State").style.borderColor = "rgb(100, 200, 50)"}
-  else {d("autoIncrementM" + n + "State").style.borderColor = "rgb(220, 20, 60)"}
-}
-function updateAutoIncrementE() {
-  let cost = getAutoIncrementECost();
-  if (user.ip.x.lt(cost) || cost.gte(infinite)) {rpc("canBuy", "cantBuy", "autoEb")}
-  else {rpc("cantBuy", "canBuy", "autoEb")}
-  if (cost.gte(infinite) && showInfinite) {cost = "Infinite"}
-  d("autoEx").textContent = e(getAutoIncrementEx());
-  d("autoECost").textContent = e(cost);
-}
-function updateAutomateIncrementE(n) {
-  if (user.automate.incrementE[n]) {d("autoIncrementE" + n + "State").style.borderColor = "rgb(100, 200, 50)"}
-  else {d("autoIncrementE" + n + "State").style.borderColor = "rgb(220, 20, 60)"}
-}
-function updateAutomates() {
-  updateAutomateIP();
-  for (let i = 0; i <= 4; i++) {
-    updateAutomateIncrementP(i);
-    updateAutomateIncrementM(i);
-    updateAutomateIncrementE(i);
+function updateAutomations() {
+  for (let name in automation) {
+    updateAutomation(name);
+    updateMaxAutoState(name);
   }
 }
-
-//Unlock Data
-function unlockAutomation() {
-  if (user.auto.ip >= 1) {s("autoIPState")} else {h("autoIPState")}
-  if (user.auto.incrementP >= 1) {sc("autoIncrementPUnlocks")} else {hc("autoIncrementPUnlocks")}
-  if (user.auto.incrementM >= 1) {sc("autoIncrementMUnlocks")} else {hc("autoIncrementMUnlocks")}
-  if (user.auto.incrementE >= 1) {sc("autoIncrementEUnlocks")} else {hc("autoIncrementEUnlocks")}
+function updateAutomationStates() {
+  for (let name in automation) {
+    if (!automation[name].array) {updateAutomationState(name)}
+    else {for (let i=0; i<5; i++) {updateAutomationState(name, i)}}
+  }
+}
+function updateAutomation(name) {
+  let cost = getAutomationCost(name);
+  if (user[automation[name].currency].current.lt(cost) || cost.gte(user[automation[name].currency].infinite)) {replaceClass("canBuy", "cantBuy", "auto"+name+"b")}
+  else {replaceClass("cantBuy", "canBuy", "auto"+name+"b")}
+  if (cost.gte(user[automation[name].currency].infinite) && showInfinite) {cost = "Infinite"}
+  di("auto"+name+"Rate").textContent = e("d", getAutomationRate(name), 2, 0);
+  di("auto"+name+"Cost").textContent = e("d", cost, 2, 0);
+}
+function updateAutomationState(name, num) {
+  if (Array.isArray(user.automation[name].enabled)) {
+    if (user.automation[name].enabled[num]) {di("auto"+name+num+"State").style.borderColor = "rgb(100, 200, 50)"}
+    else {di("auto"+name+num+"State").style.borderColor = "rgb(220, 20, 60)"}
+  }
+  else {
+    if (user.automation[name].enabled) {di("auto"+name+"State").style.borderColor = "rgb(100, 200, 50)"}
+    else {di("auto"+name+"State").style.borderColor = "rgb(220, 20, 60)"}
+  }
+}
+function updateMaxAutoState(name) {
+  if (user.automation[name].buyMax) {di("maxAuto"+name+"State").style.borderColor = "rgb(0, 0, 200)"}
+  else {di("maxAuto"+name+"State").style.borderColor = "rgb(220, 20, 60)"}
 }

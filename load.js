@@ -1,55 +1,39 @@
-//Refresh
-var updating = false;
-function updater() {
-  updating = true;
-  setTimeout(() => {
-    updateTab(user.tab);
-    updateip();
-    updatepp();
-    updater();
-  }, (1000 / updateRate));
-}
-function fixnd() {
-  user.ip.x = nd(user.ip.x);
-  user.ip.sac = nd(user.ip.sac);
-  user.ip.total = nd(user.ip.total);
-  user.ip.highest = nd(user.ip.highest);
-  user.pp.x = nd(user.pp.x);
-  user.pp.sac = nd(user.pp.sac);
-  user.pp.total = nd(user.pp.total);
-  user.pp.highest = nd(user.pp.highest);
+//Fix Data
+function fixnd(obj) {
+  if (typeof obj.ip.current != "undefined") {obj.ip.current = nd(obj.ip.current)}
+  if (typeof obj.ip.sac != "undefined") {obj.ip.sac = nd(obj.ip.sac)}
+  if (typeof obj.ip.total != "undefined") {obj.ip.total = nd(obj.ip.total)}
+  if (typeof obj.ip.highest != "undefined") {obj.ip.highest = nd(obj.ip.highest)}
+  if (typeof obj.ip.infinite != "undefined") {obj.ip.infinite = nd(obj.ip.infinite)}
+  if (typeof obj.ip.equationClicks != "undefined") {obj.ip.equationClicks = nd(obj.ip.equationClicks)}
+  if (typeof obj.pp.current != "undefined") {obj.pp.current = nd(obj.pp.current)}
+  if (typeof obj.pp.sac != "undefined") {obj.pp.sac = nd(obj.pp.sac)}
+  if (typeof obj.pp.total != "undefined") {obj.pp.total = nd(obj.pp.total)}
+  if (typeof obj.pp.highest != "undefined") {obj.pp.highest = nd(obj.pp.highest)}
+  if (typeof obj.pp.infinite != "undefined") {obj.pp.infinite = nd(obj.pp.infinite)}
+  if (typeof obj.pp.pt.refundAmount != "undefined") {obj.pp.pt.refundAmount = nd(obj.pp.pt.refundAmount)}
+  if (typeof obj.automation.Prestige.at != "undefined") {obj.automation.Prestige.at = nd(obj.automation.Prestige.at)}
+  if (typeof obj.pp.lastGain != "undefined") {obj.pp.lastGain = nd(obj.pp.lastGain)}
 }
 
-//Save Data
-function save() {
-  localStorage.setItem("user", JSON.stringify(user));
-  user.timeLastOnline = Date.now();
-  alertify.success("Game Saved");
-  if (setBrokenUser) {brokenUser = user}
-}
-setInterval(() => {save()}, 60000);
-
-//Load Data
-function exporty() {cb(btoa(JSON.stringify(brokenUser)))}
-function importy() {alertify.prompt("Paste your save code here", "", (evt, value) => {let data = JSON.parse(atob(value)); if (data != null || data != "") {loadData(data)}}, () => {alertify.error("Canceled")})}
-function load() {
-  setBrokenUser = false;
+//Load
+function loadGame() {
   let data = JSON.parse(localStorage.getItem("user"));
-  brokenUser = data;
   if (data != null) {loadData(data)}
-  else {unlocking(); updater(); reveal()}
+  else {loadData(setUser())}
+  di("loadingScreen").style.opacity = 0;
+  setTimeout(() => {hideId("loadingScreen")}, 500);
 }
 function loadData(data) {
+  let versionStart = data.version;
   resetAll(false);
-  user = data;
+  user = JSON.parse(JSON.stringify(data));
   if (user.version == "0.0.0") {
-    console.log("Loaded version 0.0.0 -> 0.1.0");
     user.active.displaypause = false;
     user.confirm = {creset: true, csacrifice: true}
     user.version = "0.1.0";
   }
   if (user.version == "0.1.0") {
-    console.log("Loaded version 0.1.0 -> 0.1.2");
     if (typeof user.sacrifice.ip.x == "undefined") {user.sacrifice.ip = user.sacrifice.ip} else {user.sacrifice.ip = user.sacrifice.ip.x}
     if (typeof user.sacrifice.pp.x == "undefined") {user.sacrifice.pp = user.sacrifice.pp} else {user.sacrifice.pp = user.sacrifice.pp.x}
     if (typeof user.sacrifice.ap.x == "undefined") {user.sacrifice.ap = user.sacrifice.ap} else {user.sacrifice.ap = user.sacrifice.ap.x}
@@ -60,14 +44,12 @@ function loadData(data) {
     user.version = "0.1.1";
   }
   if (user.version == "0.1.1") {
-    console.log("Loaded version 0.1.1 -> 0.1.2");
     user.pp.extra = 0;
     user.active.aeAutomates = undefined;
     user.active.displaypause = true;
     user.version = "0.1.2";
   }
   if (user.version == "0.1.2") {
-    console.log("Loaded Version 0.1.2 -> 0.2.0");
     let layers = ["pp", "ap", "tp", "dp", "gp"];
     let letters = ["p", "m", "e"];
     let tempObjs = ["auto", "scaling", "confirmation"];
@@ -79,15 +61,15 @@ function loadData(data) {
       if (user.automation.inc[letters[i]]) {user.auto["increment" + letters[i].toUpperCase()] = 1}
       else {user.auto["increment" + letters[i].toUpperCase()] = 0}
       user.automate["increment" + letters[i].toUpperCase()] = [];
-      for (let k = 0; k <= 4; k++) {user.automate["increment" + letters[i].toUpperCase()][k] = user.automate.inc[letters[i]][k + 1]/*false*/}
-      /*user.scaling[letters[i]] = user.scale.inc[letters[i]];*/
+      for (let k = 0; k <= 4; k++) {user.automate["increment" + letters[i].toUpperCase()][k] = user.automate.inc[letters[i]][k + 1]}
       user.scaling[letters[i]] = 0;
     }
     user.sacrifice.ip = 0;
     let ips = ["x", "sac", "total", "highest"];
+    let infinite = "1e100";
     for (let i = 0; i < ips.length; i++) {if (nd(user.ip[ips[i]]).gte(infinite)) {user.ip[ips[i]] = infinite}}
     user.ip.total = nd(user.ip.total);
-    while (user.ip.total.gte(getSacrificeIPCost())) {user.sacrifice.ip++}
+    /*while (user.ip.total.gte(getSacrificeIPCost())) {user.sacrifice.ip++}*/
     user.increment = {ip: 0, p: [0, 0, 0, 0, 0], m: [0, 0, 0, 0, 0], e: [0, 0, 0, 0, 0]}
     user.confirmation.reset = user.confirm.creset;
     user.confirmation.sacrifice = user.confirm.csacrifice;
@@ -104,138 +86,164 @@ function loadData(data) {
     delete user.automate.scale;
     delete user.automate.inc;
     user.version = "0.2.0";
-    /*console.log("Loaded Version " + user.version);
-    let layers = ["pp", "ap", "tp", "dp", "gp"];
-    delete user.ip.pp;
-    for (let i = 0; i < layers.length; i++) {delete user[layers[i]]}
-    user.auto = {}
-    if (user.automation.inc.x) {user.auto.ip = 1}
-    if (user.automation.inc.p) {user.auto.incrementP = 1} else {user.auto.incrementP = 0}
-    if (user.automation.inc.m) {user.auto.incrementM = 1} else {user.auto.incrementM = 0}
-    if (user.automation.inc.e) {user.auto.incrementE = 1} else {user.auto.incrementE = 0}
-    delete user.automation;
-    delete user.automate.scale;
-    user.automate.ip = user.automate.inc.x;
-    user.automate.incrementP = [];
-    user.automate.incrementM = [];
-    user.automate.incrementE = [];
-    for (let i = 0; i <= 4; i++) {
-      user.automate.incrementP[i] = user.automate.inc.p[i + 1];
-      user.automate.incrementM[i] = user.automate.inc.m[i + 1];
-      user.automate.incrementE[i] = user.automate.inc.e[i + 1];
-    }
-    delete user.automate.inc;
-    user.scaling = {}
-    user.scaling.p = user.scale.inc.p;
-    user.scaling.m = user.scale.inc.m;
-    user.scaling.e = user.scale.inc.e;
-    delete user.scale;
-    user.sacrifice.ip = 0;
-    user.ip.total = nd(user.ip.total);
-    while (user.ip.total.gte(getSacrificeIPCost())) {user.sacrifice.ip++}
-    for (let i = 0; i < layers.length; i++) {delete user.sacrifice[layers[i]]}
-    delete user.inc;
-    user.increment = setUser().increment;
-    delete user.active;
-    user.confirmation = {}
-    user.confirmation.reset = user.confirm.creset;
-    user.confirmation.sacrifice = user.confirm.csacrifice;
-    delete user.confirm;
-    user.timeLastOnline = user.time;
-    delete user.time;
-    if (user.tab == "auto") {user.tab = "Automation"}
-    if (user.tab == "scale") {user.tab = "Scaling"}
-    if (user.tab == "sac") {user.tab = "Sacrifice"}
-    if (user.tab == "ach") {user.tab = "Achievements"}
-    if (user.tab == "ip") {user.tab = "Increment"}
-    user.timeStart = Date.now();
-    user.notation = "Scientific";
-    user.achievements = [];
-    user.version = "0.2.0";*/
   }
   if (user.version == "0.2.0") {
-    console.log("Loaded Version 0.2.0");
     user.version = "0.2.1";
   }
   if (user.version == "0.2.1") {
-    console.log("Loaded Version 0.2.1");
-    user.pp = {x: nd(0), sac: nd(0), total: nd(0), highest: nd(0)}
+    user.pp = {}
+    user.pp.count = 0;
+    user.pp.x = nd(0);
+    user.pp.sac = nd(0);
+    user.pp.total = nd(0);
+    user.pp.highest = nd(0);
+    user.pt = {}
+    user.pt.cells = [];
     user.sacrifice.pp = 0;
-    user.pt = {"pt1-1": false, "pt1-2": false, "pt1-3": false}
+    user.version = "0.2.2";
+  }
+  if (user.version == "0.2.2") {
+    user.uiRate = 20;
+    // For some reason this didn't load in 0.2.2
+    user.pp = {}
+    user.pp.count = 0;
+    user.pp.x = nd(0);
+    user.pp.sac = nd(0);
+    user.pp.total = nd(0);
+    user.pp.highest = nd(0);
+    //
+    // For some reason this didn't load in 0.2.2
+    user.pt = {}
+    user.pt.cells = [];
+    //
+    user.pp.timeStart = user.timeStart;
+    user.pp.bestTime = 1e100;
+    user.pt.refund = false;
+    user.logpb = false;
+    user.version = "0.2.3";
+  }
+  if (user.version == "0.2.3") {
+    user.max = {}
+    user.max.autoIP = false;
+    user.max.autoIncrementP = false;
+    user.max.autoIncrementM = false;
+    user.max.autoIncrementE = false;
+    user.max.scalingP = false;
+    user.max.scalingM = false;
+    user.max.scalingE = false;
+    // Due to changes in the usage of user.pt
+    user.pt = {}
+    user.pt.refund = false;
+    user.pt.refundAmount = nd(0);
+    user.pt.cells = [];
+    //
+    user.pt.refundAmount = 0;
+    user.tabPrestige = "Tree";
+    user.challenge = {}
+    user.challenge.pp = ["null"];
+    for (let i = 1; i <= 3; i++) {user.challenge.pp[i] = {in: false, count: 0}}
+    user.confirmation.challenge = true;
+    user.auto.sacrificeIP = 0;
+    user.automate.sacrificeIP = false;
     user.version = "0.3.0";
   }
-  /*if (user.version == "0.3.0") {
-    console.log("Loaded Version 0.3.0");
-  }*/
-  if (user.version == "0.3.0-beta-v1") {
-    console.log("Loaded Version 0.3.0-beta-v1");
-    user.version = "0.3.0-beta-v1.1";
+  if (user.version == "0.3.0") {
+    let tempTab = user.tab;
+    user.tab = {}
+    user.tab.main = tempTab;
+    user.tab.Prestige = user.tabPrestige;
+    user.tab.Achievements = "Normal";
+    user.options = {}
+    if (user.notation == "Scientific" || user.notation == "Logarithm" || user.notation == "Blind") {user.options.notation = user.notation}
+    else {user.options.notation = "Scientific"}
+    user.options.confirmations = [];
+    for (con in user.confirmation) {if (user.confirmation) {user.options.confirmations.push(con.charAt(0).toUpperCase()+con.slice(1))}}
+    user.options.logpb = user.logpb;
+    if (user.achievements.includes("ach3-3")) {user.achievements.splice(user.achievements.indexOf("ach3-3"))}
+    if (user.achievements.includes("ach3-4")) {user.achievements.splice(user.achievements.indexOf("ach3-4"))}
+    user.eggs = [];
+    user.automation = {IP: {buyMax: false, bought: 0, enabled: false}, IncrementP: {buyMax: false, bought: 0, enabled: [false, false, false, false, false]}, IncrementM: {buyMax: false, bought: 0, enabled: [false, false, false, false, false]}, IncrementE: {buyMax: false, bought: 0, enabled: [false, false, false, false, false]}, SacrificeIP: {buyMax: false, bought: 0, enabled: false}, Prestige: {buyMax: false, bought: 0, enabled: false}}
+    user.automation.IP.bought = user.auto.ip;
+    user.automation.IP.enabled = user.automate.ip;
+    let names = ["P", "M", "E"];
+    for (let i=0; i<names.length; i++) {user.automation["Increment"+names[i]].bought = user.auto["increment"+names[i]]}
+    for (let i=0; i<5; i++) {for (let k=0; k<names.length; k++) {user.automation["Increment"+names[k]].enabled[i] = user.automate["increment"+names[k]][i]}}
+    user.automation.SacrificeIP.bought = user.auto.sacrificeIP;
+    user.automation.SacrificeIP.enabled = user.automate.sacrificeIP;
+    user.automation.Prestige.at = "1";
+    user.sacrifice.IP = user.sacrifice.ip;
+    if (typeof user.sacrifice.pp != "undefined") {user.sacrifice.PP = user.sacrifice.pp}
+    else {user.sacrifice.PP = 0}
+    let tempScaling = user.scaling;
+    for (let i=0; i<names.length; i++) {
+      user.scaling[names[i]] = {buyMax: false, bought: 0}
+      user.scaling[names[i]].bought = tempScaling[names[i].toLowerCase()];
+    }
+    user.ip.current = user.ip.x;
+    if (user.pp.count > 0) {user.ip.infinite = "1e1000"}
+    else {user.ip.infinite = "1e100"}
+    user.ip.equationClicks = user.increment.ip;
+    user.ip.increment = {P: {bought: []}, M: {bought: []}, E: {bought: []}}
+    for (let i=0; i<names.length; i++) {user.ip.increment[names[i]].bought = user.increment[names[i].toLowerCase()]}
+    user.pp.current = user.pp.total;
+    user.pp.sac = user.pp.total;
+    user.pp.highest = user.pp.total;
+    user.pp.infinite = "1e100";
+    user.pp.milestones = 0;
+    user.pp.pt = user.pt;
+    user.pp.pt.cells = [];
+    user.pp.pt.refund = false;
+    user.pp.pt.refundAmount = "0";
+    user.pp.challenge = user.challenge.pp;
+    user.pp.challenge.push({in: false, count: 0});
+    user.time = {}
+    user.time.lastUpdate = user.timeLastOnline;
+    user.time.played = Date.now()-user.timeStart;
+    user.time.thisPrestige = Date.now()-user.pp.timeStart;
+    user.time.bestPrestige = user.pp.bestTime;
+    user.beta = false;
+    user.atEnd = false;
+    let deletes = ["notation", "confirmation", "logpb", "auto", "automate", "max", "increment", "pt", "challenge", "timeLastOnline", "timeStart", "uiRate"];
+    for (let i=0; i<deletes.length; i++) {delete user[deletes[i]]}
+    for (let i=0; i<names.length; i++) {delete user.scaling[names[i].toLowerCase()]}
+    delete user.sacrifice.ip;
+    if (typeof user.sacrifice.pp != "undefined") {delete user.sacrifice.pp}
+    delete user.ip.x;
+    delete user.pp.x;
+    delete user.pp.timeStart;
+    delete user.pp.bestTime;
+    user.version = "0.4.0";
   }
-  if (user.version == "0.3.0-beta-v1.1") {
-    console.log("Loaded Version 0.3.0-beta-v1.1");
+  if (user.version == "0.4.0") {
+    user.options.uiRate = 20;
+    user.automation.IncrementT = {buyMax: false, bought: 0, enabled: [false, false, false, false, false]}
+    user.ip.increment.T = {}
+    user.ip.increment.T.bought = [0, 0, 0, 0, 0];
+    user.pp.lastGain = 0;
+    if (user.pp.pt.cells.includes("pt3-1") || user.pp.pt.cells.includes("pt3-4")) {
+      if (user.pp.pt.cells.includes("pt3-1") && user.pp.pt.cells.includes("pt3-4")) {
+        user.pp.current = Number(user.pp.current)+150;
+        user.pp.pt.refundAmount = Number(user.pp.pt.refundAmount)-150;
+      }
+      else {
+        user.pp.current = Number(user.pp.current)+100;
+        user.pp.pt.refundAmount = Number(user.pp.pt.refundAmount)-100;
+      }
+    }
+    user.pp.challenge.push({in: false, count: 0});
+    user.time.bestPrestige = 31536000000;
+    user.version = "0.4.1";
   }
-  if (user.version == data.version) {alertify.message("Loaded Version " + user.version)}
-  else {alertify.message("Loaded Version " + data.version + "->" + user.version)}
-  fixnd();
-  tab(user.tab);
-  setNotation(user.notation);
-  completeAchievements();
-  if (user.timeLastOnline == "now") {user.timeLastOnline = Date.now()}
-  loadOffline();
-  unlocking();
-  updateAutomates();
-  updateConfirmations();
-  reveal();
-  alertify.success("Game Loaded");
-}
-function loadOffline() {
-  let timeOffline = Date.now() - user.timeLastOnline;
-  d("offlineTime").textContent = time(nd(timeOffline));
-  if (timeOffline >= 1000) {simulateTime(timeOffline)}
+  for (let i=0; i<user.eggs.length; i++) {showId(user.eggs[i])}
+  fixnd(user);
+  showTab(user.tab.main);
+  updateOptions();
+  updateAutomationStates();
+  setPrestigeAt(user.automation.Prestige.at);
+  console.log("Offline for "+showTime(nd(Date.now()-user.time.lastUpdate)));
+  simulateTime(Date.now()-user.time.lastUpdate);
+  /*setUIRate();*/
   save();
-  console.log("Time Offline: " + time(nd(timeOffline)));
-}
-
-//Reset Data
-function confirmResetAll() {
-  if (user.confirmation.reset) {
-    alertify.confirm("Are you sure you want to reset? You will lose all of your previous progress!", () => {alertify.warning("Game Reset"); resetAll()});
-  }
-  else {resetAll()}
-}
-function resetAll(sav) {
-  if (typeof sav == "undefined") {sav = true}
-  decompleteAchievements();
-  user = setUser();
-  user.timeStart = Date.now();
-  unlocking();
-  reveal();
-  if (sav) {save()}
-  console.log("Game Reset");
-}
-function resetSacrificeIP() {
-  if (user.automate.ip) {automateIP()}
-  for (let i = 0; i < 5; i++) {
-    if (user.automate.incrementP[i]) {automateIncrementP(i)}
-    if (user.automate.incrementM[i]) {automateIncrementM(i)}
-    if (user.automate.incrementE[i]) {automateIncrementE(i)}
-  }
-  user.auto.ip = 0;
-  user.auto.incrementP = 0;
-  user.auto.incrementM = 0;
-  user.auto.incrementE = 0;
-  for (let i = 0; i <= 4; i++) {
-    user.increment.p[i] = 0;
-    user.increment.m[i] = 0;
-    user.increment.e[i] = 0;
-  }
-  user.scaling.p = 0;
-  user.scaling.m = 0;
-  user.scaling.e = 0;
-  user.ip.x = nd(1);
-  user.ip.sac = nd(1);
-}
-function resetPrestige() {
-  resetSacrificeIP();
-  user.sacrifice.ip = 0;
+  if (user.version == versionStart) {alertify.message("Loaded Version " + user.version)}
+  else {alertify.message("Loaded Version " + versionStart + " > " + user.version)}
 }
