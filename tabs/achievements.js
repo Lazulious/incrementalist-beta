@@ -1,66 +1,116 @@
 //Data
-var achievement = {}
-achievement.titles = {}
-/*achievement.hasReward = {}*/
-for (let i = 1; i <= 2; i++) {
-  for (let k = 1; k <= 6; k++) {
-    let id = "ach" + i + "-" + k;
-    achievement.titles[id] = d(id + "Title").textContent;
-    /*achievement.hasReward[id] = d(id).textContent.includes("Reward");*/
-  }
+const achievements = {
+  "ach1-1": {title: "Simple enough", desc: "Buy your first P variable", hasReward: false},
+  "ach1-2": {title: "Automation", desc: "Begin automation", hasReward: false},
+  "ach1-3": {title: "Was it worth it?", desc: "Sacrifice for the first time", hasReward: false},
+  "ach1-4": {title: "Multiplication", desc: "Buy your first M variable", hasReward: false},
+  "ach1-5": {title: "I think it was worth it", desc: "Sacrifice two times", hasReward: true},
+  "ach1-6": {title: "Click a few times", desc: "Click the equation 2,500 times", hasReward: true},
+  "ach2-1": {title: "It's not better", desc: "Get more P than P1 after 1,000", hasReward: true},
+  "ach2-2": {title: "Exponentiation", desc: "Buy your first E variable", hasReward: false},
+  "ach2-3": {title: "Is this too worth it?", desc: "Sacrifice seven times", hasReward: true},
+  "ach2-4": {title: "Exponential age", desc: "Buy your first scaling E upgrade", hasReward: true},
+  "ach2-5": {title: "Easy sacrifice", desc: "Sacrifice without buying any variables", hasReward: false},
+  "ach2-6": {title: "Can you even call this a sacrifice anymore?", desc: "Sacrifice without losing anything", hasReward: false},
+  "ach3-1": {title: "Prestigious", desc: "Prestige for the first time", hasReward: true},
+  "ach3-2": {title: "Is it easy already?", desc: "Prestige while sacrificing at most 10 times", hasReward: true},
+  "ach3-3": {title: "Haha it's harder now", desc: "Complete prestige challenge 1 for the first time", hasReward: true},
+  "ach3-4": {title: "Stonks", desc: "Buy prestige upgrade 2-3", hasReward: false},
+  "ach3-5": {title: "Full automation", desc: "Fully automate prestiges", hasReward: false},
+  /*"ach3-6": {title: "Sacrifice your PP", desc: "Sacrifice PP for the first time", hasReward: false},*/
+  "ach3-6": {title: "[WIP]", desc: "[WIP]", hasReward: false},
+  /*"ach4-1": {title: "Tetration", desc: "Buy your first T variable", hasReward: false},
+  "ach4-2": {title: "The answer", desc: "42"},
+  "ach4-3": {title: "Stonks 2.0", desc: "Buy prestige upgrade 5-1", hasReward: false},*/
+  "ach4-1": {title: "[WIP]", desc: "[WIP]", hasReward: false},
+  "ach4-2": {title: "[WIP]", desc: "[WIP]", hasReward: false},
+  "ach4-3": {title: "[WIP]", desc: "[WIP]", hasReward: false},
+  "ach4-4": {title: "[WIP]", desc: "[WIP]", hasReward: false},
+  "ach4-5": {title: "[WIP]", desc: "[WIP]", hasReward: false},
+  "ach4-6": {title: "[WIP]", desc: "[WIP]", hasReward: false},
 }
-
-//Check Data
-setInterval(() => {
-  if (!user.achievements.includes("ach1-1") && user.increment.p[0] >= 1) {completeAchievement("ach1-1")}
-  let automating = false;
-  for (let i = 0; i <= 4; i++) {if (user.automate.incrementP[i] || user.automate.incrementM[i]) {automating = true}}
-  if (!user.achievements.includes("ach1-2") && (user.automate.ip || automating)) {completeAchievement("ach1-2")}
-  if (!user.achievements.includes("ach1-3") && user.sacrifice.ip >= 1) {completeAchievement("ach1-3")}
-  if (!user.achievements.includes("ach1-4") && user.increment.m[0] >= 1) {completeAchievement("ach1-4")}
-  if (!user.achievements.includes("ach1-5") && user.sacrifice.ip >= 2) {completeAchievement("ach1-5")}
-  if (!user.achievements.includes("ach1-6") && user.increment.ip >= 2500) {completeAchievement("ach1-6"); unlockAchievement()}
-  if (!user.achievements.includes("ach2-1") && user.increment.p[0] >= 1000 && user.increment.p[1] >= 500 && (user.increment.p[0] > (user.increment.p[1] * 2))) {completeAchievement("ach2-1")}
-  if (!user.achievements.includes("ach2-2") && user.increment.e[0] >= 1) {completeAchievement("ach2-2")}
-  if (!user.achievements.includes("ach2-3") && user.sacrifice.ip >= 7) {completeAchievement("ach2-3")}
-  if (!user.achievements.includes("ach2-4") && user.scaling.e >= 1) {completeAchievement("ach2-4")}
-  /*if (!user.achievements.includes("ach2-5")) {completeAchievement("ach2-5")}
-  if (!user.achievements.includes("ach2-6")) {completeAchievement("ach2-6")}*/
-}, 1000);
+for (let id in achievements) {
+  let data = achievements[id];
+  di(id+"Title").textContent = data.title;
+  di(id+"Description").textContent = data.desc;
+}
+const eggs = {
+  "egg1-1": {title: "That was quite a mistake", desc: "Remind Geo of his big mistake"},
+  "egg1-2": {title: "EEEE", desc: "Only EEEE"}, //Removed cause of a bug
+  "egg1-3": {title: "I know \"enough\" code", desc: "Find Geo's coding weakness"}, //
+  "egg1-4": {title: "Congrats?", desc: "There is literally nothing you have to do"},
+  "egg1-5": {title: "Yep, it's there", desc: "Perform a pixel perfect click"},
+  "egg1-6": {title: "Free money", desc: "Try to give yourself money"}
+}
+for (let id in eggs) {
+  hideId(id);
+}
 
 //Functions
-function completeAchievement(id, notify) {
-  if (typeof notify == "undefined") {notify = true}
-  user.achievements.push(id);
-  rpc("achIncomplete", "achComplete", id);
-  if (notify) {alertify.message(achievement.titles[id])}
-}
-function completeAchievements() {for (let i = 0; i < user.achievements.length; i++) {rpc("achIncomplete", "achComplete", user.achievements[i])}}
-function decompleteAchievement(id) {
-  if (user.achievements.includes(id)) {
-    user.achievements.splice(user.achievements.indexOf(id), 1);
-    rpc("achComplete", "achIncomplete", id);
+function giveAchievement(id, notify) {
+  if (!user.achievements.includes(id)) {
+    user.achievements.push(id);
+    if (notify) {alertify.message(achievements[id].title)}
   }
+  if (user.achievements.length != 1) {showId("achievementS")}
+  else {hideId("achievementS")}
 }
-function decompleteAchievements() {
-  for (let i = 1; i <= 2; i++) {   
-    for (let k = 1; k <= 6; k++) {
-      rpc("achComplete", "achIncomplete", "ach" + i + "-" + k);
-    }
+function giveEgg(id, notify) {
+  if (!user.eggs.includes(id)) {
+    user.eggs.push(id);
+    if (notify) {alertify.warning(eggs[id].title)}
+    showId(id);
   }
-  if (typeof user.achievements != "undefined") {user.achievements = []}
-  /*for (let i = 0; i < user.achievements.length; i++) {
-    rpc("achComplete", "achIncomplete", user.achievements[i]);
-  }*/
+  showId(id);
+  if (user.eggs.length != 1) {showId("eggS")}
+  else {hideId("eggS")}
 }
 
+//Get Data
+function getAchievementBoost() {
+  return nd(1.1).pow(user.achievements.length);
+}
 function getAchievementReward(id) {
-  if (id == "ach1-6") {return nd(2.5).pow(nd(user.increment.ip).pow(1.35).plus(1).log10())}
+  let multi = nd(1);
+  if (user.pp.pt.cells.includes("pt3-2")) {multi = multi.times(getPTReward("pt3-2").divide(100).plus(1))}
+  if (id == "ach1-5") {return nd(2).times(multi)}
+  if (id == "ach1-6") {return nd(2.5).pow(user.ip.equationClicks.times(2).pow(1.35).plus(1).log10()).times(multi)}
+  if (id == "ach2-1") {return nd(5).times(multi)}
+  if (id == "ach2-3") {return nd(10).times(multi)}
+  if (id == "ach2-4") {
+    if (user.pp.pt.cells.includes("pt4-1")) {multi = multi.times(getPTReward("pt4-1"))}
+    return nd(6).times(multi);
+  }
+  if (id == "ach3-1") {return nd(1001).pow(getPPChallengeReward(3)).times(multi)}
+  if (id == "ach3-2") {return nd(user.sacrifice.IP/3+4).sqrt().minus(1).times(multi)}
+  if (id == "ach3-3") {
+    let completions = 0;
+    for (let i=1; i<user.pp.challenge.length; i++) {completions += user.pp.challenge[i].count}
+    if (completions < 12) {return nd(1.25).pow(completions).times(multi)}
+    else {return nd(Math.log10(completions-10)).divide(Math.log10(1.25)).plus(11.197243)}
+  }
 }
-function updateAchievement(id) {
-  if (id == "ach1-6") {d(id + "Reward").textContent = e(getAchievementReward(id))}
-}
-function unlockAchievement() {
-  let ach = user.achievements;
-  if (ach.includes("ach1-6")) {sc("ach1-6Unlocks")} else {hc("ach1-6Unlocks")}
+
+//Update Data
+function updateAchievements() {
+  di("totalAchievements").textContent = e("d", nd(user.achievements.length), 2, 0);
+  di("achievementBoost").textContent = e("d", getAchievementBoost(), 2, 2);
+  for (let id in achievements) {
+    if (achievements[id].hasReward) {di(id+"Reward").textContent = e("d", getAchievementReward(id), 2, 2)}
+    if (user.achievements.includes(id)) {di(id).style.backgroundColor = "rgb(25, 85, 25)"}
+    else {di(id).style.backgroundColor = "rgb(25, 25, 25)"}
+  }
+  di("totalEggs").textContent = e("d", nd(user.eggs.length), 2, 0);
+  for (let id in eggs) {
+    let data = eggs[id];
+    di(id+"Title").textContent = data.title;
+    if (user.eggs.includes(id)) {
+      di(id+"Description").textContent = data.desc;
+      di(id).style.backgroundColor = "rgb(85, 85, 25)";
+    }
+    else {
+      di(id+"Description").textContent = "Locked";
+      di(id).style.backgroundColor = "rgb(25, 25, 25)";
+    }
+  }
 }

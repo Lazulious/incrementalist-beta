@@ -1,78 +1,101 @@
+//Data
+const scaling = {
+  "P": {
+    currency: "ip",
+    scaling: [
+      {type: "j", scaleAt: 0, newCost: "1e15", effect: 7.5},
+      {type: "e", scaleAt: 9, newCost: "1e33", effect: 1.075},
+      {type: "e", scaleAt: 25, newCost: "9.25e104", effect: 1.2}
+    ]
+  },
+  "M": {
+    currency: "ip",
+    scaling: [
+      {type: "e", scaleAt: 0, newCost: "1e37", effect: 1.11},
+      {type: "e", scaleAt: 10, newCost: "1.14e105", effect: 1.22}
+    ]
+  },
+  "E": {
+    currency: "ip",
+    scaling: [
+      {type: "e", scaleAt: 0, newCost: "1e84", effect: 2},
+      {type: "e", scaleAt: 1, newCost: "1e168", effect: 3}
+    ]
+  }
+}
+for (let name in scaling) {
+  di("scaling"+name+"b").addEventListener("click", () => {buyScaling(name)});
+  di("maxScaling"+name+"State").addEventListener("click", () => {toggleMaxBuyScaling(name)});
+}
+
 //Buttons
-function buyScalingP() {
-  let cost = getScalingPCost();
-  if (user.ip.x.gte(cost) && cost.lt(infinite)) {
-    user.ip.x = user.ip.x.minus(cost);
-    user.scaling.p++;
+function buyScaling(name) {
+  let cost = getScalingCost(name);
+  if (user.scaling[name].buyMax) {
+    while (user[scaling[name].currency].current.gte(cost) && cost.lt(user[scaling[name].currency].infinite)) {
+      user[scaling[name].currency].current = user[scaling[name].currency].current.minus(cost);
+      user.scaling[name].bought++;
+      cost = getScalingCost(name);
+    }
+  }
+  else {
+    if (user[scaling[name].currency].current.gte(cost) && cost.lt(user[scaling[name].currency].infinite)) {
+      user[scaling[name].currency].current = user[scaling[name].currency].current.minus(cost);
+      user.scaling[name].bought++;
+    }
   }
 }
-function buyScalingM() {
-  let cost = getScalingMCost();
-  if (user.ip.x.gte(cost) && cost.lt(infinite)) {
-    user.ip.x = user.ip.x.minus(cost);
-    user.scaling.m++;
-  }
-}
-function buyScalingE() {
-  let cost = getScalingECost();
-  if (user.ip.x.gte(cost) && cost.lt(infinite)) {
-    user.ip.x = user.ip.x.minus(cost);
-    user.scaling.e++;
-  }
+function toggleMaxBuyScaling(name) {
+  user.scaling[name].buyMax = !user.scaling[name].buyMax;
+  updateMaxScalingState(name);
 }
 
 //Get Data
-function getScalingP() {
-  let multi = 1;
-  if (user.pt["pt1-3"]) {mutli /= getPrestigeTreex("pt1-3")}
-  return nd(0.75).pow(nd(Math.pow(user.scaling.p, 4.2) + 1).log10()).times(multi);
+function getScalingEffect(name) {
+  if (name == "P") {
+    let multi = nd(1);
+    if (user.pp.pt.cells.includes("pt1-3")) {multi = multi.times(getPTReward("pt1-3"))}
+    if (user.scaling[name].bought >= 1) {return nd(0.75).pow(nd(Math.pow(user.scaling[name].bought, 4.2)+1).log10().times(-1)).times(multi)}
+    else {return nd(1)}
+  }
+  if (name == "M") {
+    let multi = nd(1);
+    if (user.pp.pt.cells.includes("pt1-3")) {multi = multi.times(getPTReward("pt1-3"))}
+    if (user.scaling[name].bought >= 1) {return nd(0.5).pow(nd(Math.pow(user.scaling[name].bought, 1.25)+1).log10().times(-1)).times(multi)}
+    else {return nd(1)}
+  }
+  if (name == "E") {
+    let multi = nd(1);
+    if (user.pp.pt.cells.includes("pt1-3")) {multi = multi.times(getPTReward("pt1-3"))}
+    if (user.scaling[name].bought >= 1) {return nd(user.scaling[name].bought / 4.3 + 1).log10().plus(1).times(multi)}
+    else {return nd(1)}
+  }
 }
-function getScalingPCost() {
-  let cost = nd(10).pow(nd(user.scaling.p).times(Math.floor(nd(user.scaling.p).divide(7.5).plus(1))).plus(15));
-  if (cost.gte(1e33)) {cost = nd(1e33).pow(nd(1.075).pow(user.scaling.p - 9))}
-  return cost;
-}
-function getScalingM() {
-  let multi = 1;
-  if (user.pt["pt1-3"]) {mutli /= getPrestigeTreex("pt1-3")}
-  return nd(0.5).pow(nd(Math.pow(user.scaling.m, 1.25) + 1).log10()).times(multi);
-}
-function getScalingMCost() {
-  let cost = nd(1e37).pow(nd(1.11).pow(user.scaling.m));
-  return cost;
-}
-function getScalingE() {
-  let multi = 1;
-  if (user.pt["pt1-3"]) {mutli /= getPrestigeTreex("pt1-3")}
-  return nd(1).divide(nd(user.scaling.e / 11.25 + 1).log10().plus(1)).times(multi);
-}
-function getScalingECost() {
-  let cost = nd(1e87).pow(nd(2).pow(user.scaling.e));
-  return cost;
+function getScalingCost(name) {
+  let index = 0;
+  for (let i=0; i<scaling[name].scaling.length; i++) {if (user.scaling[name].bought >= scaling[name].scaling[i].scaleAt) {index = i}}
+  let data = scaling[name].scaling[index];
+  let userData = user.scaling[name];
+  if (data.type == "j") {return nd(10).pow(nd(userData.bought*Math.floor(userData.bought/data.effect+1)).plus(nd(data.newCost).log10()))}
+  if (data.type == "e") {return nd(data.newCost).pow(Math.pow(data.effect, userData.bought-data.scaleAt))}
 }
 
 //Update Data
-function updateScalingP() {
-  let cost = getScalingPCost();
-  if (user.ip.x.lt(cost) || cost.gte(infinite)) {rpc("canBuy", "cantBuy", "scalingPb")}
-  else {rpc("cantBuy", "canBuy", "scalingPb")}
-  if (cost.gte(infinite) && showInfinite) {cost = "Infinite"}
-  d("scalingPx").textContent = e(getScalingP(), 0, 2);
-  d("scalingPCost").textContent = e(cost);
+function updateScalings() {
+  for (let name in scaling) {
+    updateScaling(name);
+    updateMaxScalingState(name);
+  }
 }
-function updateScalingM() {
-  let cost = getScalingMCost();
-  if (user.ip.x.lt(cost) || cost.gte(infinite)) {rpc("canBuy", "cantBuy", "scalingMb")}
-  else {rpc("cantBuy", "canBuy", "scalingMb")}
-  if (cost.gte(infinite) && showInfinite) {cost = "Infinite"}
-  d("scalingMx").textContent = e(getScalingM(), 0, 2);
-  d("scalingMCost").textContent = e(cost);
+function updateMaxScalingState(name) {
+  if (user.scaling[name].buyMax) {di("maxScaling"+name+"State").style.borderColor = "rgb(0, 0, 200)"}
+  else {di("maxScaling"+name+"State").style.borderColor = "rgb(220, 20, 60)"}
 }
-function updateScalingE() {
-  let cost = getScalingECost();
-  if (user.ip.x.lt(cost) || cost.gte(infinite)) {rpc("canBuy", "cantBuy", "scalingEb")}
-  else {rpc("cantBuy", "canBuy", "scalingEb")}
-  if (cost.gte(infinite) && showInfinite) {cost = "Infinite"}
-  d("scalingEx").textContent = e(getScalingE(), 0, 2);
-  d("scalingECost").textContent = e(cost);
+function updateScaling(name) {
+  let cost = getScalingCost(name);
+  if (user[scaling[name].currency].current.lt(cost) || cost.gte(user[scaling[name].currency].infinite)) {replaceClass("canBuy", "cantBuy", "scaling"+name+"b")}
+  else {replaceClass("cantBuy", "canBuy", "scaling"+name+"b")}
+  if (cost.gte(user[scaling[name].currency].infinite) && showInfinite) {cost = "Infinite"}
+  di("scaling"+name+"x").textContent = e("d", getScalingEffect(name), 2, 2);
+  di("scaling"+name+"Cost").textContent = e("d", cost, 2, 0);
 }
